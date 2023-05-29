@@ -28,7 +28,7 @@ namespace TcgEngine
         public StatusData[] status;               //Status added by this ability  
         public int value;                         //Value passed to the effect (deal X damage)
         public int duration;                      //Duration passed to the effect (usually for status, 0=permanent)
-
+        
         [Header("Chain/Choices")]
         public AbilityData[] chain_abilities;    //Abilities that will be triggered after this one
 
