@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: sasquatch
   m_EditorClassIdentifier: 
   id: sasquatch
-  title: Sasquatch
+  title: "Sasquatch \u4F50\u8CC0\u91CE\u4EBA"
   art_full: {fileID: 21300000, guid: 5ead950ee3cbc5d4c8979120330038de, type: 3}
   art_board: {fileID: 21300000, guid: ebd136e861f797e4ab0a606a7ef4ab7b, type: 3}
   type: 10

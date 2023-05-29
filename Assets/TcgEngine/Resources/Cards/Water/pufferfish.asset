@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: pufferfish
   m_EditorClassIdentifier: 
   id: pufferfish
-  title: Pufferfish
+  title: "Pufferfish \u6CB3\u8C5A\u597D\u5403"
   art_full: {fileID: 21300000, guid: e2171587cdf01f345aafec22ae5ca887, type: 3}
   art_board: {fileID: 21300000, guid: 6e6bb7509ba520a48be2b3298e2cfb85, type: 3}
   type: 10

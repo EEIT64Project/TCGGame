@@ -32,5 +32,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Haste
+  title: "Haste\u885D\u92D2"
   desc: "Can attack immediately.\n\u53EF\u4EE5\u7ACB\u5373\u9032\u884C\u653B\u64CA"

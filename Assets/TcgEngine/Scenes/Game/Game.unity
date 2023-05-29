@@ -1717,6 +1717,11 @@ PrefabInstance:
       propertyPath: m_Text
       value: "\u7D50\u675F\u6B64\u5C40"
       objectReference: {fileID: 0}
+    - target: {fileID: 2134361131087422451, guid: b2cda006105c05b428bace831c06c984,
+        type: 3}
+      propertyPath: m_Text
+      value: "\u9078\u55AE"
+      objectReference: {fileID: 0}
     - target: {fileID: 2552961730338996592, guid: b2cda006105c05b428bace831c06c984,
         type: 3}
       propertyPath: m_RootOrder
@@ -1782,6 +1787,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -218.99997
       objectReference: {fileID: 0}
+    - target: {fileID: 3582110020775907150, guid: b2cda006105c05b428bace831c06c984,
+        type: 3}
+      propertyPath: m_Text
+      value: "\u64A4\u9000"
+      objectReference: {fileID: 0}
     - target: {fileID: 3969018848838976427, guid: b2cda006105c05b428bace831c06c984,
         type: 3}
       propertyPath: m_Text
@@ -1798,6 +1808,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 12800000, guid: a51a3aebb43ac044989270407476b208,
         type: 3}
+    - target: {fileID: 5232896403070162468, guid: b2cda006105c05b428bace831c06c984,
+        type: 3}
+      propertyPath: m_Text
+      value: "\u9078\u55AE"
+      objectReference: {fileID: 0}
     - target: {fileID: 5398796206657177333, guid: b2cda006105c05b428bace831c06c984,
         type: 3}
       propertyPath: m_FontData.m_Font

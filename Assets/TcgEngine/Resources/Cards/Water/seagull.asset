@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: seagull
   m_EditorClassIdentifier: 
   id: seagull
-  title: Seagull
+  title: "Seagull \u5927\u5634\u9DD7"
   art_full: {fileID: 21300000, guid: 4a08a6f218392f14dabeaa3970e88636, type: 3}
   art_board: {fileID: 21300000, guid: 767a944c3bb1eac4ca9a9a2d936c0549, type: 3}
   type: 10

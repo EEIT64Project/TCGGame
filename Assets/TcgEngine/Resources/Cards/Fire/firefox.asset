@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: firefox
   m_EditorClassIdentifier: 
   id: firefox
-  title: Firefox
+  title: "Firefox \u5C4C\u6253IE"
   art_full: {fileID: 21300000, guid: d2ec197d4022ca94d8dc1ee2d7eda955, type: 3}
   art_board: {fileID: 21300000, guid: c3ac28cd1113c594ebe11a5f70251135, type: 3}
   type: 10

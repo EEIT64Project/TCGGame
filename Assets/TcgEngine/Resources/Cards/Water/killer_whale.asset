@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: killer_whale
   m_EditorClassIdentifier: 
   id: killer_whale
-  title: Killer Whale
+  title: "Killer Whale \u5DE8\u9C10\u9BE8"
   art_full: {fileID: 21300000, guid: 7dd3b918be639754b8bd56863411b65d, type: 3}
   art_board: {fileID: 21300000, guid: e8ea4a3e7122f6a439408b245cf19136, type: 3}
   type: 10

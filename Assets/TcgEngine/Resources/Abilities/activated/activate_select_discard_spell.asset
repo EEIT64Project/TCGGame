@@ -37,5 +37,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Magic Focus
+  title: "Magic Focus\u9B54\u6CD5\u51DD\u805A"
   desc: "Return a spell from your graveyard to your hand.\n\u5C07\u4E00\u5F35\u6CD5\u8853\u5F9E\u4F60\u7684\u68C4\u724C\u5806\u79FB\u56DE\u4F60\u7684\u624B\u4E0A"

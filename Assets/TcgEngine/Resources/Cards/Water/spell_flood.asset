@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: spell_flood
   m_EditorClassIdentifier: 
   id: spell_flood
-  title: Flood
+  title: "Flood \u5927\u6D2A\u6C34"
   art_full: {fileID: 21300000, guid: d07e338da4c4b3f4098954a1ce85b429, type: 3}
   art_board: {fileID: 0}
   type: 20

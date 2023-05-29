@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: reaper
   m_EditorClassIdentifier: 
   id: reaper
-  title: Hell Reaper
+  title: "Hell Reaper \u5730\u7344\u6536\u5272\u8005"
   art_full: {fileID: 21300000, guid: 110e9843702372043955225eab755c90, type: 3}
   art_board: {fileID: 21300000, guid: 2ea526c03100af04caf4ce7ca391c938, type: 3}
   type: 10

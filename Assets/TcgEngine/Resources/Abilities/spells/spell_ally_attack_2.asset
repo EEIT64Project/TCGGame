@@ -35,5 +35,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Growth
+  title: "Growth\u6210\u9577"
   desc: "All allied characters gain +2/2\n\u6240\u6709\u6211\u65B9\u751F\u7269 +2/2"

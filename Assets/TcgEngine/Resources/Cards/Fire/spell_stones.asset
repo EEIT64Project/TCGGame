@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: spell_stones
   m_EditorClassIdentifier: 
   id: spell_stones
-  title: Hot Stones
+  title: "Hot Stones \u76E7\u6069\u77F3"
   art_full: {fileID: 21300000, guid: e96abe5fc2239f0498afba2234497bd8, type: 3}
   art_board: {fileID: 0}
   type: 20

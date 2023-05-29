@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: wolf_furious
   m_EditorClassIdentifier: 
   id: wolf_furious
-  title: Furious Wolf
+  title: "Furious Wolf \u60F1\u6012\u72FC"
   art_full: {fileID: 21300000, guid: 68daff2a908ce27448fa286b8c3cd714, type: 3}
   art_board: {fileID: 21300000, guid: bd86c41898912c34eba9e6bbba52fb42, type: 3}
   type: 10

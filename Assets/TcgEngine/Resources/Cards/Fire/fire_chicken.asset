@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: fire_chicken
   m_EditorClassIdentifier: 
   id: fire_chicken
-  title: Roasted Chicken
+  title: "Roasted Chicken\u597D\u5E02\u591A\u70E4\u96DE"
   art_full: {fileID: 21300000, guid: fbac205dc606347499e187567b38dc8a, type: 3}
   art_board: {fileID: 21300000, guid: 78af8169df8e58045bcb52fe3b0739c1, type: 3}
   type: 10

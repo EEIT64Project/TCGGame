@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: spell_storm
   m_EditorClassIdentifier: 
   id: spell_storm
-  title: Sea Storm
+  title: "Sea Storm \u6D77\u562F"
   art_full: {fileID: 21300000, guid: 87b1bf15c44b86945b51d6a798840222, type: 3}
   art_board: {fileID: 0}
   type: 20

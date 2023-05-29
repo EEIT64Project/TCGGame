@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: town_forest
   m_EditorClassIdentifier: 
   id: town_forest
-  title: Forest Town
+  title: "Forest Town \u71B1\u5E36\u96E8\u6797"
   art_full: {fileID: 21300000, guid: 47bb00911776e254286a5e9252ee4430, type: 3}
   art_board: {fileID: 21300000, guid: dc645e79cebe0e34b856f13245fc683d, type: 3}
   type: 30

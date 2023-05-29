@@ -33,6 +33,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Draw
+  title: "Draw\u62BD\u53D6"
   desc: "When you kill another character with this creature, draw 2 cards.\n\u7576\u6B64\u751F\u7269\u6BBA\u6B7B\u53E6\u4E00\u500B\u751F\u7269\u6642\uFF0C\u62BD
     2 \u5F35\u5361\u724C"

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: eel
   m_EditorClassIdentifier: 
   id: eel
-  title: Electric Eel
+  title: "Electric Eel \u96FB\u9C3B"
   art_full: {fileID: 21300000, guid: b72bc24b5d6aecb489310af562b78913, type: 3}
   art_board: {fileID: 21300000, guid: e7b6b8d655a48f44d88797c5e0687e6f, type: 3}
   type: 10

@@ -35,6 +35,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Fear
+  title: "Fear\u81BD\u602F"
   desc: "All enemy characters have -1 attack.\n\u6240\u6709\u6575\u65B9\u751F\u7269\u7684\u653B\u64CA\u529B\u6E1B\u5C11
     1 \u9EDE"

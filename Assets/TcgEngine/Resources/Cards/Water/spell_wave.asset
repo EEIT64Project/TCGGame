@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: spell_wave
   m_EditorClassIdentifier: 
   id: spell_wave
-  title: Wave
+  title: "Wave \u6D6A\u6F6E"
   art_full: {fileID: 21300000, guid: cc3bd4bae8a25fb4693234894df54925, type: 3}
   art_board: {fileID: 0}
   type: 20

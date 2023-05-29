@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: trap_spike
   m_EditorClassIdentifier: 
   id: trap_spike
-  title: Spike Trap
+  title: "Spike Trap \u5C16\u523A\u9677\u9631"
   art_full: {fileID: 21300000, guid: 9efae935e6d88f1479749435674589dc, type: 3}
   art_board: {fileID: 0}
   type: 40

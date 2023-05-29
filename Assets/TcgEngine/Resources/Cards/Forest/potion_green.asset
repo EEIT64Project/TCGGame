@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: potion_green
   m_EditorClassIdentifier: 
   id: potion_green
-  title: Green Potion
+  title: "Green Potion \u5973\u5DEB\u85E5\u6C34"
   art_full: {fileID: 21300000, guid: dc0a5320167a5d84299c9600c8f3d259, type: 3}
   art_board: {fileID: 0}
   type: 20

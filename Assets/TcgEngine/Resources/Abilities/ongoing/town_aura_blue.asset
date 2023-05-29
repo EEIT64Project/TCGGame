@@ -36,6 +36,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Blue Aura
+  title: "Blue Aura\u6D77\u6D0B\u4E4B\u5FC3"
   desc: "All Blue cards cost 1 less.\n\u6240\u6709\u6D77\u6D0B\u5C6C\u6027\u5361\u724C\u6E1B\u5C11
     1 \u9EDE\u6CD5\u529B\u503C\u6D88\u8017"

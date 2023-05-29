@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: fish
   m_EditorClassIdentifier: 
   id: fish
-  title: Fish
+  title: "Fish \u4FEE\u5973\u7684\u5BF5\u7269"
   art_full: {fileID: 21300000, guid: b2db8c6ecb5b1b64cbf5abac9d783ddc, type: 3}
   art_board: {fileID: 21300000, guid: 68c5a00c7e31297439b6342a300a89d9, type: 3}
   type: 10

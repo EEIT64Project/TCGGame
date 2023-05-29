@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: wolf_stalker
   m_EditorClassIdentifier: 
   id: wolf_stalker
-  title: Wolf Stalker
+  title: "Wolf Stalker \u7375\u6BBA\u8005"
   art_full: {fileID: 21300000, guid: 8be9cdeea7b57aa4dbff68d71ffa97f1, type: 3}
   art_board: {fileID: 21300000, guid: d01e947eea657984692e70b772475fd3, type: 3}
   type: 10

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: dragon_blue
   m_EditorClassIdentifier: 
   id: dragon_blue
-  title: Blue Dragon
+  title: "Blue Dragon \u85CD\u6B63\u9F8D"
   art_full: {fileID: 21300000, guid: e15194d2fa4d9894490fc12935a55811, type: 3}
   art_board: {fileID: 21300000, guid: 57f10b2c4a18f3f4880229ced3ca4e94, type: 3}
   type: 10

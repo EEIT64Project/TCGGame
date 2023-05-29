@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: armored_beast
   m_EditorClassIdentifier: 
   id: armored_beast
-  title: Armored Beast
+  title: "Armored Beast \u76AE\u514B"
   art_full: {fileID: 21300000, guid: 99b2df2a79520804883a1959ed58d2d7, type: 3}
   art_board: {fileID: 21300000, guid: 189c8c57920274f4c84895dde3e00a75, type: 3}
   type: 10

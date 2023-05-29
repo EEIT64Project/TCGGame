@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: town_underwater
   m_EditorClassIdentifier: 
   id: town_underwater
-  title: Underwater Town
+  title: "Underwater Town \u4E9E\u7279\u862D\u63D0\u65AF"
   art_full: {fileID: 21300000, guid: 7fc0bfcbe3cb6f140814840245dda73b, type: 3}
   art_board: {fileID: 21300000, guid: 24c14e88b5498bb4e8bc24429ee85c27, type: 3}
   type: 30
