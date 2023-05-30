@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace TcgEngine
 {
     //Represent the current state of a card during the game (data only)
-
+    
     [System.Serializable]
+    [DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
     public class Card
     {
         public string card_id;
@@ -416,6 +418,11 @@ namespace TcgEngine
 
             if(dest.Count > source.Count)
                 dest.RemoveRange(source.Count, dest.Count - source.Count);
+        }
+
+        private string GetDebuggerDisplay()
+        {
+            return ToString();
         }
     }
 
