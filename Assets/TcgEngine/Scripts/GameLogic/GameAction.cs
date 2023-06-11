@@ -41,6 +41,7 @@ namespace TcgEngine
         public const ushort CardSummoned = 2022;
         public const ushort CardTransformed = 2023;
         public const ushort CardDiscarded = 2025;
+        public const ushort CardDrawn = 2026;
         public const ushort CardMoved = 2027;
 
         public const ushort AttackStart = 2030;
@@ -53,7 +54,10 @@ namespace TcgEngine
         public const ushort AbilityTargetPlayer = 2043;
         public const ushort AbilityTargetSlot = 2044;
         public const ushort AbilityEnd = 2048;
-        public const ushort SecretResolved = 2050;
+
+        public const ushort SecretTriggered = 2060;
+        public const ushort SecretResolved = 2061;
+        public const ushort ValueRolled = 2070;
 
         public const ushort ServerMessage = 2190; //Server warning msg
         public const ushort RefreshAll = 2100;

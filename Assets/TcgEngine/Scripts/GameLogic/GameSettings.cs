@@ -10,6 +10,7 @@ namespace TcgEngine
     public enum PlayMode
     {
         Solo = 0,
+        Adventure = 10,
         Multiplayer = 20,
         HostP2P = 30,
         Observer = 40,
@@ -37,10 +38,16 @@ namespace TcgEngine
 
         public PlayMode play_mode = PlayMode.Solo;      //Multiplayer? Solo? Observer?
         public GameMode game_mode = GameMode.Casual;    //Ranked or not? Other special game mode?
+        public string level;                            //Adventure level ID
 
         public virtual bool IsHost()
         {
-            return play_mode == PlayMode.Solo || play_mode == PlayMode.HostP2P;
+            return play_mode == PlayMode.Solo || play_mode == PlayMode.Adventure || play_mode == PlayMode.HostP2P;
+        }
+
+        public virtual bool IsOffline()
+        {
+            return play_mode == PlayMode.Solo || play_mode == PlayMode.Adventure;
         }
 
         public virtual bool IsOnline()
@@ -89,6 +96,7 @@ namespace TcgEngine
             serializer.SerializeValue(ref play_mode);
             serializer.SerializeValue(ref game_mode);
             serializer.SerializeValue(ref nb_players);
+            serializer.SerializeValue(ref level);
         }
 
         public static string GetRankModeString(GameMode rank_mode)
@@ -120,6 +128,7 @@ namespace TcgEngine
                 settings.game_mode = GameMode.Casual;
                 settings.nb_players = 2;
                 settings.scene = "Game";
+                settings.level = "";
                 return settings;
             }
         }

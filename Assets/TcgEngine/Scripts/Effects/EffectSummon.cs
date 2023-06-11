@@ -13,14 +13,19 @@ namespace TcgEngine
     {
         public CardData summon;
 
+        public override void DoEffect(GameLogic logic, AbilityData ability, Card caster, Player target)
+        {
+            logic.SummonCardHand(target.player_id, summon, caster.VariantData); //Summon to hand
+        }
+
         public override void DoEffect(GameLogic logic, AbilityData ability, Card caster, Card target)
         {
-            logic.SummonCard(caster.player_id, summon, target.slot); //Assumes the target has just been killed, so the slot is empty
+            logic.SummonCard(caster.player_id, summon, caster.VariantData, target.slot); //Assumes the target has just been killed, so the slot is empty
         }
 
         public override void DoEffect(GameLogic logic, AbilityData ability, Card caster, Slot target)
         {
-            logic.SummonCard(caster.player_id, summon, target);
+            logic.SummonCard(caster.player_id, summon, caster.VariantData, target);
         }
     }
 }

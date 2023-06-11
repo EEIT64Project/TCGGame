@@ -24,6 +24,21 @@ namespace TcgEngine
                 rarity_list.AddRange(Resources.LoadAll<RarityData>(folder));
         }
 
+        public static RarityData GetFirst()
+        {
+            int lowest = 99999;
+            RarityData first = null;
+            foreach (RarityData rarity in GetAll())
+            {
+                if (rarity.rank < lowest)
+                {
+                    first = rarity;
+                    lowest = rarity.rank;
+                }
+            }
+            return first;
+        }
+
         public static RarityData Get(string id)
         {
             foreach (RarityData rarity in GetAll())

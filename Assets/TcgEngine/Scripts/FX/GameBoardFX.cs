@@ -18,7 +18,8 @@ namespace TcgEngine.FX
             GameClient.Get().onNewTurn += OnNewTurn;
             GameClient.Get().onCardPlayed += OnPlayCard;
             GameClient.Get().onAbilityStart += OnAbility;
-            GameClient.Get().onSecret += OnSecret;
+            GameClient.Get().onSecretTrigger += OnSecret;
+            GameClient.Get().onValueRolled += OnRoll;
         }
 
         void OnNewTurn(int player_id)
@@ -27,7 +28,7 @@ namespace TcgEngine.FX
             FXTool.DoFX(AssetData.Get().new_turn_fx, Vector3.zero);
         }
 
-		void OnPlayCard(Card card, Slot slot)
+        void OnPlayCard(Card card, Slot slot)
         {
             int player_id = GameClient.Get().GetPlayerID();
             if (card != null)
@@ -38,7 +39,7 @@ namespace TcgEngine.FX
                     GameObject prefab = player_id == card.player_id ? AssetData.Get().play_card_fx : AssetData.Get().play_card_other_fx;
                     GameObject obj = FXTool.DoFX(prefab, Vector3.zero);
                     CardUI ui = obj.GetComponentInChildren<CardUI>();
-                    ui.SetCard(icard, card.variant);
+                    ui.SetCard(icard, card.VariantData);
 
                     AudioClip spawn_audio = icard.spawn_audio != null ? icard.spawn_audio : AssetData.Get().card_spawn_audio;
                     AudioTool.Get().PlaySFX("card_spell", spawn_audio);
@@ -65,7 +66,19 @@ namespace TcgEngine.FX
 
         private void OnSecret(Card secret, Card triggerer)
         {
-            
+            CardData icard = CardData.Get(secret.card_id);
+            if (icard?.attack_audio != null)
+                AudioTool.Get().PlaySFX("card_secret", icard.attack_audio);
+        }
+
+        private void OnRoll(int value)
+        {
+            GameObject fx = FXTool.DoFX(AssetData.Get().dice_roll_fx, Vector3.zero);
+            DiceRollFX dice = fx?.GetComponent<DiceRollFX>();
+            if (dice != null)
+            {
+                dice.value = value;
+            }
         }
 
     }

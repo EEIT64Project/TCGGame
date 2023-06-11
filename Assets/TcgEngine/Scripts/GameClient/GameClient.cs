@@ -34,19 +34,21 @@ namespace TcgEngine.Client
         public UnityAction<Slot> onCardSummoned;
         public UnityAction<Card> onCardTransformed;
         public UnityAction<Card> onCardDiscarded;
+        public UnityAction<int> onCardDraw;
+        public UnityAction<int> onValueRolled;
 
         public UnityAction<AbilityData, Card> onAbilityStart;
         public UnityAction<AbilityData, Card, Card> onAbilityTargetCard;      //Ability, Caster, Target
         public UnityAction<AbilityData, Card, Player> onAbilityTargetPlayer;
         public UnityAction<AbilityData, Card, Slot> onAbilityTargetSlot;
         public UnityAction<AbilityData, Card> onAbilityEnd;
+        public UnityAction<Card, Card> onSecretTrigger;    //Secret, Triggerer
+        public UnityAction<Card, Card> onSecretResolve;    //Secret, Triggerer
 
         public UnityAction<Card, Card> onAttackStart;   //Attacker, Defender
         public UnityAction<Card, Card> onAttackEnd;     //Attacker, Defender
         public UnityAction<Card, Player> onAttackPlayerStart;
         public UnityAction<Card, Player> onAttackPlayerEnd;
-
-        public UnityAction<Card, Card> onSecret;    //Secret, Triggerer
 
         public UnityAction<int, string> onChatMsg;  //player_id, msg
         public UnityAction< string> onServerMsg;  //msg
@@ -67,7 +69,7 @@ namespace TcgEngine.Client
         protected virtual void Awake()
         {
             _instance = this;
-            Application.targetFrameRate = 60;
+            Application.targetFrameRate = 120;
         }
 
         protected virtual void Start()
@@ -77,10 +79,12 @@ namespace TcgEngine.Client
             RegisterRefresh(GameAction.GameEnd, OnGameEnd);
             RegisterRefresh(GameAction.NewTurn, OnNewTurn);
             RegisterRefresh(GameAction.CardPlayed, OnCardPlayed);
+            RegisterRefresh(GameAction.CardMoved, OnCardMoved);
             RegisterRefresh(GameAction.CardSummoned, OnCardSummoned);
             RegisterRefresh(GameAction.CardTransformed, OnCardTransformed);
             RegisterRefresh(GameAction.CardDiscarded, OnCardDiscarded);
-            RegisterRefresh(GameAction.CardMoved, OnCardMoved);
+            RegisterRefresh(GameAction.CardDrawn, OnCardDraw);
+            RegisterRefresh(GameAction.ValueRolled, OnValueRolled);
 
             RegisterRefresh(GameAction.AttackStart, OnAttackStart);
             RegisterRefresh(GameAction.AttackEnd, OnAttackEnd);
@@ -93,7 +97,8 @@ namespace TcgEngine.Client
             RegisterRefresh(GameAction.AbilityTargetSlot, OnAbilityTargetSlot);
             RegisterRefresh(GameAction.AbilityEnd, OnAbilityAfter);
 
-            RegisterRefresh(GameAction.SecretResolved, OnSecret);
+            RegisterRefresh(GameAction.SecretTriggered, OnSecretTrigger);
+            RegisterRefresh(GameAction.SecretResolved, OnSecretResolve);
 
             RegisterRefresh(GameAction.ChatMessage, OnChat);
             RegisterRefresh(GameAction.ServerMessage, OnServerMsg);
@@ -181,9 +186,7 @@ namespace TcgEngine.Client
 
         public virtual void SendGameSettings()
         {
-            PlayMode pmode = game_settings.play_mode;
-
-            if (pmode == PlayMode.Solo)
+            if (game_settings.IsOffline())
             {
                 //Solo mode, send both your settings and AI settings
                 SendGameplaySettings(game_settings);
@@ -197,7 +200,6 @@ namespace TcgEngine.Client
                 SendPlayerSettings(player_settings);
             }
         }
-
 
         public virtual void Disconnect()
         {
@@ -301,8 +303,8 @@ namespace TcgEngine.Client
 
         public void SelectChoice(int c)
         {
-            MsgChoice choice = new MsgChoice();
-            choice.choice = c;
+            MsgInt choice = new MsgInt();
+            choice.value = c;
             SendAction(GameAction.SelectChoice, choice);
         }
 
@@ -450,6 +452,18 @@ namespace TcgEngine.Client
             onCardDiscarded?.Invoke(card);
         }
 
+        private void OnCardDraw(SerializedData sdata)
+        {
+            MsgInt msg = sdata.Get<MsgInt>();
+            onCardDraw?.Invoke(msg.value);
+        }
+
+        private void OnValueRolled(SerializedData sdata)
+        {
+            MsgInt msg = sdata.Get<MsgInt>();
+            onValueRolled?.Invoke(msg.value);
+        }
+
         private void OnAttackStart(SerializedData sdata)
         {
             MsgAttack msg = sdata.Get<MsgAttack>();
@@ -524,12 +538,20 @@ namespace TcgEngine.Client
             onAbilityEnd?.Invoke(ability, caster);
         }
 
-        private void OnSecret(SerializedData sdata)
+        private void OnSecretTrigger(SerializedData sdata)
         {
             MsgSecret msg = sdata.Get<MsgSecret>();
             Card secret = game_data.GetCard(msg.secret_uid);
             Card triggerer = game_data.GetCard(msg.triggerer_uid);
-            onSecret?.Invoke(secret, triggerer);
+            onSecretTrigger?.Invoke(secret, triggerer);
+        }
+
+        private void OnSecretResolve(SerializedData sdata)
+        {
+            MsgSecret msg = sdata.Get<MsgSecret>();
+            Card secret = game_data.GetCard(msg.secret_uid);
+            Card triggerer = game_data.GetCard(msg.triggerer_uid);
+            onSecretResolve?.Invoke(secret, triggerer);
         }
 
         private void OnChat(SerializedData sdata)

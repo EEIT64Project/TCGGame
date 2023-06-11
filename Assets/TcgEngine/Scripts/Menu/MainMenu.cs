@@ -36,6 +36,7 @@ namespace TcgEngine.UI
             instance = this;
 
             //Set default settings
+            Application.targetFrameRate = 120;
             GameClient.game_settings = GameSettings.Default;
         }
 
@@ -247,6 +248,11 @@ namespace TcgEngine.UI
             StartMathmaking("");
         }
 
+        public void OnClickAdventure()
+        {
+            AdventurePanel.Get().Show();
+        }
+        
         public void OnClickCancelMatch()
         {
             GameClientMatchmaker.Get().StopMatchmaking();

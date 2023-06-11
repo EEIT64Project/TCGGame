@@ -22,7 +22,7 @@ namespace TcgEngine.UI
         public IconButton[] team_filters;
         public Toggle toggle_owned;
         public Toggle toggle_not_owned;
-        //public Toggle toggle_foil;
+
         public Toggle toggle_character;
         public Toggle toggle_spell;
         public Toggle toggle_artifact;
@@ -32,6 +32,8 @@ namespace TcgEngine.UI
         public Toggle toggle_uncommon;
         public Toggle toggle_rare;
         public Toggle toggle_mythic;
+
+        public Toggle toggle_foil;
 
         public Dropdown sort_dropdown;
         public InputField search;
@@ -57,7 +59,7 @@ namespace TcgEngine.UI
         private List<DeckLine> deck_card_lines = new List<DeckLine>();
 
         private string current_deck_tid;
-        private Dictionary<CardData, int> deck_cards = new Dictionary<CardData, int>();
+        private Dictionary<string, int> deck_cards = new Dictionary<string, int>();
         private bool editing_deck = false;
         private bool saving = false;
         private bool spawned = false;
@@ -158,15 +160,18 @@ namespace TcgEngine.UI
                 Destroy(card.gameObject);
             all_list.Clear();
 
-            foreach (CardData card in CardData.GetAll())
+            foreach (VariantData variant in VariantData.GetAll())
             {
-                GameObject nCard = Instantiate(card_prefab, grid_content.transform);
-                CollectionCard dCard = nCard.GetComponent<CollectionCard>();
-                dCard.SetCard(card, CardVariant.Normal, 0);
-                dCard.onClick += OnClickCard;
-                dCard.onClickRight += OnClickCardRight;
-                all_list.Add(dCard);
-                nCard.SetActive(false);
+                foreach (CardData card in CardData.GetAll())
+                {
+                    GameObject nCard = Instantiate(card_prefab, grid_content.transform);
+                    CollectionCard dCard = nCard.GetComponent<CollectionCard>();
+                    dCard.SetCard(card, variant, 0);
+                    dCard.onClick += OnClickCard;
+                    dCard.onClickRight += OnClickCardRight;
+                    all_list.Add(dCard);
+                    nCard.SetActive(false);
+                }
             }
         }
 
@@ -182,6 +187,11 @@ namespace TcgEngine.UI
             bool is_test = Authenticator.Get().IsTest();
             UserData udata = Authenticator.Get().UserData;
 
+            VariantData variant = VariantData.GetDefault();
+            VariantData special = VariantData.GetSpecial();
+            if (toggle_foil.isOn && special != null)
+                variant = special;
+
             List<CardDataQ> all_cards = new List<CardDataQ>();
             List<CardDataQ> shown_cards = new List<CardDataQ>();
 
@@ -189,8 +199,8 @@ namespace TcgEngine.UI
             {
                 CardDataQ card = new CardDataQ();
                 card.card = icard;
-                card.variant = CardVariant.Normal;
-                card.quantity = udata.GetCardQuantity(UserCardData.GetTid(icard.id, CardVariant.Normal));
+                card.variant = variant;
+                card.quantity = udata.GetCardQuantity(UserCardData.GetTid(icard.id, variant));
                 all_cards.Add(card);
             }
 
@@ -202,7 +212,7 @@ namespace TcgEngine.UI
                 all_cards.Sort((CardDataQ a, CardDataQ b) => { return b.card.hp == a.card.hp ? b.card.attack.CompareTo(a.card.attack) : b.card.hp.CompareTo(a.card.hp); });
             if (filter_dropdown == 3) //Cost
                 all_cards.Sort((CardDataQ a, CardDataQ b) => { return b.card.mana == a.card.mana ? a.card.title.CompareTo(b.card.title) : a.card.mana.CompareTo(b.card.mana); });
-            
+
             foreach (CardDataQ card in all_cards)
             {
                 if (card.card.deckbuilding)
@@ -250,7 +260,7 @@ namespace TcgEngine.UI
                 if (index < all_list.Count)
                 {
                     CollectionCard dcard = all_list[index];
-                    int quantity = udata.GetCardQuantity(UserCardData.GetTid(qcard.card.id, CardVariant.Normal));
+                    int quantity = udata.GetCardQuantity(UserCardData.GetTid(qcard.card.id, variant));
                     dcard.SetCard(qcard.card, qcard.variant, quantity);
                     card_list.Add(dcard);
                     dcard.gameObject.SetActive(true);
@@ -321,12 +331,10 @@ namespace TcgEngine.UI
 
                 for (int i = 0; i < deck.cards.Length; i++)
                 {
-                    string cid = UserCardData.GetCardId(deck.cards[i]);
-                    CardVariant variant = UserCardData.GetCardVariant(deck.cards[i]);
-                    CardData card = CardData.Get(cid);
+                    CardData card = UserCardData.GetCardData(deck.cards[i]);
                     if (card != null)
                     {
-                        AddDeckCard(card);
+                        AddDeckCard(deck.cards[i]);
                     }
                 }
             }
@@ -343,10 +351,11 @@ namespace TcgEngine.UI
             card_list_panel.Show();
 
             List<CardDataQ> list = new List<CardDataQ>();
-            foreach (KeyValuePair<CardData, int> pair in deck_cards)
+            foreach (KeyValuePair<string, int> pair in deck_cards)
             {
                 CardDataQ acard = new CardDataQ();
-                acard.card = pair.Key;
+                acard.card = UserCardData.GetCardData(pair.Key);
+                acard.variant = UserCardData.GetCardVariant(pair.Key);
                 acard.quantity = pair.Value;
                 list.Add(acard);
             }
@@ -365,10 +374,7 @@ namespace TcgEngine.UI
                     DeckLine line = deck_card_lines[index];
                     if (line != null)
                     {
-                        CardVariant variant = CardVariant.Normal;
-                        //CardVariant variant = card_variants.ContainsKey(card) ? card_variants[card] : CardVariant.Normal;
-                        //string tid = UserCardData.GetTid(card.id, variant);
-                        line.SetLine(card.card, variant, card.quantity, !IsCardOwned(udata, card.card, variant, card.quantity));
+                        line.SetLine(card.card, card.variant, card.quantity, !IsCardOwned(udata, card.card, card.variant, card.quantity));
                         count += card.quantity;
                     }
                 }
@@ -392,20 +398,32 @@ namespace TcgEngine.UI
             line.onClickRight += OnRightClickCardLine;
         }
 
-        private void AddDeckCard(CardData card)
+        private void AddDeckCard(CardData card, VariantData variant)
         {
-            if (deck_cards.ContainsKey(card))
-                deck_cards[card] += 1;
-            else
-                deck_cards[card] = 1;
+            string tid = UserCardData.GetTid(card.id, variant);
+            AddDeckCard(tid);
         }
 
-        private void RemoveDeckCard(CardData card)
+        private void RemoveDeckCard(CardData card, VariantData variant)
         {
-            if (deck_cards.ContainsKey(card))
-                deck_cards[card] -= 1;
-            if (deck_cards[card] <= 0)
-                deck_cards.Remove(card);
+            string tid = UserCardData.GetTid(card.id, variant);
+            RemoveDeckCard(tid);
+        }
+
+        private void AddDeckCard(string tid)
+        {
+            if (deck_cards.ContainsKey(tid))
+                deck_cards[tid] += 1;
+            else
+                deck_cards[tid] = 1;
+        }
+
+        private void RemoveDeckCard(string tid)
+        {
+            if (deck_cards.ContainsKey(tid))
+                deck_cards[tid] -= 1;
+            if (deck_cards[tid] <= 0)
+                deck_cards.Remove(tid);
         }
 
         private void RefreshStarterDeck()
@@ -426,13 +444,12 @@ namespace TcgEngine.UI
             saving = true;
 
             List<string> card_list = new List<string>();
-            foreach (KeyValuePair<CardData, int> pair in deck_cards)
+            foreach (KeyValuePair<string, int> pair in deck_cards)
             {
                 if (pair.Key != null)
                 {
-                    CardVariant variant = CardVariant.Normal;
                     for (int i = 0; i < pair.Value; i++)
-                        card_list.Add(UserCardData.GetTid(pair.Key.id, variant));
+                        card_list.Add(pair.Key);
                 }
             }
             udeck.cards = card_list.ToArray();
@@ -485,7 +502,7 @@ namespace TcgEngine.UI
             ReloadUserDecks();
         }
 
-        private bool IsCardOwned(UserData udata, CardData card, CardVariant variant, int quantity)
+        private bool IsCardOwned(UserData udata, CardData card, VariantData variant, int quantity)
         {
             bool is_test = Authenticator.Get().IsTest();
             string tid = UserCardData.GetTid(card.id, variant);
@@ -558,9 +575,10 @@ namespace TcgEngine.UI
         private void OnClickCardLine(DeckLine line)
         {
             CardData card = line.GetCard();
+            VariantData variant = line.GetVariant();
             if (card != null)
             {
-                RemoveDeckCard(card);
+                RemoveDeckCard(card, variant);
             }
 
             RefreshDeckCards();
@@ -582,17 +600,19 @@ namespace TcgEngine.UI
             }
 
             CardData icard = card.GetCard();
+            VariantData variant = card.GetVariant();
             if (icard != null)
             {
                 int in_deck = CountDeckCards(icard);
+                int in_deck_same = CountDeckCards(icard, variant);
                 UserData udata = Authenticator.Get().UserData;
 
-                bool owner = IsCardOwned(udata, card.GetCard(), card.GetVariant(), in_deck + 1);
+                bool owner = IsCardOwned(udata, card.GetCard(), card.GetVariant(), in_deck_same + 1);
                 bool deck_limit = in_deck < GameplayData.Get().deck_duplicate_max;
 
                 if (owner && deck_limit)
                 {
-                    AddDeckCard(icard);
+                    AddDeckCard(icard, variant);
                     RefreshDeckCards();
                 }
             }
@@ -611,11 +631,24 @@ namespace TcgEngine.UI
             SaveDeck();
         }
 
+        public int CountDeckCards(CardData card, VariantData cvariant)
+        {
+            string tid = UserCardData.GetTid(card.id, cvariant);
+            if (deck_cards.ContainsKey(tid))
+                return deck_cards[tid];
+            return 0;
+        }
+
         public int CountDeckCards(CardData card)
         {
-            if (deck_cards.ContainsKey(card))
-                return deck_cards[card];
-            return 0;
+            int count = 0;
+            foreach (VariantData cvariant in VariantData.GetAll())
+            {
+                string tid = UserCardData.GetTid(card.id, cvariant);
+                if (deck_cards.ContainsKey(tid))
+                    count += deck_cards[tid];
+            }
+            return count;
         }
 
         public override void Show(bool instant = false)
@@ -633,7 +666,7 @@ namespace TcgEngine.UI
     public struct CardDataQ
     {
         public CardData card;
-        public CardVariant variant;
+        public VariantData variant;
         public int quantity;
     }
 }

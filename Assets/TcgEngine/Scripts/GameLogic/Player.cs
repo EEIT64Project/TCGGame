@@ -34,8 +34,8 @@ namespace TcgEngine
         public List<Card> cards_discard = new List<Card>();
         public List<Card> cards_secret = new List<Card>();
 
-        public List<CardStat> stats = new List<CardStat>();
-        public List<CardStat> ongoing_stats = new List<CardStat>();
+        public List<CardTrait> traits = new List<CardTrait>();
+        public List<CardTrait> ongoing_traits = new List<CardTrait>();
 
         public List<CardStatus> ongoing_status = new List<CardStatus>();
         public List<CardStatus> status_effects = new List<CardStatus>();
@@ -47,7 +47,7 @@ namespace TcgEngine
         public bool IsReady() { return ready && cards_all.Count > 0; }
         public bool IsConnected() { return connected || is_ai; }
 
-        public virtual void CleanOngoing() { ongoing_status.Clear(); ongoing_stats.Clear(); }
+        public virtual void CleanOngoing() { ongoing_status.Clear(); ongoing_traits.Clear(); }
 
         //---- Cards ---------
 
@@ -71,10 +71,10 @@ namespace TcgEngine
             cards_secret.Remove(card);
         }
         
-        public virtual Card GetRandomCard(List<Card> card_list)
+        public virtual Card GetRandomCard(List<Card> card_list, System.Random rand)
         {
             if (card_list.Count > 0)
-                return card_list[Random.Range(0, card_list.Count)];
+                return card_list[rand.Next(0, card_list.Count)];
             return null;
         }
 
@@ -152,16 +152,16 @@ namespace TcgEngine
 
         //---- Slots ---------
 
-        public Slot GetRandomSlot()
+        public Slot GetRandomSlot(System.Random rand)
         {
-            return Slot.GetRandom(player_id);
+            return Slot.GetRandom(player_id, rand);
         }
 
-        public virtual Slot GetRandomEmptySlot()
+        public virtual Slot GetRandomEmptySlot(System.Random rand)
         {
             List<Slot> valid = GetEmptySlots();
             if (valid.Count > 0)
-                return valid[Random.Range(0, valid.Count)];
+                return valid[rand.Next(0, valid.Count)];
             return Slot.None;
         }
 
@@ -177,92 +177,116 @@ namespace TcgEngine
             return valid;
         }
 
-        //------ Custom Stats ---------
+        //------ Custom Traits/Stats ---------
 
-        public void SetStats(CardData icard)
+        public void SetTrait(string id, int value)
         {
-            stats.Clear();
-            if (icard.stats != null)
+            CardTrait trait = GetTrait(id);
+            if (trait != null)
             {
-                foreach (TraitStat stat in icard.stats)
-                    SetStat(stat.trait.id, stat.value);
-            }
-        }
-
-        public void SetStat(string id, int value)
-        {
-            CardStat stat = GetStat(id);
-            if (stat != null)
-            {
-                stat.value = value;
+                trait.value = value;
             }
             else
             {
-                stat = new CardStat(id, value);
-                stats.Add(stat);
+                trait = new CardTrait(id, value);
+                traits.Add(trait);
             }
         }
 
-        public void AddStat(string id, int value)
+        public void AddTrait(string id, int value)
         {
-            CardStat stat = GetStat(id);
-            if (stat != null)
-                stat.value += value;
+            CardTrait trait = GetTrait(id);
+            if (trait != null)
+                trait.value += value;
             else
-                SetStat(id, value);
+                SetTrait(id, value);
         }
 
-        public void AddOngoingStat(string id, int value)
+        public void AddOngoingTrait(string id, int value)
         {
-            CardStat stat = GetOngoingStat(id);
-            if (stat != null)
+            CardTrait trait = GetOngoingTrait(id);
+            if (trait != null)
             {
-                stat.value += value;
+                trait.value += value;
             }
             else
             {
-                stat = new CardStat(id, value);
-                ongoing_stats.Add(stat);
+                trait = new CardTrait(id, value);
+                ongoing_traits.Add(trait);
             }
         }
 
-        public CardStat GetStat(string id)
+        public void RemoveTrait(string id)
         {
-            foreach (CardStat stat in stats)
+            for (int i = traits.Count - 1; i >= 0; i--)
             {
-                if (stat.id == id)
-                    return stat;
+                if (traits[i].id == id)
+                    traits.RemoveAt(i);
+            }
+        }
+
+        public CardTrait GetTrait(string id)
+        {
+            foreach (CardTrait trait in traits)
+            {
+                if (trait.id == id)
+                    return trait;
             }
             return null;
         }
 
-        public CardStat GetOngoingStat(string id)
+        public CardTrait GetOngoingTrait(string id)
         {
-            foreach (CardStat stat in ongoing_stats)
+            foreach (CardTrait trait in ongoing_traits)
             {
-                if (stat.id == id)
-                    return stat;
+                if (trait.id == id)
+                    return trait;
             }
             return null;
         }
 
-        public int GetStatValue(TraitData stat)
+        public List<CardTrait> GetAllTraits()
         {
-            if (stat != null)
-                return GetStatValue(stat.id);
+            List<CardTrait> all_traits = new List<CardTrait>();
+            all_traits.AddRange(traits);
+            all_traits.AddRange(ongoing_traits);
+            return all_traits;
+        }
+
+        public int GetTraitValue(TraitData trait)
+        {
+            if (trait != null)
+                return GetTraitValue(trait.id);
             return 0;
         }
 
-        public virtual int GetStatValue(string id)
+        public virtual int GetTraitValue(string id)
         {
             int val = 0;
-            CardStat stat1 = GetStat(id);
-            CardStat stat2 = GetOngoingStat(id);
+            CardTrait stat1 = GetTrait(id);
+            CardTrait stat2 = GetOngoingTrait(id);
             if (stat1 != null)
                 val += stat1.value;
             if (stat2 != null)
                 val += stat2.value;
             return val;
+        }
+
+        public bool HasTrait(TraitData trait)
+        {
+            if (trait != null)
+                return HasTrait(trait.id);
+            return false;
+        }
+
+        public bool HasTrait(string id)
+        {
+            foreach (CardTrait trait in traits)
+            {
+                if (trait.id == id)
+                    return true;
+            }
+            return false;
         }
 
         //---- Status ---------

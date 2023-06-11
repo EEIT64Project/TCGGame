@@ -79,13 +79,12 @@ namespace TcgEngine.Client
                 Card target = tslot ? gdata.GetSlotCard(tslot.GetSlot()) : null;
                 AbilityButton ability = AbilityButton.GetHover(wpos, 1f);
                 PlayerAttackZone zone = PlayerAttackZone.Get(true);
-                float zone_dist = Vector3.Distance(zone.transform.position, wpos);
                 
                 if (ability != null && ability.IsVisible())
                 {
                     ability.OnClick();
                 }
-                else if (zone_dist < 1f)
+                else if (zone.IsInRange(wpos, 3f, 1f))
                 {
                     if (selected_card.GetCard().exhausted)
                         WarningText.ShowExhausted();

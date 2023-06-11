@@ -27,7 +27,7 @@ namespace TcgEngine.Server
         protected virtual void Awake()
         {
             Application.runInBackground = true;
-            Application.targetFrameRate = 60; //Limit server frame rate to prevent using 100% cpu
+            Application.targetFrameRate = 200; //Limit server frame rate to prevent using 100% cpu
         }
 
         protected virtual void Start()

@@ -31,7 +31,7 @@ namespace TcgEngine
         private int GetDamage(Game data, Card caster, int value)
         {
             Player player = data.GetPlayer(caster.player_id);
-            int damage = value + caster.GetStatValue(bonus_damage) + player.GetStatValue(bonus_damage);
+            int damage = value + caster.GetTraitValue(bonus_damage) + player.GetTraitValue(bonus_damage);
             return damage;
         }
 

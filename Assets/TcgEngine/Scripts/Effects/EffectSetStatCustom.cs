@@ -16,13 +16,22 @@ namespace TcgEngine
 
         public override void DoEffect(GameLogic logic, AbilityData ability, Card caster, Player target)
         {
-            target.SetStat(trait.id, ability.value);
+            target.SetTrait(trait.id, ability.value);
         }
 
         public override void DoEffect(GameLogic logic, AbilityData ability, Card caster, Card target)
         {
-            target.SetStat(trait.id, ability.value);
+            target.SetTrait(trait.id, ability.value);
         }
 
+        public override void DoOngoingEffect(GameLogic logic, AbilityData ability, Card caster, Player target)
+        {
+            target.SetTrait(trait.id, ability.value);
+        }
+
+        public override void DoOngoingEffect(GameLogic logic, AbilityData ability, Card caster, Card target)
+        {
+            target.SetTrait(trait.id, ability.value);
+        }
     }
 }

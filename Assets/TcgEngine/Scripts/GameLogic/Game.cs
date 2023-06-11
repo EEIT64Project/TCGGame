@@ -35,6 +35,7 @@ namespace TcgEngine
         [System.NonSerialized] public Card last_target;
         [System.NonSerialized] public Card last_killed;
         [System.NonSerialized] public Card ability_triggerer;
+        [System.NonSerialized] public int rolled_value;
 
         //Other arrays  (not serialized)
         [System.NonSerialized] public HashSet<string> ability_played = new HashSet<string>();
@@ -108,7 +109,7 @@ namespace TcgEngine
             {
                 if (!slot.IsValid() || IsCardOnSlot(slot))
                     return false;   //Slot already occupied
-                if (card.player_id != slot.p)
+                if (Slot.GetP(card.player_id) != slot.p)
                     return false; //Cant play on opponent side
                 return true;
             }
@@ -128,11 +129,15 @@ namespace TcgEngine
             if (!card.CanMove())
                 return false; //Card cant move
 
-            if (card.player_id != slot.p)
+            if (Slot.GetP(card.player_id) != slot.p)
                 return false; //Card played wrong side
 
             if (card.slot == slot)
                 return false; //Cant move to same slot
+
+            Card slot_card = GetSlotCard(slot);
+            if (slot_card != null)
+                return false; //Already a card there
 
             return true;
         }
@@ -368,22 +373,22 @@ namespace TcgEngine
             return null;
         }
         
-        public virtual Player GetRandomPlayer()
+        public virtual Player GetRandomPlayer(System.Random rand)
         {
-            Player player = GetPlayer(Random.value > 0.5f ? 1 : 0);
+            Player player = GetPlayer(rand.NextDouble() < 0.5 ? 1 : 0);
             return player;
         }
 
-        public virtual Card GetRandomBoardCard()
+        public virtual Card GetRandomBoardCard(System.Random rand)
         {
-            Player player = GetRandomPlayer();
-            return player.GetRandomCard(player.cards_board);
+            Player player = GetRandomPlayer(rand);
+            return player.GetRandomCard(player.cards_board, rand);
         }
 
-        public virtual Slot GetRandomSlot()
+        public virtual Slot GetRandomSlot(System.Random rand)
         {
-            Player player = GetRandomPlayer();
-            return player.GetRandomSlot();
+            Player player = GetRandomPlayer(rand);
+            return player.GetRandomSlot(rand);
         }
 
         public bool IsInHand(Card card)

@@ -1,20 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 namespace TcgEngine
 {
     //Represent the current state of a card during the game (data only)
-    
+
     [System.Serializable]
-    [DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
     public class Card
     {
         public string card_id;
         public string uid;
         public int player_id;
-        public CardVariant variant;
+        public string variant_id;
 
         public Slot slot;
         public bool exhausted;
@@ -28,23 +26,23 @@ namespace TcgEngine
         public int attack_ongoing_bonus = 0;
         public int hp_ongoing_bonus = 0;
 
-        public List<CardStat> stats = new List<CardStat>();
-        public List<CardStat> ongoing_stats = new List<CardStat>();
+        public List<CardTrait> traits = new List<CardTrait>();
+        public List<CardTrait> ongoing_traits = new List<CardTrait>();
 
         public List<CardStatus> status = new List<CardStatus>();
         public List<CardStatus> ongoing_status = new List<CardStatus>();
 
         [System.NonSerialized] private CardData data = null;
+        [System.NonSerialized] private VariantData vdata = null;
         [System.NonSerialized] private int hash = 0;
 
         public Card(string card_id, string uid, int player_id) { this.card_id = card_id; this.uid = uid; this.player_id = player_id; }
 
         public virtual void Refresh() { exhausted = false; }
-        public virtual void CleanOngoing() { ongoing_status.Clear(); ongoing_stats.Clear(); attack_ongoing_bonus = 0; hp_ongoing_bonus = 0; mana_ongoing_bonus = 0; }
+        public virtual void CleanOngoing() { ongoing_status.Clear(); ongoing_traits.Clear(); attack_ongoing_bonus = 0; hp_ongoing_bonus = 0; mana_ongoing_bonus = 0; }
         public virtual void Cleanse()
         {
-            CleanOngoing(); Refresh(); attack = 0; hp = 0; damage = 0;
-            status.Clear(); ongoing_status.Clear(); ongoing_stats.Clear();
+            CleanOngoing(); Refresh(); damage = 0; status.Clear(); 
         }
 
         public virtual int GetAttack() { return Mathf.Max(attack + attack_ongoing_bonus, 0); }
@@ -52,103 +50,134 @@ namespace TcgEngine
         public virtual int GetHPMax() { return Mathf.Max(hp + hp_ongoing_bonus, 0); }
         public virtual int GetMana() { return Mathf.Max(mana + mana_ongoing_bonus, 0); }
 
-        public virtual void SetCard(CardData icard)
+        public virtual void SetCard(CardData icard, VariantData cvariant)
         {
             data = icard;
             card_id = icard.id;
-            variant = CardVariant.Normal;
+            variant_id = cvariant.id;
             attack = icard.attack;
             hp = icard.hp;
             mana = icard.mana;
-            SetStats(icard);
+            SetTraits(icard);
         }
 
-        //------ Custom Stats ---------
-
-        public void SetStats(CardData icard)
+        public void SetTraits(CardData icard)
         {
-            stats.Clear();
+            traits.Clear();
+            foreach (TraitData trait in icard.traits)
+                SetTrait(trait.id, 0);
             if (icard.stats != null)
             {
                 foreach (TraitStat stat in icard.stats)
-                    SetStat(stat.trait.id, stat.value);
+                    SetTrait(stat.trait.id, stat.value);
             }
         }
+        
+        //------ Custom Traits/Stats ---------
 
-        public void SetStat(string id, int value)
+        public void SetTrait(string id, int value)
         {
-            CardStat stat = GetStat(id);
-            if (stat != null)
+            CardTrait trait = GetTrait(id);
+            if (trait != null)
             {
-                stat.value = value;
+                trait.value = value;
             }
             else
             {
-                stat = new CardStat(id, value);
-                stats.Add(stat);
+                trait = new CardTrait(id, value);
+                traits.Add(trait);
             }
         }
 
-        public void AddStat(string id, int value)
+        public void AddTrait(string id, int value)
         {
-            CardStat stat = GetStat(id);
-            if (stat != null)
-                stat.value += value;
+            CardTrait trait = GetTrait(id);
+            if (trait != null)
+                trait.value += value;
             else
-                SetStat(id, value);
+                SetTrait(id, value);
         }
 
-        public void AddOngoingStat(string id, int value)
+        public void AddOngoingTrait(string id, int value)
         {
-            CardStat stat = GetOngoingStat(id);
-            if (stat != null)
+            CardTrait trait = GetOngoingTrait(id);
+            if (trait != null)
             {
-                stat.value += value;
+                trait.value += value;
             }
             else
             {
-                stat = new CardStat(id, value);
-                ongoing_stats.Add(stat);
+                trait = new CardTrait(id, value);
+                ongoing_traits.Add(trait);
             }
         }
 
-        public CardStat GetStat(string id)
+        public void RemoveTrait(string id)
         {
-            foreach (CardStat stat in stats)
+            for (int i = traits.Count - 1; i >= 0; i--)
             {
-                if (stat.id == id)
-                    return stat;
+                if (traits[i].id == id)
+                    traits.RemoveAt(i);
+            }
+        }
+
+        public CardTrait GetTrait(string id)
+        {
+            foreach (CardTrait trait in traits)
+            {
+                if (trait.id == id)
+                    return trait;
             }
             return null;
         }
 
-        public CardStat GetOngoingStat(string id)
+        public CardTrait GetOngoingTrait(string id)
         {
-            foreach (CardStat stat in ongoing_stats)
+            foreach (CardTrait trait in ongoing_traits)
             {
-                if (stat.id == id)
-                    return stat;
+                if (trait.id == id)
+                    return trait;
             }
             return null;
         }
 
-        public int GetStatValue(TraitData stat)
+        public List<CardTrait> GetAllTraits()
         {
-            if (stat != null)
-                return GetStatValue(stat.id);
+            List<CardTrait> all_traits = new List<CardTrait>();
+            all_traits.AddRange(traits);
+            all_traits.AddRange(ongoing_traits);
+            return all_traits;
+        }
+
+        public int GetTraitValue(TraitData trait)
+        {
+            if (trait != null)
+                return GetTraitValue(trait.id);
             return 0;
         }
 
-        public virtual int GetStatValue(string id)
+        public virtual int GetTraitValue(string id)
         {
             int val = 0;
-            CardStat stat1 = GetStat(id);
-            CardStat stat2 = GetOngoingStat(id);
+            CardTrait stat1 = GetTrait(id);
+            CardTrait stat2 = GetOngoingTrait(id);
             if (stat1 != null)
                 val += stat1.value;
             if (stat2 != null)
                 val += stat2.value;
             return val;
+        }
+
+        public bool HasTrait(TraitData trait)
+        {
+            if (trait != null)
+                return HasTrait(trait.id);
+            return false;
+        }
+
+        public bool HasTrait(string id)
+        {
+            return GetTrait(id) != null || GetOngoingTrait(id) != null;
         }
 
         //------  Status Effects ---------
@@ -238,6 +267,19 @@ namespace TcgEngine
             int v1 = status1 != null ? status1.value : 0;
             int v2 = status2 != null ? status2.value : 0;
             return v1 + v2;
+        }
+
+        public virtual void ReduceStatusDurations()
+        {
+            for (int i = status.Count - 1; i >= 0; i--)
+            {
+                if (!status[i].permanent)
+                {
+                    status[i].duration -= 1;
+                    if (status[i].duration <= 0)
+                        status.RemoveAt(i);
+                }
+            }
         }
         
         //----- Abilities ------------
@@ -332,6 +374,16 @@ namespace TcgEngine
             } 
         }
 
+        public VariantData VariantData
+        {
+            get
+            {
+                if (vdata == null || vdata.id != variant_id)
+                    vdata = VariantData.Get(variant_id); //Optimization, store for future use
+                return vdata;
+            }
+        }
+
         public CardData Data => CardData; //Alternate name
 
         public int Hash
@@ -343,15 +395,15 @@ namespace TcgEngine
             }
         }
 
-        public static Card Create(string card_id, int player_id)
+        public static Card Create(CardData icard, VariantData ivariant, int player_id)
         {
-            return Create(card_id, player_id, GameTool.GenerateRandomID(11, 15));
+            return Create(icard, ivariant, player_id, GameTool.GenerateRandomID(11, 15));
         }
 
-        public static Card Create(string card_id, int player_id, string uid)
+        public static Card Create(CardData icard, VariantData ivariant, int player_id, string uid)
         {
-            Card card = new Card(card_id, uid, player_id);
-            card.SetCard(card.CardData);
+            Card card = new Card(icard.id, uid, player_id);
+            card.SetCard(icard, ivariant);
             return card;
         }
 
@@ -368,7 +420,7 @@ namespace TcgEngine
             dest.uid = source.uid;
             dest.player_id = source.player_id;
 
-            dest.variant = source.variant;
+            dest.variant_id = source.variant_id;
             dest.slot = source.slot;
             dest.exhausted = source.exhausted;
             dest.damage = source.damage;
@@ -381,8 +433,8 @@ namespace TcgEngine
             dest.attack_ongoing_bonus = source.attack_ongoing_bonus;
             dest.hp_ongoing_bonus = source.hp_ongoing_bonus;
 
-            CardStat.CloneList(source.stats, dest.stats);
-            CardStat.CloneList(source.ongoing_stats, dest.ongoing_stats);
+            CardTrait.CloneList(source.traits, dest.traits);
+            CardTrait.CloneList(source.ongoing_traits, dest.ongoing_traits);
             CardStatus.CloneList(source.status, dest.status);
             CardStatus.CloneList(source.ongoing_status, dest.ongoing_status);
         }
@@ -418,11 +470,6 @@ namespace TcgEngine
 
             if(dest.Count > source.Count)
                 dest.RemoveRange(source.Count, dest.Count - source.Count);
-        }
-
-        private string GetDebuggerDisplay()
-        {
-            return ToString();
         }
     }
 
@@ -487,7 +534,7 @@ namespace TcgEngine
     }
 
     [System.Serializable]
-    public class CardStat
+    public class CardTrait
     {
         public string id;
         public int value;
@@ -495,13 +542,13 @@ namespace TcgEngine
         [System.NonSerialized]
         private TraitData data = null;
 
-        public CardStat(string id, int value)
+        public CardTrait(string id, int value)
         {
             this.id = id;
             this.value = value;
         }
 
-        public CardStat(TraitData trait, int value)
+        public CardTrait(TraitData trait, int value)
         {
             this.id = trait.id;
             this.value = value;
@@ -520,19 +567,19 @@ namespace TcgEngine
         public TraitData Data => TraitData; //Alternate name
 
 
-        public static CardStat CloneNew(CardStat copy)
+        public static CardTrait CloneNew(CardTrait copy)
         {
-            CardStat status = new CardStat(copy.id, copy.value);
+            CardTrait status = new CardTrait(copy.id, copy.value);
             return status;
         }
 
-        public static void Clone(CardStat source, CardStat dest)
+        public static void Clone(CardTrait source, CardTrait dest)
         {
             dest.id = source.id;
             dest.value = source.value;
         }
 
-        public static void CloneList(List<CardStat> source, List<CardStat> dest)
+        public static void CloneList(List<CardTrait> source, List<CardTrait> dest)
         {
             for (int i = 0; i < source.Count; i++)
             {

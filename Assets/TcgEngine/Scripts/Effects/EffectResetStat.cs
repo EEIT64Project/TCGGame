@@ -14,7 +14,7 @@ namespace TcgEngine
     {
         public override void DoEffect(GameLogic logic, AbilityData ability, Card caster, Card target)
         {
-            target.SetCard(target.CardData);
+            target.SetCard(target.CardData, target.VariantData);
         }
     }
 }

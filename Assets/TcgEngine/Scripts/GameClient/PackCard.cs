@@ -27,7 +27,7 @@ namespace TcgEngine.Client
         public AudioClip card_rare_flip_audio;
 
         private CardData icard;
-        private CardVariant variant;
+        private VariantData variant;
 
         private Vector3 target;
         private Quaternion rtarget;
@@ -61,7 +61,7 @@ namespace TcgEngine.Client
                 Destroy(gameObject);
         }
 
-        public void SetCard(PackData pack, CardData card, CardVariant variant)
+        public void SetCard(PackData pack, CardData card, VariantData variant)
         {
             this.icard = card;
             this.variant = variant;

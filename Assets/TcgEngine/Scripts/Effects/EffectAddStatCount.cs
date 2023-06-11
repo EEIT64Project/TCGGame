@@ -76,8 +76,7 @@ namespace TcgEngine
                 int count = 0;
                 foreach (Card card in card_pile)
                 {
-                    CardData icard = CardData.Get(card.card_id);
-                    if (IsTrait(icard))
+                    if (IsTrait(card))
                         count++;
                 }
                 return count;
@@ -85,11 +84,11 @@ namespace TcgEngine
             return 0;
         }
 
-        private bool IsTrait(CardData icard)
+        private bool IsTrait(Card card)
         {
-            bool is_type = icard.type == has_type || has_type == CardType.None;
-            bool is_team = icard.team == has_team || has_team == null;
-            bool is_trait = icard.HasTrait(has_trait) || has_trait == null;
+            bool is_type = card.CardData.type == has_type || has_type == CardType.None;
+            bool is_team = card.CardData.team == has_team || has_team == null;
+            bool is_trait = card.HasTrait(has_trait) || has_trait == null;
             return (is_type && is_team && is_trait);
         }
     }

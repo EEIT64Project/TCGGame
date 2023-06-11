@@ -22,6 +22,8 @@ namespace TcgEngine
         public static int y_min = 1; //Dont change this, should start at 1  (0,0,0 represent invalid slot)
         public static int y_max = 1; //Set this to the number of rows/locations you want to have
 
+        public static bool ignore_p = false; //Set to true if you dont want to use P value
+
         private static Dictionary<int, List<Slot>> player_slots = new Dictionary<int, List<Slot>>();
         private static List<Slot> all_slots = new List<Slot>();
 
@@ -36,6 +38,13 @@ namespace TcgEngine
         {
             this.x = x;
             this.y = y;
+            this.p = pid;
+        }
+
+        public Slot(SlotXY slot, int pid)
+        {
+            this.x = slot.x;
+            this.y = slot.y;
             this.p = pid;
         }
 
@@ -70,32 +79,40 @@ namespace TcgEngine
             return dx <= dist && dy <= dist && dp <= dist;
         }
 
-        public bool IsSamePlayer(Slot slot)
-        {
-            return slot.p == p;
-        }
-
+        //Check if the slot is valid one (or if out of board)
         public bool IsValid()
         {
             return x >= x_min && x <= x_max && y >= y_min && y <= y_max && p >= 0;
         }
 
-        public static Slot GetRandom(int p)
+        //Return slot P-value of player, usually its same as player_id, unless we ignore P value then its 0 for all
+        public static int GetP(int pid)
         {
-            if(y_max > y_min)
-                return new Slot(Random.Range(x_min, x_max + 1), Random.Range(y_min, y_max + 1), p);
-            return new Slot(Random.Range(x_min, x_max + 1), y_min, p);
+            return ignore_p ? 0 : pid;
         }
 
-        public static Slot GetRandom()
+        //Get a random slot on player side
+        public static Slot GetRandom(int pid, System.Random rand)
+        {
+            int p = GetP(pid);
+            if (y_max > y_min)
+                return new Slot(rand.Next(x_min, x_max + 1), rand.Next(y_min, y_max + 1), p);
+            return new Slot(rand.Next(x_min, x_max + 1), y_min, p);
+        }
+
+        //Get a random slot amongts all valid ones
+        public static Slot GetRandom(System.Random rand)
         {
             if (y_max > y_min)
-                return new Slot(Random.Range(x_min, x_max + 1), Random.Range(y_min, y_max + 1), Random.Range(0, 2));
-            return new Slot(Random.Range(x_min, x_max + 1), y_min, Random.Range(0, 2));
+                return new Slot(rand.Next(x_min, x_max + 1), rand.Next(y_min, y_max + 1), rand.Next(0, 2));
+            return new Slot(rand.Next(x_min, x_max + 1), y_min, rand.Next(0, 2));
         }
 
-        public static List<Slot> GetAll(int p)
+        //Get all slots on player side
+        public static List<Slot> GetAll(int pid)
         {
+            int p = GetP(pid);
+
             if (player_slots.ContainsKey(p))
                 return player_slots[p]; //Faster access
 
@@ -111,6 +128,7 @@ namespace TcgEngine
             return list;
         }
 
+        //Get all valid slots
         public static List<Slot> GetAll()
         {
             if (all_slots.Count > 0)
@@ -160,5 +178,12 @@ namespace TcgEngine
         {
             get { return new Slot(0, 0, 0); }
         }
+    }
+
+    [System.Serializable]
+    public struct SlotXY
+    {
+        public int x;
+        public int y;
     }
 }

@@ -68,13 +68,31 @@ namespace TcgEngine.Client
             List<UserCardData> cards = new List<UserCardData>();
             List <CardData> all_cards = CardData.GetAll(pack);
 
-            for (int i = 0; i < pack.cards; i++)
+            if (pack.type == PackType.Random)
             {
-                CardData card = all_cards[Random.Range(0, all_cards.Count)];
-                UserCardData ucard = new UserCardData();
-                ucard.tid = UserCardData.GetTid(card.id, CardVariant.Normal);
-                ucard.quantity = 1;
-                cards.Add(ucard);
+                for (int i = 0; i < pack.cards; i++)
+                {
+                    RarityData rarity = GetRandomRarity(pack, i == 0);
+                    VariantData variant = GetRandomVariant(pack);
+                    List<CardData> vcards = GetCardArray(all_cards, rarity);
+                    CardData card = vcards[Random.Range(0, vcards.Count)];
+                    UserCardData ucard = new UserCardData();
+                    ucard.tid = UserCardData.GetTid(card.id, variant);
+                    ucard.quantity = 1;
+                    cards.Add(ucard);
+                }
+            }
+
+            if (pack.type == PackType.Fixed)
+            {
+                for (int i = 0; i < Mathf.Min(pack.cards, all_cards.Count); i++)
+                {
+                    CardData card = all_cards[i];
+                    UserCardData ucard = new UserCardData();
+                    ucard.tid = UserCardData.GetTid(card.id, VariantData.GetDefault());
+                    ucard.quantity = 1;
+                    cards.Add(ucard);
+                }
             }
 
             udata.AddPack(pack.id, -1);
@@ -125,7 +143,7 @@ namespace TcgEngine.Client
                 GameObject cobj = Instantiate(card_prefab, new Vector3(0f, -3f, 0f), Quaternion.identity);
                 PackCard pcard = cobj.GetComponent<PackCard>();
                 string card_id = UserCardData.GetCardId(card.tid);
-                CardVariant variant = UserCardData.GetCardVariant(card.tid);
+                VariantData variant = UserCardData.GetCardVariant(card.tid);
                 CardData icard = CardData.Get(card_id);
                 pcard.SetCard(pack, icard, variant);
                 BoardRef bref = BoardRef.Get(BoardRefType.CardArea, index);
@@ -133,6 +151,67 @@ namespace TcgEngine.Client
                 pcard.SetTarget(pos);
                 index++;
             }
+        }
+
+        private List<CardData> GetCardArray(List<CardData>  all_cards, RarityData rarity)
+        {
+            List<CardData> cards = new List<CardData>();
+            foreach (CardData acard in all_cards)
+            {
+                if (acard.rarity == rarity)
+                    cards.Add(acard);
+            }
+            return cards;
+        }
+
+        private RarityData GetRandomRarity(PackData pack, bool is_first)
+        {
+            PackRarity[] rarities = is_first ? pack.rarities_1st : pack.rarities;
+            if (rarities == null || rarities.Length == 0)
+                return RarityData.GetFirst();
+
+            int total = 0;
+            foreach (PackRarity rarity in rarities)
+            {
+                total += rarity.probability;
+            }
+
+            int rvalue = Mathf.FloorToInt(Random.value * total);
+            for (int i = 0; i < rarities.Length; i++)
+            {
+                PackRarity rarity = rarities[i];
+                if (rvalue < rarity.probability)
+                {
+                    return rarity.rarity;
+                }
+                rvalue -= rarity.probability;
+            }
+            return RarityData.GetFirst();
+        }
+
+        private VariantData GetRandomVariant(PackData pack)
+        {
+            PackVariant[] variants = pack.variants;
+            if (variants == null || variants.Length == 0)
+                return VariantData.GetDefault();
+
+            int total = 0;
+            foreach (PackVariant variant in variants)
+            {
+                total += variant.probability;
+            }
+
+            int rvalue = Mathf.FloorToInt(Random.value * total);
+            for (int i = 0; i < variants.Length; i++)
+            {
+                PackVariant variant = variants[i];
+                if (rvalue < variant.probability)
+                {
+                    return variant.variant;
+                }
+                rvalue -= variant.probability;
+            }
+            return VariantData.GetDefault();
         }
 
         public void StopReveal()

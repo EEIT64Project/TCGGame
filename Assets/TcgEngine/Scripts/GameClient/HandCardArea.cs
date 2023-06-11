@@ -14,7 +14,7 @@ namespace TcgEngine.Client
 
     public class HandCardArea : MonoBehaviour
     {
-        public RectTransform hand_area;
+        public RectTransform card_area;
         public GameObject card_template;
         public float card_spacing = 100f;
         public float card_angle = 10f;
@@ -82,7 +82,7 @@ namespace TcgEngine.Client
 
         public void SpawnNewCard(Card card)
         {
-            GameObject card_obj = Instantiate(card_template, hand_area.transform);
+            GameObject card_obj = Instantiate(card_template, card_area.transform);
             card_obj.SetActive(true);
             card_obj.GetComponent<HandCard>().SetCard(card);
             card_obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -100f);

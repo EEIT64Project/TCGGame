@@ -216,29 +216,28 @@ namespace TcgEngine.Client
                 return;
             }
 
-            PlayerAttackZone zone = PlayerAttackZone.GetNearest(board_pos, 2f);
+            PlayerAttackZone zone = PlayerAttackZone.GetNearest(board_pos, 3f, 1f);
             BoardSlot bslot = BoardSlot.GetNearest(board_pos, 2f);
             int player_id = GameClient.Get().GetPlayerID();
             Game gdata = GameClient.Get().GetGameData();
             Player player = gdata.GetPlayer(player_id);
-            bool success = false;
+            Card card = GetCard();
+
             Slot slot = Slot.None;
-
-            if (bslot != null && gdata.CanPlayCard(GetCard(), bslot.GetSlot(), true))
-            {
-                success = true;
+            if (bslot != null)
                 slot = bslot.GetSlot();
-            }
-
-            else if (zone != null && gdata.CanPlayCard(GetCard(), zone.GetSlot(), true))
-            {
-                success = true;
+            else if (zone != null)
                 slot = zone.GetSlot();
+
+            Card slot_card = gdata.GetSlotCard(slot);
+            if (bslot != null && card.CardData.IsRequireTarget() && slot_card != null && slot_card.HasStatus(StatusType.SpellImmunity))
+            {
+                WarningText.ShowSpellImmune();
+                return;
             }
 
-            if (success)
+            if (gdata.CanPlayCard(card, slot, true))
             {
-                Card card = GetCard();
                 if (!player.CanPayMana(card))
                     WarningText.ShowNoMana();
                 else

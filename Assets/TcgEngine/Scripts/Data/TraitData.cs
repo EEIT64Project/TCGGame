@@ -17,6 +17,11 @@ namespace TcgEngine
 
         public static List<TraitData> trait_list = new List<TraitData>();
 
+        public string GetTitle()
+        {
+            return title;
+        }
+
         public static void Load(string folder = "")
         {
             if (trait_list.Count == 0)

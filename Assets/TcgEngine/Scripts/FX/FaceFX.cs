@@ -15,13 +15,25 @@ namespace TcgEngine.FX
 
         void Start()
         {
+            Vector3 up = GameBoard.Get().transform.up;
+
             if (type == FaceType.FaceCamera)
             {
                 GameCamera cam = GameCamera.Get();
                 if (cam != null)
                 {
                     Vector3 forward = cam.transform.forward;
-                    transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
+                    transform.rotation = Quaternion.LookRotation(forward, up);
+                }
+            }
+
+            if (type == FaceType.FaceCameraCenter)
+            {
+                GameCamera cam = GameCamera.Get();
+                if (cam != null)
+                {
+                    Vector3 forward = transform.position - cam.transform.position;
+                    transform.rotation = Quaternion.LookRotation(forward.normalized, up);
                 }
             }
 
@@ -31,7 +43,7 @@ namespace TcgEngine.FX
                 if (board != null)
                 {
                     Vector3 forward = board.transform.forward;
-                    transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
+                    transform.rotation = Quaternion.LookRotation(forward, up);
                 }
             }
         }
@@ -39,7 +51,8 @@ namespace TcgEngine.FX
 
     public enum FaceType
     {
-        FaceCamera = 0,
-        FaceBoard = 10
+        FaceCamera = 0,         //Set same rotation as camera rotation
+        FaceCameraCenter = 5,   //Face camera world position
+        FaceBoard = 10          //Set same rotation as to board rotation
     }
 }

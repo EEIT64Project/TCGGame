@@ -13,7 +13,7 @@ namespace TcgEngine.Client
     /// Represents the visual aspect of a card on the board.
     /// Will take the data from Card.cs and display it
     /// </summary>
-    
+
     public class BoardCard : MonoBehaviour
     {
         public SpriteRenderer card_sprite;
@@ -36,9 +36,8 @@ namespace TcgEngine.Client
         private CardUI card_ui;
         private BoardCardFX card_fx;
         private Canvas canvas;
-        private string card_id = "";
-        private string card_uid = "";
 
+        private string card_uid = "";
         private bool destroyed = false;
         private bool focus = false;
         private float timer = 0f;
@@ -88,7 +87,8 @@ namespace TcgEngine.Client
             Game data = GameClient.Get().GetGameData();
             Player player = GameClient.Get().GetPlayer();
             Card card = data.GetCard(card_uid);
-            card_ui.SetCardBoard(card);
+            if(!destroyed)
+                card_ui.SetCardBoard(card);
 
             bool selected = controls.GetSelected() == this;
             Vector3 targ_pos = GetTargetPos();
@@ -105,7 +105,7 @@ namespace TcgEngine.Client
             card_glow.color = new Color(ccolor.r, ccolor.g, ccolor.b, calpha);
             card_shadow.enabled = !destroyed && timer > 0.4f;
             card_sprite.color = card.HasStatus(StatusType.Stealth) ? Color.gray : Color.white;
-            card_ui.hp.color = card.damage > 0 ? Color.yellow : Color.white;
+            card_ui.hp.color = (destroyed || card.damage > 0) ? Color.yellow : Color.white;
 
             //armor
             int armor_val = card.GetStatusValue(StatusType.Armor);
@@ -114,7 +114,7 @@ namespace TcgEngine.Client
             armor_icon.enabled = armor_val > 0;
 
             //Reset after transform
-            Sprite sprite = card.CardData.GetBoardArt(card.variant);
+            Sprite sprite = card.CardData.GetBoardArt(card.VariantData);
             if (sprite != card_sprite.sprite)
                 card_sprite.sprite = sprite;
 
@@ -150,9 +150,7 @@ namespace TcgEngine.Client
 
         private Vector3 GetTargetPos()
         {
-            PlayerControls controls = PlayerControls.Get();
             Game data = GameClient.Get().GetGameData();
-            Player player = GameClient.Get().GetPlayer();
             Card card = data.GetCard(card_uid);
 
             if (destroyed && back_to_hand && timer > 0.5f)
@@ -170,7 +168,6 @@ namespace TcgEngine.Client
 
         public void SetCard(Card card)
         {
-            this.card_id = card.card_id;
             this.card_uid = card.uid;
 
             transform.position = GetTargetPos();
@@ -179,7 +176,7 @@ namespace TcgEngine.Client
             if (icard)
             {
                 card_ui.SetCardBoard(card);
-                card_sprite.sprite = icard.GetBoardArt(card.variant);
+                card_sprite.sprite = icard.GetBoardArt(card.VariantData);
                 armor.enabled = false;
                 armor_icon.enabled = false;
                 status_alpha_target = 0f;
@@ -196,11 +193,16 @@ namespace TcgEngine.Client
         {
             if (!destroyed)
             {
+                Game data = GameClient.Get().GetGameData();
+                Card card = data.GetCard(card_uid);
+                Player player = data.GetPlayer(card.player_id);
+
                 destroyed = true;
                 timer = 0f;
                 status_alpha_target = 0f;
                 card_glow.enabled = false;
                 card_shadow.enabled = false;
+
                 SetOrder(card_sprite.sortingOrder - 2);
                 Destroy(gameObject, 1.3f);
 
@@ -209,9 +211,6 @@ namespace TcgEngine.Client
                     canvas.gameObject.SetActive(false);
                 });
 
-                Game data = GameClient.Get().GetGameData();
-                Card card = data.GetCard(card_uid);
-                Player player = data.GetPlayer(card.player_id);
                 GameBoard board = GameBoard.Get();
                 if (player.HasCard(player.cards_hand, card) || player.HasCard(player.cards_deck, card))
                 {
@@ -220,6 +219,11 @@ namespace TcgEngine.Client
                     back_to_hand_target = back_to_hand_target * 10f;
                 }
 
+                if (!back_to_hand)
+                {
+                    card.hp = 0;
+                    card_ui.SetCardBoard(card);
+                }
 
                 if (onKill != null)
                     onKill.Invoke();
@@ -228,29 +232,58 @@ namespace TcgEngine.Client
 
         private void ShowStatusBar()
         {
-            Game data = GameClient.Get().GetGameData();
-            Card card = data.GetCard(card_uid);
+            Card card = GetCard();
             if (card != null && status_text != null && !destroyed)
             {
-                status_text.text = "";
+                string stxt = GetStatusText();
+                string ttxt = GetTraitText();
 
-                foreach (CardStatus astatus in card.GetAllStatus())
-                {
-                    StatusData istats = StatusData.Get(astatus.type);
-                    if (istats != null && !string.IsNullOrEmpty(istats.title))
-                    {
-                        int ival = Mathf.Max(astatus.value, Mathf.CeilToInt(astatus.duration / 2f));
-                        string sval = ival > 1 ? " " + ival : "";
-                        status_text.text += istats.GetTitle() + sval + ", ";
-                    }
-                }
-
-                if (status_text.text.Length > 2)
-                    status_text.text = status_text.text.Substring(0, status_text.text.Length - 2);
+                if (stxt.Length > 0 && ttxt.Length > 0)
+                    status_text.text = ttxt + ", " + stxt;
+                else
+                    status_text.text = ttxt + stxt;
             }
 
             bool show_status = status_text != null && status_text.text.Length > 0;
             status_alpha_target = show_status ? 1f : 0f;
+        }
+
+        public string GetStatusText()
+        {
+            Card card = GetCard();
+            string txt = "";
+            foreach (CardStatus astatus in card.GetAllStatus())
+            {
+                StatusData istats = StatusData.Get(astatus.type);
+                if (istats != null && !string.IsNullOrEmpty(istats.title))
+                {
+                    int ival = Mathf.Max(astatus.value, Mathf.CeilToInt(astatus.duration / 2f));
+                    string sval = ival > 1 ? " " + ival : "";
+                    txt += istats.GetTitle() + sval + ", ";
+                }
+            }
+            if (txt.Length > 2)
+                txt = txt.Substring(0, txt.Length - 2);
+            return txt;
+        }
+
+        public string GetTraitText()
+        {
+            Card card = GetCard();
+            string txt = "";
+            foreach (CardTrait atrait in card.GetAllTraits())
+            {
+                TraitData itrait = TraitData.Get(atrait.id);
+                if (itrait != null && !string.IsNullOrEmpty(itrait.title))
+                {
+                    int ival = atrait.value;
+                    string sval = ival > 1 ? " " + ival : "";
+                    txt += itrait.GetTitle() + sval + ", ";
+                }
+            }
+            if (txt.Length > 2)
+                txt = txt.Substring(0, txt.Length - 2);
+            return txt;
         }
 
         public bool IsDead()

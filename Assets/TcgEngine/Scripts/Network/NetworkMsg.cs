@@ -209,16 +209,6 @@ namespace TcgEngine
         }
     }
 
-    public class MsgChoice : INetworkSerializable
-    {
-        public int choice;
-
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        {
-            serializer.SerializeValue(ref choice);
-        }
-    }
-
     public class MsgPlayer : INetworkSerializable
     {
         public int player_id;
@@ -308,6 +298,16 @@ namespace TcgEngine
         {
             serializer.SerializeValue(ref secret_uid);
             serializer.SerializeValue(ref triggerer_uid);
+        }
+    }
+
+    public class MsgInt : INetworkSerializable
+    {
+        public int value;
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref value);
         }
     }
 

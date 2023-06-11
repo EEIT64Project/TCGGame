@@ -220,7 +220,7 @@ namespace TcgEngine.UI
             }
             await Authenticator.Get().SaveUserData();
             MainMenu.Get().RefreshUserData();
-            RefreshPanel();
+            LoadData();
         }
 
         private async void SaveUserCardback(CardbackData cardback)
@@ -235,7 +235,7 @@ namespace TcgEngine.UI
             }
             await Authenticator.Get().SaveUserData();
             MainMenu.Get().RefreshUserData();
-            RefreshPanel();
+            LoadData();
         }
 
         public void OnClickAvatar()

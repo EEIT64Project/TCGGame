@@ -135,6 +135,31 @@ namespace TcgEngine.Client
             return new Slot(GetPlayerID());
         }
 
+        public bool IsInRange(Vector3 pos, float rangeX, float rangeY)
+        {
+            float distX = Mathf.Abs((transform.position - pos).x);
+            float distY = Mathf.Abs((transform.position - pos).y);
+            float distZ = Mathf.Abs((transform.position - pos).z);
+            float distYZ = Mathf.Max(distY, distZ);
+            return (distX < rangeX && distYZ < rangeY);
+        }
+
+        public static PlayerAttackZone GetNearest(Vector3 pos, float rangeX, float rangeY)
+        {
+            PlayerAttackZone nearest = null;
+            float min_dist = Mathf.Max(rangeX, rangeY);
+            foreach (PlayerAttackZone zone in zone_list)
+            {
+                float dist = (zone.transform.position - pos).magnitude;
+                if (dist < min_dist && zone.IsInRange(pos, rangeX, rangeY))
+                {
+                    min_dist = dist;
+                    nearest = zone;
+                }
+            }
+            return nearest;
+        }
+
         public static PlayerAttackZone GetNearest(Vector3 pos, float range = 999f)
         {
             PlayerAttackZone nearest = null;

@@ -14,6 +14,7 @@ namespace TcgEngine.UI
     public class DeckLine : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         public Image image;
+        public Image frame;
         public Text title;
         public Text value;
         public IconValue cost;
@@ -26,7 +27,7 @@ namespace TcgEngine.UI
         public UnityAction<DeckLine> onClickDelete;
 
         private CardData card;
-        private CardVariant variant;
+        private VariantData variant;
         private DeckData deck;
         private UserDeckData udeck;
         private Material default_mat;
@@ -37,6 +38,8 @@ namespace TcgEngine.UI
         {
             if (image != null)
                 default_mat = image.material;
+            if (frame != null)
+                default_mat = frame.material;
         }
 
         void Update()
@@ -48,7 +51,7 @@ namespace TcgEngine.UI
             }
         }
 
-        public void SetLine(CardData card, CardVariant variant, int quantity, bool warn = false)
+        public void SetLine(CardData card, VariantData variant, int quantity, bool warn = false)
         {
             this.card = card;
             this.variant = variant;
@@ -59,19 +62,28 @@ namespace TcgEngine.UI
             if (title != null)
                 title.text = card.title;
             if (title != null)
-                title.color = variant != CardVariant.Normal ? Color.yellow : Color.white;
+                title.color = variant.color;
             if (value != null)
                 value.text = quantity.ToString();
             if (value != null)
                 value.enabled = quantity > 1;
             if (cost != null)
                 cost.value = card.mana;
+            if (this.value != null)
+                this.value.color = warn ? Color.red : Color.white;
 
             if (image != null)
             {
                 image.sprite = card.GetFullArt(variant);
                 image.enabled = true;
                 image.material = warn ? disabled_mat : default_mat;
+            }
+
+            if (frame != null)
+            {
+                frame.sprite = variant.frame;
+                frame.enabled = true;
+                frame.material = warn ? disabled_mat : default_mat;
             }
 
             gameObject.SetActive(true);
@@ -112,7 +124,7 @@ namespace TcgEngine.UI
             if (this.value != null)
                 this.value.enabled = deck.GetQuantity() > 0;
             if (this.value != null)
-                this.value.color = deck.IsValid() ? Color.white : Color.red;
+                this.value.color = udata.IsDeckValid(deck) ? Color.white : Color.red;
 
             gameObject.SetActive(true);
         }
@@ -155,6 +167,8 @@ namespace TcgEngine.UI
                 cost.value = 0;
             if (image != null)
                 image.enabled = false;
+            if (frame != null)
+                frame.enabled = false;
             if (delete_btn != null)
                 delete_btn.SetVisible(false);
 
@@ -166,7 +180,7 @@ namespace TcgEngine.UI
             return card;
         }
 
-        public CardVariant GetVariant()
+        public VariantData GetVariant()
         {
             return variant;
         }

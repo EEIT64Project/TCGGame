@@ -12,10 +12,13 @@ namespace TcgEngine
     public class PackData : ScriptableObject
     {
         public string id;
+
+        [Header("Content")]
+        public PackType type;
         public int cards = 5;   //Cards per pack
-        public int cost = 100;  //Cost to buy
-        public int[] rarities_1st;  //Probability of each rarity, for first card, first element is common
-        public int[] rarities;      //Probability of each rarity, for other cards, first element is common
+        public PackRarity[] rarities_1st;  //Probability of each rarity, for first card
+        public PackRarity[] rarities;      //Probability of each rarity, for other cards
+        public PackVariant[] variants;      //Probability of each variant, for other cards
 
         [Header("Display")]
         public string title;
@@ -27,6 +30,7 @@ namespace TcgEngine
 
         [Header("Availability")]
         public bool available = true;
+        public int cost = 100;  //Cost to buy
 
         public static List<PackData> pack_list = new List<PackData>();
 
@@ -78,5 +82,25 @@ namespace TcgEngine
         {
             return pack_list;
         }
+    }
+
+    public enum PackType
+    {
+        Random = 0,
+        Fixed = 10,
+    }
+
+    [System.Serializable]
+    public struct PackRarity
+    {
+        public RarityData rarity;
+        public int probability;
+    }
+
+    [System.Serializable]
+    public struct PackVariant
+    {
+        public VariantData variant;
+        public int probability;
     }
 }

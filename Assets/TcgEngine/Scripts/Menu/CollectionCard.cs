@@ -29,7 +29,7 @@ namespace TcgEngine.UI
             card_ui.onClickRight += onClickRight;
         }
 
-        public void SetCard(CardData card, CardVariant variant, int quantity)
+        public void SetCard(CardData card, VariantData variant, int quantity)
         {
             card_ui.SetCard(card, variant);
             if (this.quantity_bar != null)
@@ -61,7 +61,7 @@ namespace TcgEngine.UI
             return card_ui.GetCard();
         }
 
-        public CardVariant GetVariant()
+        public VariantData GetVariant()
         {
             return card_ui.GetVariant();
         }

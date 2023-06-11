@@ -76,15 +76,15 @@ namespace TcgEngine.Server
             gameplay.onGameEnd += OnGameEnd;
             gameplay.onTurnStart += OnTurnStart;
             gameplay.onTurnPlay += OnTurnPlay;
-            gameplay.onSelectorStart += OnSelector;
-            gameplay.onSelectorSelect += OnSelector;
+            gameplay.onTurnEnd += OnTurnEnd;
 
             gameplay.onCardPlayed += OnCardPlayed;
             gameplay.onCardSummoned += OnCardSummoned;
             gameplay.onCardMoved += OnCardMoved;
             gameplay.onCardTransformed += OnCardTransformed;
             gameplay.onCardDiscarded += OnCardDiscarded;
-            gameplay.onSecret += OnSecretResolved;
+            gameplay.onCardDrawn += OnCardDraw;
+            gameplay.onRollValue += OnValueRolled;
 
             gameplay.onAbilityStart += OnAbilityStart;
             gameplay.onAbilityTargetCard += OnAbilityTargetCard;
@@ -96,6 +96,12 @@ namespace TcgEngine.Server
             gameplay.onAttackEnd += OnAttackEnd;
             gameplay.onAttackPlayerStart += OnAttackPlayerStart;
             gameplay.onAttackPlayerEnd += OnAttackPlayerEnd;
+
+            gameplay.onSecretTrigger += OnSecretTriggered;
+            gameplay.onSecretResolve += OnSecretResolved;
+
+            gameplay.onSelectorStart += OnSelector;
+            gameplay.onSelectorSelect += OnSelector;
         }
 
         protected virtual void Clear()
@@ -104,15 +110,15 @@ namespace TcgEngine.Server
             gameplay.onGameEnd -= OnGameEnd;
             gameplay.onTurnStart -= OnTurnStart;
             gameplay.onTurnPlay -= OnTurnPlay;
-            gameplay.onSelectorStart -= OnSelector;
-            gameplay.onSelectorSelect -= OnSelector;
+            gameplay.onTurnEnd -= OnTurnEnd;
 
             gameplay.onCardPlayed -= OnCardPlayed;
             gameplay.onCardSummoned -= OnCardSummoned;
             gameplay.onCardMoved -= OnCardMoved;
             gameplay.onCardTransformed -= OnCardTransformed;
             gameplay.onCardDiscarded -= OnCardDiscarded;
-            gameplay.onSecret -= OnSecretResolved;
+            gameplay.onCardDrawn -= OnCardDraw;
+            gameplay.onRollValue -= OnValueRolled;
 
             gameplay.onAbilityStart -= OnAbilityStart;
             gameplay.onAbilityTargetCard -= OnAbilityTargetCard;
@@ -124,6 +130,12 @@ namespace TcgEngine.Server
             gameplay.onAttackEnd -= OnAttackEnd;
             gameplay.onAttackPlayerStart -= OnAttackPlayerStart;
             gameplay.onAttackPlayerEnd -= OnAttackPlayerEnd;
+
+            gameplay.onSecretTrigger -= OnSecretTriggered;
+            gameplay.onSecretResolve -= OnSecretResolved;
+
+            gameplay.onSelectorStart -= OnSelector;
+            gameplay.onSelectorSelect -= OnSelector;
         }
 
         public virtual void Update()
@@ -141,7 +153,7 @@ namespace TcgEngine.Server
                 EndExpiredGame();
 
             //Timer during Play phase
-            if (game_data.state == GameState.Play)
+            if (game_data.state == GameState.Play && !gameplay.IsResolving())
             {
                 game_data.turn_timer -= Time.deltaTime;
 
@@ -170,6 +182,8 @@ namespace TcgEngine.Server
                     StartGame();
                 }
             }
+
+            gameplay.Update(Time.deltaTime);
 
             //Update AI
             foreach (AIPlayer ai in ai_list)
@@ -257,7 +271,7 @@ namespace TcgEngine.Server
             GameSettings settings = sdata.Get<GameSettings>();
             if (player_id >= 0 && settings != null)
             {
-                SetGameplaySettings(settings);
+                SetGameSettings(settings);
                 RefreshAll();
             }
         }
@@ -328,10 +342,10 @@ namespace TcgEngine.Server
 
         public void ReceiveSelectChoice(ClientData iclient, SerializedData sdata)
         {
-            MsgChoice msg = sdata.Get<MsgChoice>();
+            MsgInt msg = sdata.Get<MsgInt>();
             int player_id = GetPlayerID(iclient);
             if (player_id >= 0 && msg != null)
-                SelectChoiceAction(player_id, msg.choice);
+                SelectChoiceAction(player_id, msg.value);
         }
 
         public void ReceiveCancelSelection(ClientData iclient, SerializedData sdata)
@@ -397,7 +411,7 @@ namespace TcgEngine.Server
                 if (cdeck == null)
                     cdeck = GameplayData.Get().test_deck;
 
-                gameplay.SetPlayerDeck(player_id, cdeck.id, cdeck.cards);
+                gameplay.SetPlayerDeck(player_id, cdeck);
                 RefreshAll();
             }
         }
@@ -441,7 +455,7 @@ namespace TcgEngine.Server
             }
         }
 
-        public virtual void SetGameplaySettings(GameSettings settings)
+        public virtual void SetGameSettings(GameSettings settings)
         {
             if (game_data.state == GameState.Connecting)
             {
@@ -731,6 +745,11 @@ namespace TcgEngine.Server
             RefreshAll();
         }
 
+        protected virtual void OnTurnEnd()
+        {
+            RefreshAll();
+        }
+
         protected virtual void OnSelector()
         {
             RefreshAll();
@@ -745,6 +764,15 @@ namespace TcgEngine.Server
             RefreshAll();
         }
 
+        protected virtual void OnCardMoved(Card card, Slot slot)
+        {
+            MsgPlayCard mdata = new MsgPlayCard();
+            mdata.card_uid = card.uid;
+            mdata.slot = slot;
+            SendToAll(GameAction.CardMoved, mdata, NetworkDelivery.Reliable);
+            RefreshAll();
+        }
+        
         protected virtual void OnCardSummoned(Card card, Slot slot)
         {
             MsgPlayCard mdata = new MsgPlayCard();
@@ -767,13 +795,18 @@ namespace TcgEngine.Server
             SendToAll(GameAction.CardDiscarded, mdata, NetworkDelivery.Reliable);
         }
 
-        protected virtual void OnCardMoved(Card card, Slot slot)
+        protected virtual void OnCardDraw(int nb)
         {
-            MsgPlayCard mdata = new MsgPlayCard();
-            mdata.card_uid = card.uid;
-            mdata.slot = slot;
-            SendToAll(GameAction.CardMoved, mdata, NetworkDelivery.Reliable);
-            RefreshAll();
+            MsgInt mdata = new MsgInt();
+            mdata.value = nb;
+            SendToAll(GameAction.CardDrawn, mdata, NetworkDelivery.Reliable);
+        }
+
+        protected virtual void OnValueRolled(int nb)
+        {
+            MsgInt mdata = new MsgInt();
+            mdata.value = nb;
+            SendToAll(GameAction.ValueRolled, mdata, NetworkDelivery.Reliable);
         }
 
         protected virtual void OnAttackStart(Card attacker, Card target)
@@ -858,6 +891,14 @@ namespace TcgEngine.Server
             mdata.target_uid = "";
             SendToAll(GameAction.AbilityEnd, mdata, NetworkDelivery.Reliable);
             RefreshAll();
+        }
+
+        protected virtual void OnSecretTriggered(Card secret, Card trigger)
+        {
+            MsgSecret mdata = new MsgSecret();
+            mdata.secret_uid = secret.uid;
+            mdata.triggerer_uid = trigger != null ? trigger.uid : "";
+            SendToAll(GameAction.SecretTriggered, mdata, NetworkDelivery.Reliable);
         }
 
         protected virtual void OnSecretResolved(Card secret, Card trigger)

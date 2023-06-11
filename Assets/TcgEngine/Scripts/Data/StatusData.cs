@@ -28,6 +28,7 @@ namespace TcgEngine
         Silenced = 30,      //All abilities canceled
         Paralysed = 32,     //Cant do any actions for X turns
         Poisoned = 34,     //Lose hp each start of turn
+        Sleep = 36,         //Doesnt untap at the start of turn
 
 
     }

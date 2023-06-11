@@ -9,7 +9,7 @@ namespace TcgEngine
     /// Server API password is not in this file (and is in the Server scene instead) to prevent exposing it to client build
     /// </summary>
 
-    [CreateAssetMenu(fileName = "NetworkData", menuName = "TcgEngine/NetworkData", order = 5)]
+    [CreateAssetMenu(fileName = "NetworkData", menuName = "TcgEngine/NetworkData", order = 0)]
     public class NetworkData : ScriptableObject
     {
         [Header("Game Server")]
