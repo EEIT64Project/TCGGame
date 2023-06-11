@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fde1028e457564468c157e3c4b1bd3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hand_area: {fileID: 3582334442645935922}
+  card_area: {fileID: 3582334442645935922}
   card_template: {fileID: 433157449621324005}
   card_spacing: 80
   card_angle: 5

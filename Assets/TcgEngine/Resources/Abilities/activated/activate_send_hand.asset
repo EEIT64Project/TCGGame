@@ -17,7 +17,7 @@ MonoBehaviour:
   conditions_trigger: []
   target: 30
   conditions_target:
-  - {fileID: 11400000, guid: 902733d12f434e94b904de5ebf4112de, type: 2}
+  - {fileID: 11400000, guid: 065da32cbd133734493695579723a718, type: 2}
   - {fileID: 11400000, guid: 47221d412dc0a014b8a33abb0cbfc773, type: 2}
   filters_target: []
   effects:
@@ -34,5 +34,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 1
-  title: "Charge\u8FD4\u56DE"
-  desc: "Return target to its owner's hand.\n\u5C07\u4E00\u5F35\u751F\u7269\u724C\u8FD4\u56DE\u5176\u64C1\u6709\u8005\u624B\u4E0A"
+  title: Charge
+  desc: "Return a character to its owner's hand.\n\u5C07\u4E00\u5F35\u751F\u7269\u724C\u8FD4\u56DE\u5176\u64C1\u6709\u8005\u624B\u4E0A"
