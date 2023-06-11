@@ -30,6 +30,8 @@ MonoBehaviour:
     type: 3}
   play_secret_fx: {fileID: 0}
   play_secret_other_fx: {fileID: 0}
+  dice_roll_fx: {fileID: 3537770169904059536, guid: 530aef1a1b389e549b7a1ac0514fc1ae,
+    type: 3}
   hover_text_box: {fileID: 498548249271810415, guid: 8736207e88e73ca46bd477d91bc5e282,
     type: 3}
   new_turn_fx: {fileID: 0}

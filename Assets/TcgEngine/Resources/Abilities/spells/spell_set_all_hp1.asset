@@ -34,6 +34,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Flood \u5927\u6D2A\u6C34"
+  title: Flood
   desc: "The hp of all characters on the board is lowered to 1.\n\u5834\u4E0A\u6240\u6709\u751F\u7269\u724C\u7684\u751F\u547D\u503C\u964D\u70BA
     1 \u9EDE"
