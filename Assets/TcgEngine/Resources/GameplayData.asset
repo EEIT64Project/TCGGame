@@ -21,6 +21,7 @@ MonoBehaviour:
   second_bonus: {fileID: 11400000, guid: 9503f60659f1df04eb3dd7fa925885fb, type: 2}
   deck_size: 20
   deck_duplicate_max: 2
+  sell_ratio: 0.8
   ai_type: 10
   ai_level: 10
   free_decks:

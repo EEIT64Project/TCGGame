@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   url: 159.203.25.56
   port: 8777
-  auth_type: 10
+  auth_type: 0
   api_url: 159.203.25.56
-  api_https: 0
+  api_https: 1
