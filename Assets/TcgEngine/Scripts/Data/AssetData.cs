@@ -21,6 +21,7 @@ namespace TcgEngine
         public GameObject play_card_other_fx;
         public GameObject play_secret_fx;
         public GameObject play_secret_other_fx;
+        public GameObject dice_roll_fx;
         public GameObject hover_text_box;
         public GameObject new_turn_fx;
         public GameObject win_fx;

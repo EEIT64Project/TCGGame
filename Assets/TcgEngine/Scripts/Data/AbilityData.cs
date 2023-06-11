@@ -28,7 +28,7 @@ namespace TcgEngine
         public StatusData[] status;               //Status added by this ability  
         public int value;                         //Value passed to the effect (deal X damage)
         public int duration;                      //Duration passed to the effect (usually for status, 0=permanent)
-        
+
         [Header("Chain/Choices")]
         public AbilityData[] chain_abilities;    //Abilities that will be triggered after this one
 
@@ -201,6 +201,13 @@ namespace TcgEngine
             return true;
         }
 
+        //Check if destination array has the target after being filtered, used to support filters in CardSelector
+        public bool IsCardSelectionValid(Game data, Card caster, Card target, ListSwap<Card> card_array = null)
+        {
+            List<Card> targets = GetValidCardSelectTargets(data, caster, card_array);
+            return targets.Contains(target); //Card is still in array after filtering
+        }
+
         public void DoEffects(GameLogic logic, Card caster)
         {
             foreach(EffectData effect in effects)
@@ -267,26 +274,46 @@ namespace TcgEngine
             return total;
         }
 
-        //Return list of possible targets (not selected yet),  memory_array is used for optimization and avoid allocating new memory
-        public List<Card> GetValidCardTargets(Game data, Card caster, List<Card> memory_array = null)
+        private void AddValidCards(Game data, Card caster, List<Card> source, List<Card> targets)
         {
-            List<Card> valid_targets = memory_array != null ? memory_array : new List<Card>();
-            if (valid_targets.Count > 0)
-                valid_targets.Clear();
+            foreach (Card card in source)
+            {
+                if (AreTargetConditionsMet(data, caster, card))
+                    targets.Add(card);
+            }
+        }
+
+        //Return list of possible targets (not selected yet),  memory_array is used for optimization and avoid allocating new memory
+        public List<Card> GetValidCardSelectTargets(Game data, Card caster, ListSwap<Card> memory_array = null)
+        {
+            if (memory_array == null)
+                memory_array = new ListSwap<Card>(); //Slow operation
+
+            List<Card> targets = memory_array.Get();
 
             //Card can be anywhere
             if (target == AbilityTarget.AllCardsAllPiles || target == AbilityTarget.CardSelector)
             {
                 foreach (Player player in data.players)
                 {
-                    foreach (Card card in player.cards_all.Values)
+                    AddValidCards(data, caster, player.cards_deck, targets);
+                    AddValidCards(data, caster, player.cards_discard, targets);
+                    AddValidCards(data, caster, player.cards_hand, targets);
+                    AddValidCards(data, caster, player.cards_secret, targets);
+                    AddValidCards(data, caster, player.cards_board, targets);
+                }
+            }
+            else if (target == AbilityTarget.AllCardsHand)
+            {
+                foreach (Player player in data.players)
+                {
+                    foreach (Card card in player.cards_hand)
                     {
                         if (AreTargetConditionsMet(data, caster, card))
-                            valid_targets.Add(card);
+                            targets.Add(card);
                     }
                 }
             }
-            //Only cards on board
             else
             {
                 foreach (Player player in data.players)
@@ -294,20 +321,27 @@ namespace TcgEngine
                     foreach (Card card in player.cards_board)
                     {
                         if (AreTargetConditionsMet(data, caster, card))
-                            valid_targets.Add(card);
+                            targets.Add(card);
                     }
                 }
             }
 
-            return valid_targets;
+            if (filters_target != null && targets.Count > 0)
+            {
+                foreach (FilterData filter in filters_target)
+                    targets = filter.FilterTargets(data, this, caster, targets, memory_array.GetOther(targets));
+            }
+
+            return targets;
         }
 
         //Return cards targets,  memory_array is used for optimization and avoid allocating new memory
-        public List<Card> GetCardTargets(Game data, Card caster, List<Card> memory_array = null)
+        public List<Card> GetCardTargets(Game data, Card caster, ListSwap<Card> memory_array = null)
         {
-            List<Card> targets = memory_array != null ? memory_array : new List<Card>();
-            if (targets.Count > 0)
-                targets.Clear();
+            if (memory_array == null)
+                memory_array = new ListSwap<Card>(); //Slow operation
+
+            List<Card> targets = memory_array.Get();
 
             if (target == AbilityTarget.Self)
             {
@@ -327,15 +361,27 @@ namespace TcgEngine
                 }
             }
 
-            if (target == AbilityTarget.AllCardsAllPiles)
+            if (target == AbilityTarget.AllCardsHand)
             {
                 foreach (Player player in data.players)
                 {
-                    foreach (Card card in player.cards_all.Values)
+                    foreach (Card card in player.cards_hand)
                     {
                         if (AreTargetConditionsMet(data, caster, card))
                             targets.Add(card);
                     }
+                }
+            }
+
+            if (target == AbilityTarget.AllCardsAllPiles)
+            {
+                foreach (Player player in data.players)
+                {
+                    AddValidCards(data, caster, player.cards_deck, targets);
+                    AddValidCards(data, caster, player.cards_discard, targets);
+                    AddValidCards(data, caster, player.cards_hand, targets);
+                    AddValidCards(data, caster, player.cards_secret, targets);
+                    AddValidCards(data, caster, player.cards_board, targets);
                 }
             }
 
@@ -367,15 +413,23 @@ namespace TcgEngine
                     targets.Add(target);
             }
 
+            //Filter targets
+            if (filters_target != null && targets.Count > 0)
+            {
+                foreach (FilterData filter in filters_target)
+                    targets = filter.FilterTargets(data, this, caster, targets, memory_array.GetOther(targets));
+            }
+
             return targets;
         }
 
         //Return player targets,  memory_array is used for optimization and avoid allocating new memory
-        public List<Player> GetPlayerTargets(Game data, Card caster, List<Player> memory_array = null)
+        public List<Player> GetPlayerTargets(Game data, Card caster, ListSwap<Player> memory_array = null)
         {
-            List<Player> targets = memory_array != null ? memory_array : new List<Player>();
-            if (targets.Count > 0)
-                targets.Clear();
+            if (memory_array == null)
+                memory_array = new ListSwap<Player>(); //Slow operation
+
+            List<Player> targets = memory_array.Get();
 
             if (target == AbilityTarget.PlayerSelf)
             {
@@ -398,15 +452,23 @@ namespace TcgEngine
                 targets.AddRange(data.players);
             }
 
+            //Filter targets
+            if (filters_target != null && targets.Count > 0)
+            {
+                foreach (FilterData filter in filters_target)
+                    targets = filter.FilterTargets(data, this, caster, targets, memory_array.GetOther(targets));
+            }
+
             return targets;
         }
 
         //Return slot targets,  memory_array is used for optimization and avoid allocating new memory
-        public List<Slot> GetSlotTargets(Game data, Card caster, List<Slot> memory_array = null)
+        public List<Slot> GetSlotTargets(Game data, Card caster, ListSwap<Slot> memory_array = null)
         {
-            List<Slot> targets = memory_array != null ? memory_array : new List<Slot>();
-            if (targets.Count > 0)
-                targets.Clear();
+            if (memory_array == null)
+                memory_array = new ListSwap<Slot>(); //Slow operation
+
+            List<Slot> targets = memory_array.Get();
 
             if (target == AbilityTarget.AllSlots)
             {
@@ -418,17 +480,19 @@ namespace TcgEngine
                 }
             }
 
-            return targets;
-        }
+            //Filter targets
+            if (filters_target != null && targets.Count > 0)
+            {
+                foreach (FilterData filter in filters_target)
+                    targets = filter.FilterTargets(data, this, caster, targets, memory_array.GetOther(targets));
+            }
 
-        public bool IsSelectTarget()
-        {
-            return target == AbilityTarget.SelectTarget;
+            return targets;
         }
 
         public bool IsSelector()
         {
-            return target == AbilityTarget.CardSelector || target == AbilityTarget.ChoiceSelector;
+            return target == AbilityTarget.SelectTarget || target == AbilityTarget.CardSelector || target == AbilityTarget.ChoiceSelector;
         }
 
         public static AbilityData Get(string id)
@@ -481,6 +545,7 @@ namespace TcgEngine
         AllPlayers = 7,
 
         AllCardsBoard = 10,
+        AllCardsHand = 11,
         AllCardsAllPiles = 12,
         AllSlots = 15,
 
@@ -489,7 +554,7 @@ namespace TcgEngine
 
         SelectTarget = 30,        //Select a card, player or slot on board
         CardSelector = 40,          //Card selector menu
-        ChoiceSelector = 44,        //Choice selector menu
+        ChoiceSelector = 50,        //Choice selector menu
 
         LastPlayed = 70,            //Last card that was played
         LastTargeted = 72,          //Last card that was targeted with an ability

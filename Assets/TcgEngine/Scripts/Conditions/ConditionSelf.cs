@@ -27,7 +27,7 @@ namespace TcgEngine
 
         public override bool IsTargetConditionMet(Game data, AbilityData ability, Card caster, Slot target)
         {
-            bool same_owner = caster.player_id == target.p;
+            bool same_owner = Slot.GetP(caster.player_id) == target.p;
             return CompareBool(same_owner, oper);
         }
     }

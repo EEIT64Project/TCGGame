@@ -45,6 +45,7 @@ namespace TcgEngine.AI
         private Pool<Game> data_pool = new Pool<Game>();
         private Pool<AIAction> action_pool = new Pool<AIAction>();
         private Pool<List<AIAction>> list_pool = new Pool<List<AIAction>>();
+        private ListSwap<Card> card_array = new ListSwap<Card>();
 
         public static AILogic Create(int player_id, int level)
         {
@@ -53,7 +54,7 @@ namespace TcgEngine.AI
             job.ai_level = level;
 
             job.heuristic = new AIHeuristic(player_id, level);
-            job.game_logic = new GameLogic();
+            job.game_logic = new GameLogic(true); //Skip all delays for the AI calculations
 
             return job;
         }
@@ -64,7 +65,7 @@ namespace TcgEngine.AI
                 return;
 
             game_data = Game.CloneNew(data);        //Clone game data to keep original data unaffected
-            game_logic.Clear();                     //Clear temp memory
+            game_logic.ClearResolve();                 //Clear temp memory
             game_logic.SetData(game_data);          //Assign data to game logic
             random_gen = new System.Random();       //Reset random seed
 
@@ -142,6 +143,7 @@ namespace TcgEngine.AI
                         AddActions(action_list, data, node, GameAction.Attack, card);
                         AddActions(action_list, data, node, GameAction.AttackPlayer, card);
                         AddActions(action_list, data, node, GameAction.CastAbility, card);
+                        //AddActions(action_list, data, node, GameAction.Move, card);        //Uncomment to consider move actions
                     }
                 }
                 else
@@ -150,8 +152,10 @@ namespace TcgEngine.AI
                 }
             }
 
-            //End Turn (dont add if your can still attack player)
-            bool can_end = !HasAction(action_list, GameAction.AttackPlayer) && data.selector == SelectorType.None;
+            //End Turn (dont add action if ai can still attack player, or ai hasnt spent any mana)
+            bool is_full_mana = HasAction(action_list, GameAction.PlayCard) && player.mana >= player.mana_max;
+            bool can_attack_player = HasAction(action_list, GameAction.AttackPlayer);
+            bool can_end = !can_attack_player && !is_full_mana && data.selector == SelectorType.None;
             if (action_list.Count == 0 || can_end)
             {
                 AIAction actiont = CreateAction(GameAction.EndTurn);
@@ -225,7 +229,7 @@ namespace TcgEngine.AI
             Profiler.BeginSample("Clone Data");
             Game ndata = data_pool.Create();
             Game.Clone(data, ndata); //Clone
-            game_logic.Clear();
+            game_logic.ClearResolve();
             game_logic.SetData(ndata);
             Profiler.EndSample();
 
@@ -434,6 +438,19 @@ namespace TcgEngine.AI
                     }
                 }
             }
+
+            if (type == GameAction.Move)
+            {
+                foreach (Slot slot in Slot.GetAll(player.player_id))
+                {
+                    if (data.CanMoveCard(card, slot))
+                    {
+                        AIAction action = CreateAction(type, card);
+                        action.slot = slot;
+                        actions.Add(action);
+                    }
+                }
+            }
         }
 
         private void AddSelectActions(List<AIAction> actions, Game data, NodeState node)
@@ -482,15 +499,12 @@ namespace TcgEngine.AI
             {
                 for (int p = 0; p < data.players.Length; p++)
                 {
-                    Player tplayer = data.players[p];
-                    foreach (Card tcard in tplayer.cards_all.Values)
+                    List<Card> cards = ability.GetValidCardSelectTargets(data, caster, card_array);
+                    foreach (Card tcard in cards)
                     {
-                        if (ability.AreTargetConditionsMet(data, caster, tcard))
-                        {
-                            AIAction action = CreateAction(GameAction.SelectCard, caster);
-                            action.target_uid = tcard.uid;
-                            actions.Add(action);
-                        }
+                        AIAction action = CreateAction(GameAction.SelectCard, caster);
+                        action.target_uid = tcard.uid;
+                        actions.Add(action);
                     }
                 }
             }
@@ -509,9 +523,12 @@ namespace TcgEngine.AI
                 }
             }
 
-            //Always add option to cancel
-            AIAction caction = CreateAction(GameAction.CancelSelect, caster);
-            actions.Add(caction);
+            //Add option to cancel, if no valid options
+            if (actions.Count == 0)
+            {
+                AIAction caction = CreateAction(GameAction.CancelSelect, caster);
+                actions.Add(caction);
+            }
         }
 
         private AIAction CreateAction(ushort type)

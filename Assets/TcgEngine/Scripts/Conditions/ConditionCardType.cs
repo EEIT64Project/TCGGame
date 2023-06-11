@@ -20,8 +20,7 @@ namespace TcgEngine
 
         public override bool IsTargetConditionMet(Game data, AbilityData ability, Card caster, Card target)
         {
-            CardData icard = CardData.Get(target.card_id);
-            return CompareBool(IsTrait(icard), oper);
+            return CompareBool(IsTrait(target), oper);
         }
 
         public override bool IsTargetConditionMet(Game data, AbilityData ability, Card caster, Player target)
@@ -34,11 +33,11 @@ namespace TcgEngine
             return false; //Not a card
         }
 
-        private bool IsTrait(CardData icard)
+        private bool IsTrait(Card card)
         {
-            bool is_type = icard.type == has_type || has_type == CardType.None;
-            bool is_team = icard.team == has_team || has_team == null;
-            bool is_trait = icard.HasTrait(has_trait) || has_trait == null;
+            bool is_type = card.CardData.type == has_type || has_type == CardType.None;
+            bool is_team = card.CardData.team == has_team || has_team == null;
+            bool is_trait = card.HasTrait(has_trait) || has_trait == null;
             return (is_type && is_team && is_trait);
         }
     }

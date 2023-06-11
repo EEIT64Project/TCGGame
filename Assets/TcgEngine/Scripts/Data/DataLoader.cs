@@ -25,11 +25,15 @@ namespace TcgEngine
 
         public void LoadData()
         {
+            //To make loading faster, add a path inside each Load() function, relative to Resources folder
+            //For example CardData.Load("Cards");  to only load data inside the Resources/Cards folder
             CardData.Load();
             TeamData.Load();
             RarityData.Load();
             TraitData.Load();
+            VariantData.Load();
             PackData.Load();
+            LevelData.Load();
             DeckData.Load();
             AbilityData.Load();
             StatusData.Load();

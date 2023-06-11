@@ -15,6 +15,8 @@ namespace TcgEngine.AI
         private bool is_playing = false;
         private bool is_selecting = false;
 
+        private System.Random rand = new System.Random();
+
         public AIPlayerRandom(GameLogic gameplay, int id, int level)
         {
             this.gameplay = gameplay;
@@ -141,11 +143,11 @@ namespace TcgEngine.AI
             Player player = game_data.GetPlayer(player_id);
             if (player.cards_hand.Count > 0 && game_data.IsPlayerActionTurn(player))
             {
-                Card random = player.GetRandomCard(player.cards_hand);
-                Slot slot = player.GetRandomSlot();
+                Card random = player.GetRandomCard(player.cards_hand, rand);
+                Slot slot = player.GetRandomSlot(rand);
 
                 if (random != null && random.CardData.IsRequireTarget())
-                    slot = game_data.GetRandomSlot(); //Spell can target any slot, not just your side
+                    slot = game_data.GetRandomSlot(rand); //Spell can target any slot, not just your side
 
                 if (random != null)
                     gameplay.PlayCard(random, slot);
@@ -161,8 +163,8 @@ namespace TcgEngine.AI
             Player player = game_data.GetPlayer(player_id);
             if (player.cards_board.Count > 0 && game_data.IsPlayerActionTurn(player))
             {
-                Card random = player.GetRandomCard(player.cards_board);
-                Card rtarget = game_data.GetRandomBoardCard();
+                Card random = player.GetRandomCard(player.cards_board, rand);
+                Card rtarget = game_data.GetRandomBoardCard(rand);
                 if (random != null && rtarget != null)
                     gameplay.AttackTarget(random, rtarget);
             }
@@ -175,10 +177,10 @@ namespace TcgEngine.AI
 
             Game game_data = gameplay.GetGameData();
             Player player = game_data.GetPlayer(player_id);
-            Player oplayer = game_data.GetRandomPlayer();
+            Player oplayer = game_data.GetRandomPlayer(rand);
             if (player.cards_board.Count > 0 && game_data.IsPlayerActionTurn(player))
             {
-                Card random = player.GetRandomCard(player.cards_board);
+                Card random = player.GetRandomCard(player.cards_board, rand);
                 if (random != null && oplayer != null && oplayer != player)
                     gameplay.AttackPlayer(random, oplayer);
             }
@@ -195,10 +197,10 @@ namespace TcgEngine.AI
             Card caster = game_data.GetCard(game_data.selector_caster_uid);
             if (player != null && ability != null && caster != null)
             {
-                List<Card> card_list = ability.GetValidCardTargets(game_data, caster);
+                List<Card> card_list = ability.GetValidCardSelectTargets(game_data, caster);
                 if (card_list.Count > 0)
                 {
-                    Card card = card_list[Random.Range(0, card_list.Count)];
+                    Card card = card_list[rand.Next(0, card_list.Count)];
                     gameplay.SelectCard(card);
                 }
             }
@@ -220,7 +222,7 @@ namespace TcgEngine.AI
                 Player tplayer = game_data.GetPlayer(target_player);
                 if (tplayer.cards_board.Count > 0)
                 {
-                    Card random = tplayer.GetRandomCard(tplayer.cards_board);
+                    Card random = tplayer.GetRandomCard(tplayer.cards_board, rand);
                     if (random != null)
                         gameplay.SelectCard(random);
                 }
@@ -238,7 +240,7 @@ namespace TcgEngine.AI
                 AbilityData ability = AbilityData.Get(game_data.selector_ability_id);
                 if (ability != null && ability.chain_abilities.Length > 0)
                 {
-                    int choice = Random.Range(0, ability.chain_abilities.Length);
+                    int choice = rand.Next(0, ability.chain_abilities.Length);
                     gameplay.SelectChoice(choice);
                 }
             }

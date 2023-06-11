@@ -166,6 +166,11 @@ namespace TcgEngine.AI
                     return 200 + (card.GetMana() * 5);
             }
 
+            if (order.type == GameAction.Move)
+            {
+                return 150;
+            }
+
             return 100; //Other orders are better than End/Cancel
         }
 
@@ -190,6 +195,8 @@ namespace TcgEngine.AI
                 type_sort = 1; //Positive Spells
             if (order.type == GameAction.CastAbility)
                 type_sort = 2; //Card Abilities
+            if (order.type == GameAction.Move)
+                type_sort = 3; //Move
             if (order.type == GameAction.Attack)
                 type_sort = 4; //Attacks
             if (order.type == GameAction.AttackPlayer)

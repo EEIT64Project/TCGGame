@@ -32,24 +32,9 @@ namespace TcgEngine
             return cards.Length;
         }
 
-        public int GetCost()
-        {
-            int cost = 0;
-            foreach (CardData card in cards)
-            {
-                cost += card.mana;
-            }
-            return cost;
-        }
-
         public bool IsValid()
         {
-            return cards.Length == 8;
-        }
-
-        public bool IsOverGemLimit(int max_gems)
-        {
-            return GetCost() > max_gems;
+            return cards.Length >= GameplayData.Get().deck_size;
         }
 
         public static DeckData Get(string id)

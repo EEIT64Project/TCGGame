@@ -151,7 +151,7 @@ namespace TcgEngine
             return unique_cards.Count;
         }
 
-        public int CountCardType(CardVariant variant)
+        public int CountCardType(VariantData variant)
         {
             int value = 0;
             foreach (UserCardData card in cards)
@@ -184,7 +184,9 @@ namespace TcgEngine
 
         public bool IsDeckValid(UserDeckData deck)
         {
-            return HasDeckCards(deck) && deck.IsValid();
+            if (Authenticator.Get().IsApi())
+                return HasDeckCards(deck) && deck.IsValid();
+            return deck.IsValid();
         }
 
         public void AddPack(string tid, int quantity)
@@ -228,6 +230,16 @@ namespace TcgEngine
                 List<UserCardData> acards = new List<UserCardData>(cards);
                 acards.Add(npack);
                 cards = acards.ToArray();
+            }
+        }
+
+        public void AddReward(string tid)
+        {
+            if (!HasReward(tid))
+            {
+                List<string> arewards = new List<string>(rewards);
+                arewards.Add(tid);
+                rewards = arewards.ToArray();
             }
         }
 
@@ -295,35 +307,38 @@ namespace TcgEngine
         public string tid;
         public int quantity;
 
-        public static string GetTid(string card_id, CardVariant variant)
+        public static string GetTid(string card_id, VariantData variant)
         {
-            if (variant == CardVariant.Foil)
-                return card_id + "_foil";
+            if (!variant.is_default)
+                return card_id + variant.GetSuffix();
             return card_id;
+        }
+
+        public static CardData GetCardData(string tid)
+        {
+            return CardData.Get(GetCardId(tid));
         }
 
         public static string GetCardId(string tid)
         {
-            if (tid.EndsWith("_nft_foil"))
-                return tid.Replace("_nft_foil", "");
-            if (tid.EndsWith("_nft"))
-                return tid.Replace("_nft", "");
-            if (tid.EndsWith("_foil"))
-                return tid.Replace("_foil", "");
+            foreach (VariantData variant in VariantData.GetAll())
+            {
+                string suffix = variant.GetSuffix();
+                if (tid.EndsWith(suffix))
+                    return tid.Replace(suffix, "");
+            }
             return tid;
         }
 
-        public static CardVariant GetCardVariant(string tid)
+        public static VariantData GetCardVariant(string tid)
         {
-            if (tid.EndsWith("_foil"))
-                return CardVariant.Foil;
-            return CardVariant.Normal;
-        }
-
-        public static bool IsFoil(string tid)
-        {
-            CardVariant variant = GetCardVariant(tid);
-            return variant == CardVariant.Foil;
+            foreach (VariantData variant in VariantData.GetAll())
+            {
+                string suffix = variant.GetSuffix();
+                if (tid.EndsWith(suffix))
+                    return variant;
+            }
+            return VariantData.GetDefault();
         }
     }
 

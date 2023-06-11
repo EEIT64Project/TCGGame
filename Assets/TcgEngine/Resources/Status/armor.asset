@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: armor
   m_EditorClassIdentifier: 
   effect: 16
-  title: Armor
+  title: "Armor \u8B77\u7532"
   icon: {fileID: 0}
-  desc: Receives less damage from attacks.
+  desc: "Receives less damage from attacks.\n\u53D7\u5230\u8F03\u5C11\u7684\u653B\u64CA\u50B7\u5BB3\u3002"
   status_fx: {fileID: 0}
   hvalue: 1

@@ -195,9 +195,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: In Test Mode, use any Username you want (each one has its own save). Use
-    two different usernames to test in multi. Install the API server to use real
-    user login with password.
+  m_Text: 
 --- !u!222 &46835327
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -424,7 +422,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u904A\u6232\u540D\u7A31"
+  m_Text: "\u73A9\u5BB6\u540D\u7A31"
 --- !u!222 &101236787
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -580,7 +578,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u8ACB\u518D\u6B21\u8F38\u5165\u5BC6\u78BC"
+  m_Text: "\u518D\u6B21\u8F38\u5165\u5BC6\u78BC"
 --- !u!222 &143283469
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -734,7 +732,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u5BC6\u78BC"
+  m_Text: "\u8ACB\u8F38\u5165\u5BC6\u78BC"
 --- !u!222 &210327324
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1682,7 +1680,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u904A\u6232\u540D\u7A31"
+  m_Text: "\u73A9\u5BB6\u540D\u7A31"
 --- !u!222 &649902633
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3626,7 +3624,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Error Message
+  m_Text: "\u932F\u8AA4\u8A0A\u606F"
 --- !u!222 &1798367779
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4768,7 +4766,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: error
+  m_Text: "\u932F\u8AA4"
 --- !u!1 &3129754220103435555
 GameObject:
   m_ObjectHideFlags: 0
@@ -5155,7 +5153,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u4FE1\u7BB1..."
+  m_Text: Email...
 --- !u!222 &3129754221430591217
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5235,7 +5233,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u627E\u56DE\u5BC6\u78BC"
+  m_Text: "\u5BC6\u78BC\u91CD\u7F6E"
 --- !u!222 &3129754221501770265
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5908,7 +5906,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: error
+  m_Text: "\u932F\u8AA4"
 --- !u!224 &7793941511285069829
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6202,7 +6200,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u8F38\u5165\u9A57\u8B49\u78BC..."
+  m_Text: "\u8ACB\u8F38\u5165\u9A57\u8B49\u78BC..."
 --- !u!224 &7793941511451195865
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7029,7 +7027,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u8ACB\u518D\u6B21\u8F38\u5165\u5BC6\u78BC..."
+  m_Text: "\u518D\u6B21\u8F38\u5165\u5BC6\u78BC..."
 --- !u!224 &7793941512003986067
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7217,4 +7215,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u627E\u56DE\u5BC6\u78BC"
+  m_Text: "\u5BC6\u78BC\u91CD\u7F6E"

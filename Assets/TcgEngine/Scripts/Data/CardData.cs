@@ -13,12 +13,6 @@ namespace TcgEngine
         Secret = 40,
     }
 
-    public enum CardVariant
-    {
-        Normal = 0,
-        Foil = 5,
-    }
-
     /// <summary>
     /// Defines all card data
     /// </summary>
@@ -80,12 +74,12 @@ namespace TcgEngine
                 card_list.AddRange(Resources.LoadAll<CardData>(folder));
         }
 
-        public Sprite GetBoardArt(CardVariant variant)
+        public Sprite GetBoardArt(VariantData variant)
         {
             return art_board;
         }
 
-        public Sprite GetFullArt(CardVariant variant)
+        public Sprite GetFullArt(VariantData variant)
         {
             return art_full;
         }

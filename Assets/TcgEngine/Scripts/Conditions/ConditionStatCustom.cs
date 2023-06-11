@@ -18,12 +18,12 @@ namespace TcgEngine
 
         public override bool IsTargetConditionMet(Game data, AbilityData ability, Card caster, Card target)
         {
-            return CompareInt(target.GetStatValue(trait.id), oper, value);
+            return CompareInt(target.GetTraitValue(trait.id), oper, value);
         }
 
         public override bool IsTargetConditionMet(Game data, AbilityData ability, Card caster, Player target)
         {
-            return CompareInt(target.GetStatValue(trait.id), oper, value);
+            return CompareInt(target.GetTraitValue(trait.id), oper, value);
         }
     }
 }
