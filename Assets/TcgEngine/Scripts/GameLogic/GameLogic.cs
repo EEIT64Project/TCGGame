@@ -1403,7 +1403,7 @@ namespace TcgEngine.Gameplay
                 attack_queue.Enqueue(elem);
             }
         }
-
+       
         protected virtual void AddCallbackToQueue(System.Action callback)
         {
             if (callback != null)
