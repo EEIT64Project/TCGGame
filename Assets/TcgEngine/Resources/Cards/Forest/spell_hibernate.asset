@@ -10,27 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 843a21f7f6f205741a0a7341aec8e84d, type: 3}
-  m_Name: crab_mana
+  m_Name: spell_hibernate
   m_EditorClassIdentifier: 
-  id: crab_mana
-  title: "Mana Crab \u540E\u91CC\u87F9"
-  art_full: {fileID: 21300000, guid: cce549b2eaf206644bd6bc7ac6e38295, type: 3}
-  art_board: {fileID: 21300000, guid: e73be87636869234498a5156aa80fd7a, type: 3}
-  type: 10
-  team: {fileID: 11400000, guid: ed6dfd9dc7797584994eaf1fba66535f, type: 2}
-  rarity: {fileID: 11400000, guid: fab1a52f5a36cc942985dea95be18ac9, type: 2}
-  mana: 2
-  attack: 3
-  hp: 1
+  id: spell_hibernate
+  title: "Hibernate \u61B2\u6625\u8001\u5E2B"
+  art_full: {fileID: 21300000, guid: 3339b73563834724b892ec5aa394be35, type: 3}
+  art_board: {fileID: 0}
+  type: 20
+  team: {fileID: 11400000, guid: b80d8061c5bdb2e408e62a08e0e743ca, type: 2}
+  rarity: {fileID: 11400000, guid: 13b592f40b7cd424c966f5d7eef425aa, type: 2}
+  mana: 3
+  attack: 0
+  hp: 0
   traits: []
   stats: []
   abilities:
-  - {fileID: 11400000, guid: 9fe267054ee4b774b8219c64e0fc33c5, type: 2}
-  text: "When attacking a player, gain 2 mana.\n\u653B\u64CA\u73A9\u5BB6\u6642\uFF0C\u7372\u5F97
-    2 \u9EDE\u6CD5\u529B\u503C"
+  - {fileID: 11400000, guid: c33b9c4b9a4ad6540a84480f2cb45841, type: 2}
+  text: "Target gains +4/4 and goes to sleep for the next 2 turns.\n\u76EE\u6A19\u7372\u5F97
+    +4/4 \u4E26\u5728\u63A5\u4E0B\u4F86\u7684 2 \u56DE\u5408\u5167\u9032\u5165\u7761\u7720\u72C0\u614B\u3002"
   desc: 
-  spawn_fx: {fileID: 2106287953758554471, guid: a1e1ec86d02e969408bf2a6c17010f46,
-    type: 3}
+  spawn_fx: {fileID: 0}
   death_fx: {fileID: 0}
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}

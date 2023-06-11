@@ -10,25 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 843a21f7f6f205741a0a7341aec8e84d, type: 3}
-  m_Name: kraken
+  m_Name: flame_eagle
   m_EditorClassIdentifier: 
-  id: kraken
-  title: "Kraken \u7B11\u7F8E\u4EBA\u9B5A"
-  art_full: {fileID: 21300000, guid: 7f5caa30992161948b7c40c6b67f7638, type: 3}
-  art_board: {fileID: 21300000, guid: a7ef87091fb6a3247920caaebc079de4, type: 3}
+  id: flame_eagle
+  title: "Flame Eagle \u70C8\u7130\u9DF9"
+  art_full: {fileID: 21300000, guid: 9a0ccc62afbc00441bdc835c4bc15f2e, type: 3}
+  art_board: {fileID: 21300000, guid: d98fe108a4ff3b74fbf697ff101bbb65, type: 3}
   type: 10
-  team: {fileID: 11400000, guid: ed6dfd9dc7797584994eaf1fba66535f, type: 2}
-  rarity: {fileID: 11400000, guid: 15eaa2a0fbd97f149b3aa87387c160d1, type: 2}
-  mana: 6
-  attack: 5
-  hp: 5
+  team: {fileID: 11400000, guid: 6bbb96863ece0314fb318c0fce569afc, type: 2}
+  rarity: {fileID: 11400000, guid: fab1a52f5a36cc942985dea95be18ac9, type: 2}
+  mana: 1
+  attack: 1
+  hp: 1
   traits: []
   stats: []
   abilities:
+  - {fileID: 11400000, guid: bd8a20981b906a34897ee485cfc1db6b, type: 2}
   - {fileID: 11400000, guid: 3e633064b8ed24c4294c69cb519efd9f, type: 2}
-  text: "Haste\n\u885D\u92D2"
+  text: "Flying\nHaste\n\u98DB\u884C\n\u885D\u92D2"
   desc: 
-  spawn_fx: {fileID: 2106287953758554471, guid: a1e1ec86d02e969408bf2a6c17010f46,
+  spawn_fx: {fileID: 9125387663047351618, guid: bac685160af4aff46ae561a51da6f5f4,
     type: 3}
   death_fx: {fileID: 0}
   attack_fx: {fileID: 0}
@@ -38,8 +39,6 @@ MonoBehaviour:
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
-  deckbuilding: 1
+  deckbuilding: 0
   cost: 100
-  packs:
-  - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
-  - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}
+  packs: []
