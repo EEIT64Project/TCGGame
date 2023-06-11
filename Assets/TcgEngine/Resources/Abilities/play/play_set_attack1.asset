@@ -36,6 +36,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Electrify\u89F8\u96FB"
+  title: Electrify
   desc: "On play, selected target's attack is reduced to 1.\n\u6253\u51FA\u6B64\u724C\uFF0C\u6240\u9078\u76EE\u6A19\u7684\u653B\u64CA\u529B\u964D\u4F4E\u70BA
     1 \u9EDE"

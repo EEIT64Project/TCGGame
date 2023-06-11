@@ -10,18 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ce5f81e5cc37f547af6923758602c8c, type: 3}
-  m_Name: play_select_discard_character
+  m_Name: chain_treasure
   m_EditorClassIdentifier: 
-  id: play_select_discard
-  trigger: 10
-  conditions_trigger:
-  - {fileID: 11400000, guid: cca8bbaef69235e45a8f13e01fee6581, type: 2}
+  id: chain_treasure
+  trigger: 0
+  conditions_trigger: []
   target: 40
   conditions_target:
-  - {fileID: 11400000, guid: 10fa3e2ed9faf4545b0bfb85394c8409, type: 2}
-  - {fileID: 11400000, guid: 065da32cbd133734493695579723a718, type: 2}
   - {fileID: 11400000, guid: 7463bf87d3794e249b7610c9de9c5327, type: 2}
-  filters_target: []
+  - {fileID: 11400000, guid: 99c12d98b2b59f04a8441a9bc9bf5816, type: 2}
+  filters_target:
+  - {fileID: 11400000, guid: cb5bc89c1ee330b4bb183f1b0a81e3b4, type: 2}
   effects:
   - {fileID: 11400000, guid: 8f17c76aa367dd144a0665d4514588e9, type: 2}
   status: []
@@ -36,5 +35,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Dig\u76DC\u5893"
-  desc: "On play, return a character from your graveyard to your hand.\n\u6253\u51FA\u6B64\u724C\uFF0C\u5C07\u4E00\u500B\u751F\u7269\u724C\u5F9E\u4F60\u7684\u68C4\u724C\u5806\u79FB\u56DE\u4F60\u7684\u624B\u4E0A"
+  title: 
+  desc: 

@@ -34,6 +34,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Fire Damage\u71C3\u71D2"
+  title: Fire Damage
   desc: "On play, deal 2 damage to all other cards.\n\u6253\u51FA\u6B64\u724C\uFF0C\u5C0D\u6240\u6709\u5176\u4ED6\u5361\u724C\u9020\u6210
     2 \u9EDE\u50B7\u5BB3"

@@ -32,5 +32,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Flying\u795E\u901F"
+  title: Flying
   desc: "Can ignore Taunt.\n\u7121\u8996\u5632\u8AF7"

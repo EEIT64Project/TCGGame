@@ -37,6 +37,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Killer\u6BBA\u624B"
+  title: Killer
   desc: "On play, destroy a character with 4 or less attack. If you do, draw a card.\n\u6253\u51FA\u6B64\u724C\uFF0C\u6467\u6BC0\u4E00\u500B\u653B\u64CA\u529B\u4E0D\u8D85\u904E
     4 \u9EDE\u7684\u751F\u7269\u724C\u3002\u82E5\u6210\u529F\uFF0C\u62BD\u4E00\u5F35\u5361\u724C"

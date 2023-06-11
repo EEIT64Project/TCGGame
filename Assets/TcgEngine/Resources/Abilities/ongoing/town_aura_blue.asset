@@ -15,7 +15,7 @@ MonoBehaviour:
   id: town_aura_blue
   trigger: 2
   conditions_trigger: []
-  target: 12
+  target: 11
   conditions_target:
   - {fileID: 11400000, guid: 902733d12f434e94b904de5ebf4112de, type: 2}
   - {fileID: 11400000, guid: 2ad88c4591acb394e97d4cc7b96d2757, type: 2}
@@ -36,6 +36,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Blue Aura\u6D77\u6D0B\u4E4B\u5FC3"
+  title: Blue Aura
   desc: "All Blue cards cost 1 less.\n\u6240\u6709\u6D77\u6D0B\u5C6C\u6027\u5361\u724C\u6E1B\u5C11
     1 \u9EDE\u6CD5\u529B\u503C\u6D88\u8017"

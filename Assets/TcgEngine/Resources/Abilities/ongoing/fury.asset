@@ -32,5 +32,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Fury\u72C2\u6012"
+  title: Fury
   desc: "Can attack twice per turn.\n\u4E00\u56DE\u5408\u53EF\u4EE5\u653B\u64CA\u5169\u6B21"
