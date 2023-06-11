@@ -448,36 +448,6 @@ namespace TcgEngine
             return id;
         }
 		
-		public static int GenerateRandomInt()
-        {
-            return UnityEngine.Random.Range(int.MinValue, int.MaxValue);
-        }
-		
-		public static int GenerateRandomIntFromSeed(int seed)
-        {
-            System.Random random = new System.Random(seed);
-            return random.Next(int.MinValue, int.MaxValue);
-        }
-        
-        public static ulong GenerateRandomUInt64()
-        {
-            ulong id = (uint) UnityEngine.Random.Range(int.MinValue, int.MaxValue); //Cast to uint before casting to ulong
-            uint bid = (uint) UnityEngine.Random.Range(int.MinValue, int.MaxValue);
-            id = id << 32;
-            id = id | bid;
-            return id;
-        }
-		
-		public static ulong GenerateRandomUInt64FromSeed(int seed)
-        {
-            System.Random random = new System.Random(seed);
-            ulong id = (uint)random.Next(int.MinValue, int.MaxValue); //Cast to uint before casting to ulong
-            uint bid = (uint)random.Next(int.MinValue, int.MaxValue);
-            id = id << 32;
-            id = id | bid;
-            return id;
-        }
-
         public static IPAddress ResolveDnsReverse(string url)
         {
             IPHostEntry ip_address = Dns.GetHostEntry(url);

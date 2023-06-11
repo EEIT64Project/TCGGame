@@ -46,7 +46,7 @@ namespace TcgEngine.UI
             this.display_index = display_index;
             this.card = card;
             CardData icard = CardData.Get(card.card_id);
-            card_ui.SetCard(icard, card.variant);
+            card_ui.SetCard(icard, card.VariantData);
         }
 
     }

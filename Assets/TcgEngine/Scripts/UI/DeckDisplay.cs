@@ -56,14 +56,15 @@ namespace TcgEngine.UI
                     card_count.color = deck.GetQuantity() >= GameplayData.Get().deck_size ? Color.white : Color.red;
                 }
 
-                List<CardData> cards = new List<CardData>();
+                List<CardDataQ> cards = new List<CardDataQ>();
                 foreach (string tid in deck.cards)
                 {
-                    string card_id = UserCardData.GetCardId(tid);
-                    CardVariant variant = UserCardData.GetCardVariant(tid);
-                    CardData icard = CardData.Get(card_id);
-                    if (icard != null)
-                        cards.Add(icard);
+                    CardDataQ card = new CardDataQ();
+                    card.card = UserCardData.GetCardData(tid);
+                    card.variant = UserCardData.GetCardVariant(tid);
+                    card.quantity = 1;
+                    if (card.card != null)
+                        cards.Add(card);
                 }
 
                 ShowCards(cards);
@@ -89,8 +90,29 @@ namespace TcgEngine.UI
                     card_count.color = deck.GetQuantity() >= GameplayData.Get().deck_size ? Color.white : Color.red;
                 }
 
-                List<CardData> dcards = new List<CardData>();
-                dcards.AddRange(deck.cards);
+                List<CardDataQ> dcards = new List<CardDataQ>();
+                VariantData variant = VariantData.GetDefault();
+                foreach (CardData icard in deck.cards)
+                {
+                    CardDataQ card = new CardDataQ();
+                    card.card = icard;
+                    card.variant = variant;
+                    card.quantity = 1;
+                    dcards.Add(card);
+                }
+
+                if (deck is DeckPuzzleData)
+                {
+                    DeckPuzzleData pdeck = (DeckPuzzleData)deck;
+                    foreach (DeckCardSlot slot in pdeck.board_cards)
+                    {
+                        CardDataQ card = new CardDataQ();
+                        card.card = slot.card;
+                        card.variant = variant;
+                        card.quantity = 1;
+                        dcards.Add(card);
+                    }
+                }
 
                 ShowCards(dcards);
             }
@@ -98,17 +120,17 @@ namespace TcgEngine.UI
             gameObject.SetActive(deck != null);
         }
 
-        public void ShowCards(List<CardData> cards)
+        public void ShowCards(List<CardDataQ> cards)
         {
-            cards.Sort((CardData a, CardData b) => { return b.mana.CompareTo(a.mana); });
+            cards.Sort((CardDataQ a, CardDataQ b) => { return b.card.mana.CompareTo(a.card.mana); });
 
             int index = 0;
-            foreach (CardData icard in cards)
+            foreach (CardDataQ icard in cards)
             {
                 if (index < ui_cards.Length)
                 {
                     CardUI card_ui = ui_cards[index];
-                    card_ui.SetCard(icard, CardVariant.Normal);
+                    card_ui.SetCard(icard.card, icard.variant);
                     index++;
                 }
             }

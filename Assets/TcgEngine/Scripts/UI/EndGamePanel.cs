@@ -131,6 +131,18 @@ namespace TcgEngine.UI
                     }
                 }
             }
+
+            //Adventure Rewards
+            if (GameClient.game_settings.play_mode == PlayMode.Adventure)
+            {
+                LevelData lvl = LevelData.Get(GameClient.game_settings.level);
+                if (lvl != null && RewardManager.Get().IsRewardGained())
+                {
+                    target_coins = lvl.reward_coins;
+                    target_xp = lvl.reward_xp;
+                    reward_loaded = true;
+                }
+            }
         }
 
         public void ShowWinner(int winner)

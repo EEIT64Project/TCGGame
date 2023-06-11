@@ -28,6 +28,7 @@ namespace TcgEngine.UI
         public Sprite avatar_dead;
 
         private bool killed = false;
+        private float timer = 0f;
 
         private static List<PlayerUI> ui_list = new List<PlayerUI>();
 
@@ -46,6 +47,11 @@ namespace TcgEngine.UI
             pname.text = "";
             hp_txt.text = "";
             hp_max_txt.text = "";
+
+            for (int i = 0; i < secrets.Length; i++)
+                secrets[i].gameObject.SetActive(false);
+
+            GameClient.Get().onSecretTrigger += OnSecretTrigger;
         }
 
         void Update()
@@ -53,9 +59,7 @@ namespace TcgEngine.UI
             if (!GameClient.Get().IsReady())
                 return;
 
-            int player_id = is_opponent ? GameClient.Get().GetOpponentPlayerID() : GameClient.Get().GetPlayerID();
-            Game data = GameClient.Get().GetGameData();
-            Player player = data.GetPlayer(player_id);
+            Player player = GetPlayer();
 
             if (player != null)
             {
@@ -68,16 +72,32 @@ namespace TcgEngine.UI
                 AvatarData adata = AvatarData.Get(player.avatar);
                 if (avatar != null && adata != null && !killed)
                     avatar.SetAvatar(adata);
+            }
 
-                for (int i = 0; i < secrets.Length; i++)
-                {
-                    bool active = i < player.cards_secret.Count;
-                    bool was_active = secrets[i].gameObject.activeSelf;
-                    if (active != was_active)
-                        secrets[i].gameObject.SetActive(active);
-                    if (active && !was_active)
-                        secrets[i].SetTrigger("fx");
-                }
+            timer += Time.deltaTime;
+            if (timer > 0.4f)
+            {
+                timer = 0f;
+                SlowUpdate();
+            }
+        }
+
+        void SlowUpdate()
+        {
+            Player player = GetPlayer();
+            if (player == null)
+                return;
+
+            for (int i = 0; i < secrets.Length; i++)
+            {
+                bool active = i < player.cards_secret.Count;
+                bool was_active = secrets[i].gameObject.activeSelf;
+                if (active != was_active)
+                    secrets[i].gameObject.SetActive(active);
+                if (active && !was_active)
+                    secrets[i].SetTrigger("appear");
+                if (!active && was_active)
+                    secrets[i].Rebind();
             }
         }
 
@@ -87,6 +107,23 @@ namespace TcgEngine.UI
             avatar.SetImage(avatar_dead);
             AudioTool.Get().PlaySFX("fx", dead_audio);
             FXTool.DoFX(dead_fx, avatar.transform.position);
+        }
+
+        private void OnSecretTrigger(Card secret, Card triggerer)
+        {
+            Player player = GetPlayer();
+            int index = player.cards_secret.Count - 1;
+            if (player.player_id == secret.player_id && index >= 0 && index < secrets.Length)
+            {
+                secrets[index].SetTrigger("reveal");
+            }
+        }
+
+        public Player GetPlayer()
+        {
+            int player_id = is_opponent ? GameClient.Get().GetOpponentPlayerID() : GameClient.Get().GetPlayerID();
+            Game data = GameClient.Get().GetGameData();
+            return data.GetPlayer(player_id);
         }
 
         public static PlayerUI Get(bool opponent)

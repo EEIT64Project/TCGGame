@@ -61,6 +61,11 @@ namespace TcgEngine.UI
             ShowText("Not enough mana");
         }
 
+        public static void ShowSpellImmune()
+        {
+            ShowText("Spell Immunity");
+        }
+
         public static void ShowInvalidTarget()
         {
             ShowText("Invalid target");

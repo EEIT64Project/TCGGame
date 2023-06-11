@@ -13,33 +13,10 @@ namespace TcgEngine
     public static class GameTool
     {
         private const string uid_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        private static System.Random rand = new System.Random();
+        private static System.Random random = new System.Random();
 
         public static string GenerateRandomID(int min = 9, int max = 15)
         {
-            int length = UnityEngine.Random.Range(min, max);
-            string unique_id = "";
-            for (int i = 0; i < length; i++)
-            {
-                unique_id += uid_chars[UnityEngine.Random.Range(0, uid_chars.Length - 1)];
-            }
-            return unique_id;
-        }
-
-        public static string GenerateRandomID(System.Random rand, int min = 9, int max = 15)
-        {
-            int length = rand.Next(min, max);
-            string unique_id = "";
-            for (int i = 0; i < length; i++)
-            {
-                unique_id += uid_chars[rand.Next(uid_chars.Length - 1)];
-            }
-            return unique_id;
-        }
-
-        public static string GenerateRandomIDFromSeed(int seed, int min = 11, int max = 17)
-        {
-            System.Random random = new System.Random(seed);
             int length = random.Next(min, max);
             string unique_id = "";
             for (int i = 0; i < length; i++)
@@ -47,6 +24,20 @@ namespace TcgEngine
                 unique_id += uid_chars[random.Next(uid_chars.Length - 1)];
             }
             return unique_id;
+        }
+
+        public static int GenerateRandomInt()
+        {
+            return random.Next(int.MinValue, int.MaxValue);
+        }
+
+        public static ulong GenerateRandomUInt64()
+        {
+            ulong id = (uint)random.Next(int.MinValue, int.MaxValue); //Cast to uint before casting to ulong
+            uint bid = (uint)random.Next(int.MinValue, int.MaxValue);
+            id = id << 32;
+            id = id | bid;
+            return id;
         }
 
         public static List<T> PickXRandom<T>(List<T> source, List<T> dest, int x)
@@ -59,7 +50,7 @@ namespace TcgEngine
 
             for (int i = 0; i < x; i++)
             {
-                int r = rand.Next(source.Count);
+                int r = random.Next(source.Count);
                 dest.Add(source[r]);
                 source.RemoveAt(r);
             }

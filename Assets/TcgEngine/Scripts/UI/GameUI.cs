@@ -67,7 +67,7 @@ namespace TcgEngine.UI
             int player_id = GameClient.Get().GetPlayerID();
 
             LoadPanel.Get().SetVisible(is_connecting && !data.AreAllPlayersConnected());
-            end_turn_button.interactable = GameClient.Get().IsYourTurn();
+            end_turn_button.interactable = yourturn && data.state == GameState.Play;
 
             //Timer
             turn_count.text = "Turn " + data.turn_count.ToString();
@@ -92,21 +92,20 @@ namespace TcgEngine.UI
                 selector_timer += Time.deltaTime;
 
             //Card Selector
-            bool show_selector = data.selector == SelectorType.SelectorCard && data.selector_player == player_id && selector_timer > 2f;
+            bool show_selector = data.selector == SelectorType.SelectorCard && data.selector_player == player_id && selector_timer > 1f;
             if (show_selector && !CardSelector.Get().IsVisible())
             {
                 AbilityData iability = AbilityData.Get(data.selector_ability_id);
                 Card caster = data.GetCard(data.selector_caster_uid);
-                List<Card> card_list = iability.GetValidCardTargets(data, caster);
                 selector_timer = 0f;
 
                 if (iability != null)
-                    CardSelector.Get().Show(card_list, iability);
+                    CardSelector.Get().Show(iability, caster);
             }
 
             //Choice selector
             bool show_choice_selector = data.selector == SelectorType.SelectorChoice && data.selector_player == player_id;
-            if (show_choice_selector && !ChoiceSelector.Get().IsVisible() && selector_timer > 2f)
+            if (show_choice_selector && !ChoiceSelector.Get().IsVisible() && selector_timer > 1f)
             {
                 AbilityData iability = AbilityData.Get(data.selector_ability_id);
                 ChoiceSelector.Get().Show(iability);

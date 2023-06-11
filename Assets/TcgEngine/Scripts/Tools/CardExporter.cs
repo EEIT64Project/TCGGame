@@ -17,6 +17,7 @@ namespace TcgEngine
         public string export_path = "C:/CardsExport";
         public int width = 856;
         public int height = 1200;
+        public VariantData variant;
 
         [Header("References")]
         public Camera render_cam;
@@ -27,6 +28,9 @@ namespace TcgEngine
 
         void Start()
         {
+            if (variant == null)
+                variant = VariantData.GetDefault();
+
             GenerateAll();
         }
 
@@ -60,7 +64,7 @@ namespace TcgEngine
 
         private void GenerateCard(CardData card)
         {
-            card_ui.SetCard(card, CardVariant.Normal);
+            card_ui.SetCard(card, variant);
             render_cam.Render();
         }
 

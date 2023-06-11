@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TcgEngine.Client;
-using TcgEngine;
 
 namespace TcgEngine.UI
 {
@@ -30,7 +29,6 @@ namespace TcgEngine.UI
             button_list.Add(this);
             canvas_group = GetComponent<CanvasGroup>();
             canvas_group.alpha = 0f;
-            //GetComponent<Button>().onClick.AddListener( OnClick);
             if (focus_highlight != null)
                 focus_highlight.enabled = false;
         }
@@ -127,5 +125,6 @@ namespace TcgEngine.UI
             }
             return nearest;
         }
+
     }
 }

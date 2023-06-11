@@ -10,7 +10,7 @@ using TcgEngine.UI;
 namespace TcgEngine
 {
     /// <summary>
-    /// Use this tool to upload your cards and packs to the Mongo Database (it will overwrite existing data)
+    /// Use this tool to upload your cards, packs and rewards to the Mongo Database (it will overwrite existing data)
     /// </summary>
 
     public class CardUploader : MonoBehaviour
@@ -47,7 +47,9 @@ namespace TcgEngine
             ShowText("Deleting previous data...");
             await DeleteAllPacks();
             await DeleteAllCards();
+            await DeleteAllVariants();
             await DeleteAllDecks();
+            await DeleteAllRewards();
 
             //Packs
             List<PackData> packs = PackData.GetAll();
@@ -75,6 +77,16 @@ namespace TcgEngine
                 }
             }
 
+            //Variants
+            List<VariantData> variants = VariantData.GetAll();
+            for (int i = 0; i < variants.Count; i++)
+            {
+                VariantData variant = variants[i];
+                ShowText("Uploading: " + variant.id);
+                UploadVariant(variant);
+                await Task.Delay(100);
+            }
+
             //Starter Decks
             DeckData[] decks = GameplayData.Get().starter_decks;
             for (int i = 0; i < decks.Length; i++)
@@ -83,6 +95,16 @@ namespace TcgEngine
                 ShowText("Uploading: " + deck.id);
                 UploadDeck(deck);
                 UploadDeckReward(deck);
+                await Task.Delay(100);
+            }
+
+            //Solo rewards
+            List<LevelData> levels = LevelData.GetAll();
+            for (int i = 0; i < levels.Count; i++)
+            {
+                LevelData level = levels[i];
+                ShowText("Uploading: " + level.id);
+                UploadLevelReward(level);
                 await Task.Delay(100);
             }
 
@@ -102,9 +124,21 @@ namespace TcgEngine
             await ApiClient.Get().SendRequest(url, WebRequest.METHOD_DELETE);
         }
 
+        private async Task DeleteAllVariants()
+        {
+            string url = ApiClient.ServerURL + "/variants";
+            await ApiClient.Get().SendRequest(url, WebRequest.METHOD_DELETE);
+        }
+
         private async Task DeleteAllDecks()
         {
             string url = ApiClient.ServerURL + "/decks";
+            await ApiClient.Get().SendRequest(url, WebRequest.METHOD_DELETE);
+        }
+
+        private async Task DeleteAllRewards()
+        {
+            string url = ApiClient.ServerURL + "/rewards";
             await ApiClient.Get().SendRequest(url, WebRequest.METHOD_DELETE);
         }
 
@@ -114,12 +148,40 @@ namespace TcgEngine
             req.tid = pack.id;
             req.cards = pack.cards;
             req.cost = pack.cost;
-            req.rarities_1st = pack.rarities_1st;
-            req.rarities = pack.rarities;
+            req.random = pack.type == PackType.Random;
+
+            req.rarities_1st = new PackAddProbability[pack.rarities_1st.Length];
+            req.rarities = new PackAddProbability[pack.rarities.Length];
+            req.variants = new PackAddProbability[pack.variants.Length];
+
+            for (int i = 0; i < req.rarities_1st.Length; i++)
+                req.rarities_1st[i] = AddPackRarity(pack.rarities_1st[i]);
+
+            for (int i = 0; i < req.rarities.Length; i++)
+                req.rarities[i] = AddPackRarity(pack.rarities[i]);
+
+            for (int i = 0; i < req.variants.Length; i++)
+                req.variants[i] = AddPackVariant(pack.variants[i]);
 
             string url = ApiClient.ServerURL + "/packs/add";
             string json = ApiTool.ToJson(req);
             await ApiClient.Get().SendPostRequest(url, json);
+        }
+
+        private PackAddProbability AddPackRarity(PackRarity rarity)
+        {
+            PackAddProbability add = new PackAddProbability();
+            add.tid = rarity.rarity.id;
+            add.value = rarity.probability;
+            return add;
+        }
+
+        private PackAddProbability AddPackVariant(PackVariant rarity)
+        {
+            PackAddProbability add = new PackAddProbability();
+            add.tid = rarity.variant.id;
+            add.value = rarity.probability;
+            return add;
         }
 
         private async void UploadCard(CardData card)
@@ -128,7 +190,7 @@ namespace TcgEngine
             req.tid = card.id;
             req.type = card.GetTypeId();
             req.team = card.team.id;
-            req.rarity = card.rarity.rank;
+            req.rarity = card.rarity.id;
             req.mana = card.mana;
             req.attack = card.attack;
             req.hp = card.hp;
@@ -141,6 +203,18 @@ namespace TcgEngine
             }
 
             string url = ApiClient.ServerURL + "/cards/add";
+            string json = ApiTool.ToJson(req);
+            await ApiClient.Get().SendPostRequest(url, json);
+        }
+
+        private async void UploadVariant(VariantData variant)
+        {
+            VariantAddRequest req = new VariantAddRequest();
+            req.tid = variant.id;
+            req.cost_factor = variant.cost_factor;
+            req.is_default = variant.is_default;
+
+            string url = ApiClient.ServerURL + "/variants/add";
             string json = ApiTool.ToJson(req);
             await ApiClient.Get().SendPostRequest(url, json);
         }
@@ -174,6 +248,31 @@ namespace TcgEngine
             await ApiClient.Get().SendPostRequest(url, json);
         }
 
+        private async void UploadLevelReward(LevelData level)
+        {
+            RewardAddRequest req = new RewardAddRequest();
+            req.tid = level.id;
+            req.group = "";
+            req.coins = level.reward_coins;
+            req.xp = level.reward_xp;
+
+            req.cards = new string[level.reward_cards.Length];
+            for (int i = 0; i < level.reward_cards.Length; i++)
+            {
+                req.cards[i] = level.reward_cards[i].id;
+            }
+
+            req.packs = new string[level.reward_packs.Length];
+            for (int i = 0; i < level.reward_packs.Length; i++)
+            {
+                req.packs[i] = level.reward_packs[i].id;
+            }
+
+            string url = ApiClient.ServerURL + "/rewards/add";
+            string json = ApiTool.ToJson(req);
+            await ApiClient.Get().SendPostRequest(url, json);
+        }
+
         private void ShowText(string txt)
         {
             msg_text.text = txt;
@@ -193,7 +292,7 @@ namespace TcgEngine
         public string tid;
         public string type;
         public string team;
-        public int rarity;
+        public string rarity;
         public int mana;
         public int attack;
         public int hp;
@@ -207,8 +306,25 @@ namespace TcgEngine
         public string tid;
         public int cards;
         public int cost;
-        public int[] rarities_1st;
-        public int[] rarities;
+        public bool random;
+        public PackAddProbability[] rarities_1st;
+        public PackAddProbability[] rarities;
+        public PackAddProbability[] variants;
+    }
+
+    [System.Serializable]
+    public class PackAddProbability
+    {
+        public string tid;
+        public int value;
+    }
+
+    [System.Serializable]
+    public class VariantAddRequest
+    {
+        public string tid;
+        public int cost_factor;
+        public bool is_default;
     }
 
     [System.Serializable]

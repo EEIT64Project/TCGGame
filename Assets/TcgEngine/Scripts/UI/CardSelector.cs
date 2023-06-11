@@ -23,6 +23,7 @@ namespace TcgEngine.UI
 
         private AbilityData iability;
         private List<Card> card_list;
+        private ListSwap<Card> cards_array = new ListSwap<Card>();
         private List<CardSelectorCard> card_img_list = new List<CardSelectorCard>();
 
         private Vector2 mouse_start;
@@ -61,12 +62,12 @@ namespace TcgEngine.UI
 
             //Mouse scroll
             mouse_scroll += -Input.mouseScrollDelta.y;
-            if (mouse_scroll > 1f)
+            if (mouse_scroll > 0.5f)
             {
                 OnClickNext(1);
                 mouse_scroll -= 1f;
             }
-            if (mouse_scroll < -1f)
+            else if (mouse_scroll < -0.5f)
             {
                 OnClickNext(-1);
                 mouse_scroll += 1f;
@@ -91,8 +92,6 @@ namespace TcgEngine.UI
 
         private void RefreshSelector()
         {
-            Game data = GameClient.Get().GetGameData();
-
             foreach (CardSelectorCard card in card_img_list)
                 Destroy(card.gameObject);
             card_img_list.Clear();
@@ -102,28 +101,22 @@ namespace TcgEngine.UI
             select_button_text.text = (iability != null) ? "Select" : "OK";
             select_button.SetActive(iability != null);
 
-            Card caster = data.GetCard(data.selector_caster_uid);
-
             int index = 0;
             int image_index = 0;
             foreach (Card card in card_list)
             {
                 CardData icard = CardData.Get(card.card_id);
-                //CardType card_type = iability.target_type;
                 if (icard != null)
                 {
-                    if (iability == null || iability.AreTargetConditionsMet(data, caster, card))
-                    {
-                        GameObject card_obj = Instantiate(card_template, content.transform);
-                        card_obj.SetActive(true);
-                        RectTransform card_rect = card_obj.GetComponent<RectTransform>();
-                        CardSelectorCard card_img = card_obj.GetComponent<CardSelectorCard>();
-                        card_img.SetCard(index, image_index, card);
-                        card_img.target_pos = GetCardPos(card_img);
-                        card_rect.anchoredPosition = card_img.target_pos;
-                        card_img_list.Add(card_img);
-                        image_index++;
-                    }
+                    GameObject card_obj = Instantiate(card_template, content.transform);
+                    card_obj.SetActive(true);
+                    RectTransform card_rect = card_obj.GetComponent<RectTransform>();
+                    CardSelectorCard card_img = card_obj.GetComponent<CardSelectorCard>();
+                    card_img.SetCard(index, image_index, card);
+                    card_img.target_pos = GetCardPos(card_img);
+                    card_rect.anchoredPosition = card_img.target_pos;
+                    card_img_list.Add(card_img);
+                    image_index++;
                 }
                 index++;
             }
@@ -206,10 +199,11 @@ namespace TcgEngine.UI
             current_index = Mathf.Clamp(current_index, 0, card_img_list.Count - 1);
         }
 
-        public void Show(List<Card> card_list, AbilityData iability)
+        //Show ability
+        public void Show(AbilityData iability, Card caster)
         {
-            this.card_list = new List<Card>(card_list);
-            this.card_list.Sort((Card a, Card b) => { return a.CardData.title.CompareTo(b.CardData.title); }); //Reorder to not show the deck order
+            Game data = GameClient.Get().GetGameData();
+            this.card_list = iability.GetValidCardSelectTargets(data, caster);
             this.iability = iability;
             title.text = iability.title;
             subtitle.text = iability.desc;
@@ -219,6 +213,7 @@ namespace TcgEngine.UI
             RefreshSelector();
         }
 
+        //Show deck/discard
         public void Show(List<Card> card_list, string title)
         {
             this.card_list = new List<Card>(card_list);

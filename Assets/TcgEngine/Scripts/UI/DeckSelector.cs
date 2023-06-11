@@ -42,7 +42,7 @@ namespace TcgEngine.UI
             {
                 foreach (UserDeckData deck in udata.decks)
                 {
-                    if (deck.IsValid())
+                    if (udata.IsDeckValid(deck))
                     {
                         deck_dropdown.AddOption(deck.tid, deck.title);
                     }

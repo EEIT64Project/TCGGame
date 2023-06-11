@@ -16,6 +16,7 @@ namespace TcgEngine.UI
     public class CardUI : MonoBehaviour, IPointerClickHandler
     {
         public Image card_image;
+        public Image frame_image;
         public Image team_icon;
         public Image rarity_icon;
         public Image attack_icon;
@@ -28,13 +29,13 @@ namespace TcgEngine.UI
         public Text card_title;
         public Text card_text;
 
-        public StatUI[] stats;
+        public TraitUI[] stats;
 
         public UnityAction<CardUI> onClick;
         public UnityAction<CardUI> onClickRight;
 
         private CardData card;
-        private CardVariant variant;
+        private VariantData variant;
 
         void Awake()
         {
@@ -46,12 +47,12 @@ namespace TcgEngine.UI
             if (card == null)
                 return;
 
-            SetCard(card.CardData, card.variant);
+            SetCard(card.CardData, card.VariantData);
 
             if (cost != null)
                 cost.text = card.GetMana().ToString();
 
-            foreach (StatUI stat in stats)
+            foreach (TraitUI stat in stats)
                 stat.SetCard(card);
         }
 
@@ -60,7 +61,7 @@ namespace TcgEngine.UI
             if (card == null)
                 return;
 
-            SetCard(card.CardData, card.variant);
+            SetCard(card.CardData, card.VariantData);
 
             if (cost != null)
                 cost.text = card.GetMana().ToString();
@@ -69,11 +70,11 @@ namespace TcgEngine.UI
             if (hp != null)
                 hp.text = card.GetHP().ToString();
 
-            foreach (StatUI stat in stats)
+            foreach (TraitUI stat in stats)
                 stat.SetCard(card);
         }
 
-        public void SetCard(CardData card, CardVariant variant)
+        public void SetCard(CardData card, VariantData variant)
         {
             if (card == null)
                 return;
@@ -83,8 +84,10 @@ namespace TcgEngine.UI
 
             if(card_image != null)
                 card_image.sprite = card.GetFullArt(variant);
+            if (frame_image != null)
+                frame_image.sprite = variant.frame;
             if (card_title != null)
-                card_title.text = card.title.ToUpper();
+                card_title.text = card.GetTitle().ToUpper();
             if (card_text != null)
                 card_text.text = card.GetText();
 
@@ -116,7 +119,7 @@ namespace TcgEngine.UI
                 rarity_icon.enabled = rarity_icon.sprite != null;
             }
 
-            foreach (StatUI stat in stats)
+            foreach (TraitUI stat in stats)
                 stat.SetCard(card);
 
             if (!gameObject.activeSelf)
@@ -127,6 +130,8 @@ namespace TcgEngine.UI
         {
             if (card_image != null)
                 card_image.material = mat;
+            if (frame_image != null)
+                frame_image.material = mat;
             if (team_icon != null)
                 team_icon.material = mat;
             if (rarity_icon != null)
@@ -143,6 +148,8 @@ namespace TcgEngine.UI
         {
             if (card_image != null)
                 card_image.color = new Color(card_image.color.r, card_image.color.g, card_image.color.b, opacity);
+            if (frame_image != null)
+                frame_image.color = new Color(frame_image.color.r, frame_image.color.g, frame_image.color.b, opacity);
             if (team_icon != null)
                 team_icon.color = new Color(team_icon.color.r, team_icon.color.g, team_icon.color.b, opacity);
             if (rarity_icon != null)
@@ -191,7 +198,7 @@ namespace TcgEngine.UI
             return card;
         }
 
-        public CardVariant GetVariant()
+        public VariantData GetVariant()
         {
             return variant;
         }
