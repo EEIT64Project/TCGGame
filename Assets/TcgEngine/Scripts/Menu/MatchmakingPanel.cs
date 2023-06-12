@@ -34,9 +34,9 @@ namespace TcgEngine.UI
             base.Update();
 
             if (GameClientMatchmaker.Get().IsConnected())
-                text.text = "Finding Opponent...";
+                text.text = "正在尋找對手...";
             else
-                text.text = "Connecting to server...";
+                text.text = "連接至伺服器...";
         }
 
         public void SetCount(int players)
