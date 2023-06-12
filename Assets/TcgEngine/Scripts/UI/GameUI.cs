@@ -46,7 +46,7 @@ namespace TcgEngine.UI
             BlackPanel.Get().Hide();
 
             if (quit_btn != null)
-                quit_btn.text = GameClient.game_settings.IsOnlinePlayer() ? "Resign" : "Quit";
+                quit_btn.text = GameClient.game_settings.IsOnlinePlayer() ? "Resign" : "離開遊戲";
         }
 
         void Update()
@@ -70,7 +70,7 @@ namespace TcgEngine.UI
             end_turn_button.interactable = yourturn && data.state == GameState.Play;
 
             //Timer
-            turn_count.text = "Turn " + data.turn_count.ToString();
+            turn_count.text = "第 " + data.turn_count.ToString() + " 回合";
             turn_timer.enabled = data.turn_timer > 0f;
             turn_timer.text = Mathf.RoundToInt(data.turn_timer).ToString();
             turn_timer.enabled = data.turn_timer < 999f;
