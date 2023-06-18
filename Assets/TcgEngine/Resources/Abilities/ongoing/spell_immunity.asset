@@ -32,5 +32,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Spell Immunity
+  title: "Spell Immunity \u6CD5\u8853\u514D\u75AB"
   desc: "Cannot be targeted or damaged by spells and traps.\n\u4E0D\u6703\u88AB\u6CD5\u8853\u6307\u5B9A\uFF0C\u4E0D\u6703\u88AB\u6CD5\u8853\u548C\u9677\u9631\u9020\u6210\u50B7\u5BB3"

@@ -8,7 +8,7 @@ using TcgEngine;
 namespace TcgEngine.UI
 {
     /// <summary>
-    /// Box that appears when using the SelectTarget ability target
+    /// 技能需要選中目標時的對話框
     /// </summary>
 
     public class SelectTargetUI : UIPanel

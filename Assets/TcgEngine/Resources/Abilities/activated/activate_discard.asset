@@ -36,5 +36,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Discard
+  title: "Discard \u68C4\u724C"
   desc: "Opponent discard a random card from their hand.\n\u5C0D\u624B\u5F9E\u4ED6\u5011\u7684\u624B\u724C\u4E2D\u96A8\u6A5F\u4E1F\u68C4\u4E00\u5F35\u724C"

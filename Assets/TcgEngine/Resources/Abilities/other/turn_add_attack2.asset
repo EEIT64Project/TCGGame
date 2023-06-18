@@ -32,6 +32,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Furious
+  title: "Furious \u61A4\u6012"
   desc: "At the start of each turn, gain +2 attack.\n\u5728\u6BCF\u500B\u56DE\u5408\u958B\u59CB\u6642\uFF0C\u589E\u52A0
     2 \u9EDE\u653B\u64CA\u529B"

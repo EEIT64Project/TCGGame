@@ -36,6 +36,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Treasure
+  title: "Treasure \u6F58\u6735\u62C9\u76D2\u5B50"
   desc: "Look at the next 7 cards in your deck, and take 2 into your hand.\n\u67E5\u770B\u724C\u7D44\u4E2D\u63A5\u4E0B\u4F86\u7684
     7 \u5F35\u724C\uFF0C\u7136\u5F8C\u9078\u64C7\u5169\u5F35\u52A0\u5165\u4F60\u7684\u624B\u724C\u3002"

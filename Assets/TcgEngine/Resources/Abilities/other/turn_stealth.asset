@@ -34,6 +34,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Stealth
+  title: "Stealth \u6F5B\u884C"
   desc: "At the end of your turn, if you have at least one other character in play,
     go in stealth.\n\u5728\u4F60\u7684\u56DE\u5408\u7D50\u675F\u6642\uFF0C\u5982\u679C\u4F60\u81F3\u5C11\u6709\u4E00\u500B\u5176\u4ED6\u751F\u7269\u724C\u5728\u5834\u4E0A\uFF0C\u6B64\u751F\u7269\u7372\u5F97\u6F5B\u884C\u72C0\u614B"

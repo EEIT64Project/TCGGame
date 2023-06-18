@@ -35,6 +35,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Green Aura
+  title: "Green Aura \u91CE\u6027\u4E4B\u529B"
   desc: "All Green characters gain +2 hp.\n\u6240\u6709\u68EE\u6797\u5C6C\u6027\u5361\u724C\u589E\u52A0
     2 \u9EDE\u751F\u547D\u503C"

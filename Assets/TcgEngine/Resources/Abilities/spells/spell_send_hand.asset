@@ -34,5 +34,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Return Hand
+  title: "Return Hand \u8FD4\u56DE"
   desc: "Return target to its owner's hand.\n\u5C07\u76EE\u6A19\u8FD4\u56DE\u5176\u64C1\u6709\u8005\u624B\u4E0A"

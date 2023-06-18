@@ -33,6 +33,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Defense
+  title: "Defense \u8D8A\u632B\u8D8A\u52C7"
   desc: "Has +3 attack during the opponent's turn.\n\u5728\u5C0D\u624B\u7684\u56DE\u5408\u4E2D\u589E\u52A0
     3 \u9EDE\u653B\u64CA\u529B"

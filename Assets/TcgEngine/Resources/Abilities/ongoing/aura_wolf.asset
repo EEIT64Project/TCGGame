@@ -36,6 +36,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Wolf Aura
+  title: "Wolf Aura \u5713\u6708\u4E4B\u591C"
   desc: "All other allied wolves gain +1 attack.\n\u6240\u6709\u5176\u4ED6\u6211\u65B9\u7684\u72FC\u589E\u52A0
     1 \u9EDE\u653B\u64CA\u529B"

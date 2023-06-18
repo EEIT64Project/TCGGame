@@ -98,7 +98,7 @@ namespace TcgEngine.UI
             drag = false;
             mouse_scroll = 0f;
 
-            select_button_text.text = (iability != null) ? "Select" : "OK";
+            select_button_text.text = (iability != null) ? "選擇" : "OK";
             select_button.SetActive(iability != null);
 
             int index = 0;

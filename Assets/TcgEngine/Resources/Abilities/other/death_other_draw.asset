@@ -33,5 +33,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Eat
+  title: "Eat \u5927\u5FEB\u6735\u9824"
   desc: "Whenever another character dies, draw a card.\n\u7576\u5176\u4ED6\u751F\u7269\u6B7B\u4EA1\u6642\uFF0C\u62BD\u4E00\u5F35\u5361\u724C"

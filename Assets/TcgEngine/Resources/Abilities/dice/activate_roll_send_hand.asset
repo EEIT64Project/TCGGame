@@ -35,6 +35,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Charge
+  title: "Charge \u5145\u80FD"
   desc: "Select a character and roll a D6, on 4+ return it to its owner's hand.\n\u9078\u64C7\u4E00\u500B\u751F\u7269\u4E26\u64F2
     D6\uFF0C\u5728 4+ \u6642\u5C07\u5176\u8FD4\u56DE\u5176\u6240\u6709\u8005\u624B\u4E0A\u3002"

@@ -34,6 +34,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Aerial Strike
+  title: "Aerial Strike \u7A7A\u8972"
   desc: "Summon three 1/1 eagles with flying and haste into your hand.\n\u53EC\u559A\u4E09\u96BB
     1/1 \u5177\u6709\u98DB\u884C\u548C\u885D\u92D2\u7684\u9DF9\u9032\u5165\u4F60\u7684\u624B\u724C\u3002"

@@ -35,5 +35,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Heal
+  title: "Heal \u6CBB\u7652"
   desc: "Target card is fully healed.\n\u76EE\u6A19\u5361\u724C\u6062\u5FA9\u5168\u90E8\u8840\u91CF"

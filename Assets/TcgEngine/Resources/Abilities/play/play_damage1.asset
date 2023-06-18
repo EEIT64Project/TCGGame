@@ -33,8 +33,8 @@ MonoBehaviour:
   target_fx: {fileID: 9125387663047351618, guid: b66600b51774daa49964ead5c6a00c49,
     type: 3}
   cast_audio: {fileID: 0}
-  target_audio: {fileID: 0}
+  target_audio: {fileID: 8300000, guid: 76e519a27e6ba40c48ae31521a7d7952, type: 3}
   charge_target: 0
-  title: Fire Damage
+  title: "Fire Damage \u9EDE\u71C3"
   desc: "On play, deal 1 damage to any target.\n\u6253\u51FA\u6B64\u724C\uFF0C\u5C0D\u4EFB\u610F\u76EE\u6A19\u9020\u6210
     1 \u9EDE\u50B7\u5BB3"

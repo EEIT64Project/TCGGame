@@ -35,6 +35,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Poison
+  title: "Poison \u4E2D\u6BD2"
   desc: "Target character gains poison. They lose 1 hp each turn.\n\u76EE\u6A19\u751F\u7269\u9032\u5165\u4E2D\u6BD2\u72C0\u614B\u3002\u6BCF\u56DE\u5408\u640D\u5931
     1 \u9EDE\u751F\u547D\u503C"

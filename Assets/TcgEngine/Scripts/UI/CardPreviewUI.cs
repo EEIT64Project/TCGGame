@@ -8,7 +8,7 @@ using TcgEngine;
 namespace TcgEngine.UI
 {
     /// <summary>
-    /// In the game scene, the CardPreviewUI is what shows the card in big with extra info when hovering a card
+    /// 在遊戲場景中，滑鼠停止於卡片上方時以大尺寸顯示卡片和額外信息的部分
     /// </summary>
 
     public class CardPreviewUI : MonoBehaviour

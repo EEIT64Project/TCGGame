@@ -7,8 +7,7 @@ using TcgEngine.Client;
 namespace TcgEngine.UI
 {
     /// <summary>
-    /// The choice selector is a box that appears when using an ability with ChoiceSelector as target
-    /// it let you choose between different abilities
+    /// 卡牌能力選擇框
     /// </summary>
 
     public class ChoiceSelector : UIPanel

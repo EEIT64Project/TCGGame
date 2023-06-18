@@ -96,11 +96,11 @@ namespace TcgEngine.UI
                 other_avatar.sprite = avat2.avatar;
 
             if (pwinner != null && pwinner == player)
-                winner_text.text = "Victory";
+                winner_text.text = "勝利";
             else if (pwinner != null)
-                winner_text.text = "Defeat";
+                winner_text.text = "戰敗";
             else
-                winner_text.text = "Tie";
+                winner_text.text = "和局";
 
             if (pwinner == player)
                 winner_glow.rectTransform.anchoredPosition = player_avatar.rectTransform.anchoredPosition;

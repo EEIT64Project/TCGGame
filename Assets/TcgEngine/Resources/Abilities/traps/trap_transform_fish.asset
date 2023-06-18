@@ -35,6 +35,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: Transform to Fish
+  title: "Transform to Fish \u8B8A\u5F62\u8853"
   desc: "When the next creature is played, transform it into a 1/1 fish.\n\u7576\u6575\u65B9\u73A9\u5BB6\u6253\u51FA\u4E0B\u4E00\u500B\u751F\u7269\u6642\uFF0C\u5C07\u5176\u8B8A\u6210
     1/1 \u7684\u9B5A"

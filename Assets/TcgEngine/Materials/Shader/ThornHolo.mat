@@ -43,6 +43,8 @@ Material:
     - Vector1_28EDB65D: 1
     - Vector1_BF141601: 20
     - Vector1_F5FE8909: 5
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - dissolve: 1
     - glow_value: 5
     - noise_scale: 10
