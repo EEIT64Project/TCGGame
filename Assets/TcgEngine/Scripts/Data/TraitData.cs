@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// Defines all traits and stats data
+    /// 定義所有特徵和統計數據
     /// </summary>
 
     [CreateAssetMenu(fileName = "TraitData", menuName = "TcgEngine/TraitData", order = 1)]

@@ -6,8 +6,8 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Effects that heals a card or player (hp)
-    /// It cannot restore more than the original hp, use AddStats to go beyond original
+    /// 治療卡牌或玩家的效果（生命值）
+    /// 它無法恢復超過原始HP，可使用 AddStats 來超越原始HP
     /// </summary>
 
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/Heal", order = 10)]

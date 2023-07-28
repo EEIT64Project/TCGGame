@@ -7,10 +7,10 @@ using TcgEngine.UI;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Represents the visual deck on the board
-    /// Will show number of cards in deck/discard when hovering
+    /// 代表面板上的視覺效果
+    /// 懸停時將顯示牌組/棄牌中的牌數
     /// </summary>
-    
+
     public class BoardDeck : MonoBehaviour
     {
         public bool opponent;
@@ -93,9 +93,9 @@ namespace TcgEngine.Client
         private void OnMouseOver()
         {
             if (!opponent && Input.GetMouseButtonDown(0))
-                ShowDeckCards(); //Cannot see opponent deck
+                ShowDeckCards(); //無法看到對手牌組
             else if(Input.GetMouseButtonDown(1))
-                ShowDiscardCards(); //Cant see both player discard
+                ShowDiscardCards(); //無法看到兩個玩家棄牌
         }
     }
 }

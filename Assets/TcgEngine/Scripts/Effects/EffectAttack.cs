@@ -6,7 +6,7 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Effect to make a card attack a target
+    /// 使卡牌攻擊目標的效果
     /// </summary>
 
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/Attack", order = 10)]

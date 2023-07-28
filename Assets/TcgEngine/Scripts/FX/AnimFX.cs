@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace TcgEngine.FX
 {
     /// <summary>
-    /// Useful tool to define animation sequences
+    /// 定義動畫序列的有用工具
     /// </summary>
 
     public class AnimFX : MonoBehaviour

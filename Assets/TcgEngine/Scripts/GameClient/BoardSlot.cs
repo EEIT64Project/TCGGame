@@ -7,8 +7,8 @@ using TcgEngine.UI;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Visual representation of a Slot.cs
-    /// Will highlight when can be interacted with
+    /// Slot.cs 的視覺表示
+    /// 突出顯示何時可以與之互動
     /// </summary>
 
     public class BoardSlot : MonoBehaviour
@@ -58,18 +58,18 @@ namespace TcgEngine.Client
             Card dcard = drag_card?.GetCard();
             Card slot_card = gdata.GetSlotCard(GetSlot());
             bool your_turn = GameClient.Get().IsYourTurn();
-            collide.enabled = slot_card == null; //Disable collider when a card is here
+            collide.enabled = slot_card == null; //當卡片位於此處時禁用碰撞器
 
-            //Find target opacity value
+            //查找目標不透明度值
             float target_alpha = 0f;
             if (your_turn && dcard != null && dcard.CardData.IsBoardCard() && gdata.CanPlayCard(dcard, slot))
             {
-                target_alpha = 1f; //hightlight when dragging a character or artifact
+                target_alpha = 1f; //拖動角色或工件時突出顯示
             }
 
             if (your_turn && dcard != null && dcard.CardData.IsRequireTarget() && gdata.CanPlayCard(dcard, slot))
             {
-                target_alpha = 1f; //Highlight when dragin a spell with target
+                target_alpha = 1f; //拖動帶有目標的咒語時突出顯示
             }
 
             if (gdata.selector == SelectorType.SelectTarget && player.player_id == gdata.selector_player)
@@ -77,7 +77,7 @@ namespace TcgEngine.Client
                 Card caster = gdata.GetCard(gdata.selector_caster_uid);
                 AbilityData ability = AbilityData.Get(gdata.selector_ability_id);
                 if(ability != null && slot_card == null && ability.CanTarget(gdata, caster, slot))
-                    target_alpha = 1f; //Highlight when selecting a target and empty slots are valid
+                    target_alpha = 1f; //選擇目標時高亮顯示，空槽位有效
             }
 
             Card select_card = bcard_selected?.GetCard();
@@ -89,12 +89,12 @@ namespace TcgEngine.Client
                 target_alpha = 1f;
             }
 
-            //Update color and alpha
+            //更新顏色和 Alpha
             current_alpha = Mathf.MoveTowards(current_alpha, target_alpha * start_alpha, 2f * Time.deltaTime);
             render.color = new Color(render.color.r, render.color.g, render.color.b, current_alpha);
         }
 
-        //Find the actual slot coordinates of this board slot
+        //找到該板槽位的實際槽位坐標
         public Slot GetSlot()
         {
             int p = 0;
@@ -104,7 +104,7 @@ namespace TcgEngine.Client
                 int pid = GameClient.Get().GetPlayerID();
                 int px = x;
                 if ((pid % 2) == 1)
-                    px = Slot.x_max - x + Slot.x_min; //Flip X coordinate if not the first player
+                    px = Slot.x_max - x + Slot.x_min; //如果不是第一個玩家，則翻轉 X 坐標
                 return new Slot(px, y, p);
             }
 
@@ -113,7 +113,7 @@ namespace TcgEngine.Client
                 int pid = GameClient.Get().GetPlayerID();
                 int py = y;
                 if ((pid % 2) == 1)
-                    py = Slot.y_max - y + Slot.y_min; //Flip Y coordinate if not the first player
+                    py = Slot.y_max - y + Slot.y_min; //如果不是第一個玩家，則翻轉 Y 坐標
                 return new Slot(x, py, p);
             }
 
@@ -125,7 +125,7 @@ namespace TcgEngine.Client
             return new Slot(x, y, p);
         }
 
-        //When clicking on the slot
+        //單擊插槽時
         public void OnMouseDown()
         {
             if (GameUI.IsOverUI())
@@ -197,9 +197,9 @@ namespace TcgEngine.Client
     public enum BoardSlotType
     {
         Fixed = 0,              //x,y,p = slot
-        PlayerSelf = 5,         //p = client player id
-        PlayerOpponent = 7,     //p = client's opponent player id
-        FlipX = 10,              //p=0,   x=unchanged for first player,  x=reversed for second player
-        FlipY = 11,              //p=0,   y=unchanged for first player,  y=reversed for second player
+        PlayerSelf = 5,         //p = 客戶端玩家ID
+        PlayerOpponent = 7,     //p = 客戶端的對手玩家ID
+        FlipX = 10,              //p=0,   x=第一個玩家不變,  x=第二名玩家逆轉
+        FlipY = 11,              //p=0,   y=第一個玩家不變,  y=第二名玩家逆轉
     }
 }

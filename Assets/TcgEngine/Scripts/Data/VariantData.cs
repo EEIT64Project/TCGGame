@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// Defines card variants
+    /// 定義卡牌變體
     /// </summary>
 
     [CreateAssetMenu(fileName = "VariantData", menuName = "TcgEngine/VariantData", order = 5)]

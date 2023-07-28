@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TcgEngine
 {
-    //Represent the current state of a card during the game (data only)
+    //表示遊戲過程中卡牌的當前狀態（僅數據）
 
     [System.Serializable]
     public class Card
@@ -72,8 +72,8 @@ namespace TcgEngine
                     SetTrait(stat.trait.id, stat.value);
             }
         }
-        
-        //------ Custom Traits/Stats ---------
+
+        //------ 自定義特徵/統計數據 ---------
 
         public void SetTrait(string id, int value)
         {
@@ -179,8 +179,8 @@ namespace TcgEngine
             all_traits.AddRange(ongoing_traits);
             return all_traits;
         }
-        
-        //Alternate names since traits/stats are stored in same var
+
+        //由於特徵/統計信息存儲在相同的變量中，因此使用備用名稱
         public void SetStat(string id, int value) => SetTrait(id, value);
         public void AddStat(string id, int value) => AddTrait(id, value);
         public void AddOngoingStat(string id, int value) => AddOngoingTrait(id, value);
@@ -191,7 +191,7 @@ namespace TcgEngine
         public bool HasStat(string id) => HasTrait(id);
         public List<CardTrait> GetAllStats() => GetAllTraits();
 
-        //------  Status Effects ---------
+        //------  狀態效果 ---------
 
         public void AddStatus(StatusData status, int value, int duration)
         {
@@ -305,7 +305,7 @@ namespace TcgEngine
             }
         }
         
-        //----- Abilities ------------
+        //----- 能力 ------------
 
         public AbilityData GetAbility(AbilityTrigger trigger)
         {
@@ -343,24 +343,24 @@ namespace TcgEngine
             return false;
         }
 
-        //---- Action Check ---------
+        //---- 動作檢查 ---------
 
         public virtual bool CanAttack(bool skip_cost = false)
         {
             if (HasStatus(StatusType.Paralysed))
                 return false;
             if (!skip_cost && exhausted)
-                return false; //no more action
+                return false; //不再採取任何行動
             return true;
         }
 
         public virtual bool CanMove(bool skip_cost = false)
         {
-            //In demo we can move freely, since it has no effect
+            //在演示中我們可以自由移動，因為它沒有任何效果
             //if (HasStatusEffect(StatusEffect.Paralysed))
             //   return false;
             //if (!skip_cost && exhausted)
-            //    return false; //no more action
+            //    return false; //不再採取任何行動
             return true; 
         }
 
@@ -392,7 +392,7 @@ namespace TcgEngine
         { 
             get { 
                 if(data == null || data.id != card_id)
-                    data = CardData.Get(card_id); //Optimization, store for future use
+                    data = CardData.Get(card_id); //優化，存儲以備將來使用
                 return data;
             } 
         }
@@ -402,18 +402,18 @@ namespace TcgEngine
             get
             {
                 if (vdata == null || vdata.id != variant_id)
-                    vdata = VariantData.Get(variant_id); //Optimization, store for future use
+                    vdata = VariantData.Get(variant_id); //優化，存儲以備將來使用
                 return vdata;
             }
         }
 
-        public CardData Data => CardData; //Alternate name
+        public CardData Data => CardData; //備用名稱
 
         public int Hash
         {
             get {
                 if (hash == 0)
-                    hash = Mathf.Abs(uid.GetHashCode()); //Optimization, store for future use
+                    hash = Mathf.Abs(uid.GetHashCode()); //優化，存儲以備將來使用
                 return hash;
             }
         }
@@ -437,7 +437,7 @@ namespace TcgEngine
             return card;
         }
 
-        //Clone all card variables into another var, used mostly by the AI when building a prediction tree
+        //將所有卡片變量複製到另一個變量中，主要由人工智能在構建預測分支時使用
         public static void Clone(Card source, Card dest)
         {
             dest.card_id = source.card_id;
@@ -463,28 +463,28 @@ namespace TcgEngine
             CardStatus.CloneList(source.ongoing_status, dest.ongoing_status);
         }
 
-        //Clone a var that could be null
+        //複製一個可能為 null 的 var
         public static void CloneNull(Card source, ref Card dest)
         {
-            //Source is null
+            //來源為null
             if (source == null)
             {
                 dest = null;
                 return;
             }
 
-            //Dest is null
+            //目標為null
             if (dest == null)
             {
                 dest = CloneNew(source);
                 return;
             }
 
-            //Both arent null, just clone
+            //兩者都不為null，就複製
             Clone(source, dest);
         }
 
-        //Clone dictionary completely
+        //完全複製字典
         public static void CloneDict(Dictionary<string, Card> source, Dictionary<string, Card> dest)
         {
             foreach (KeyValuePair<string, Card> pair in source)
@@ -497,7 +497,7 @@ namespace TcgEngine
             }
         }
 
-        //Clone list by keeping references from ref_dict
+        //通過保留 ref_dict 的引用來複製列表
         public static void CloneListRef(Dictionary<string, Card> ref_dict, List<Card> source, List<Card> dest)
         {
             for (int i = 0; i < source.Count; i++)
@@ -546,7 +546,7 @@ namespace TcgEngine
             }
         }
 
-        public StatusData Data => StatusData; //Alternate name
+        public StatusData Data => StatusData; //備用名稱
 
         public static CardStatus CloneNew(CardStatus copy)
         {
@@ -609,7 +609,7 @@ namespace TcgEngine
             }
         }
 
-        public TraitData Data => TraitData; //Alternate name
+        public TraitData Data => TraitData; //備用名稱
 
 
         public static CardTrait CloneNew(CardTrait copy)

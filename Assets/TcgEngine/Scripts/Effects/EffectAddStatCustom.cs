@@ -6,9 +6,9 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Effect that adds or removes card/player custom stats
+    /// 添加或刪除卡/玩家自定義統計數據的效果
     /// </summary>
-    
+
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/AddStatCustom", order = 10)]
     public class EffectAddStatCustom : EffectData
     {

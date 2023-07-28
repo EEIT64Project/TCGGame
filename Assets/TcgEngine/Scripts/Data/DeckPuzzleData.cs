@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// Deck with more fields for having specific cards or starting board cards
+    /// 具有更多字段的牌組，用於放置特定牌或起始牌
     /// </summary>
 
     [System.Serializable]

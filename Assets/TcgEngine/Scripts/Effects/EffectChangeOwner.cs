@@ -6,13 +6,13 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Change owner of target card to the owner of the caster (or the opponent player)
+    /// 將目標卡牌的擁有者更改為施法者（或對手玩家）的擁有者
     /// </summary>
 
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/ChangeOwner", order = 10)]
     public class EffectChangeOwner : EffectData
     {
-        public bool owner_opponent; //Change to self or opponent?
+        public bool owner_opponent; //換自己還是換對手？
 
         public override void DoEffect(GameLogic logic, AbilityData ability, Card caster, Card target)
         {

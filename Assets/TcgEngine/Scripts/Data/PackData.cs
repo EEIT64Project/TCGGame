@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// Defines all packs data
+    /// 定義所有包數據
     /// </summary>
 
     [CreateAssetMenu(fileName = "PackData", menuName = "TcgEngine/PackData", order = 5)]
@@ -15,10 +15,10 @@ namespace TcgEngine
 
         [Header("Content")]
         public PackType type;
-        public int cards = 5;   //Cards per pack
-        public PackRarity[] rarities_1st;  //Probability of each rarity, for first card
-        public PackRarity[] rarities;      //Probability of each rarity, for other cards
-        public PackVariant[] variants;      //Probability of each variant, for other cards
+        public int cards = 5;   //每包卡數
+        public PackRarity[] rarities_1st;  //第一張卡的每種稀有度的概率
+        public PackRarity[] rarities;      //其他卡牌每種稀有度的概率
+        public PackVariant[] variants;      //其他卡牌每種變體的概率
 
         [Header("Display")]
         public string title;
@@ -30,7 +30,7 @@ namespace TcgEngine
 
         [Header("Availability")]
         public bool available = true;
-        public int cost = 100;  //Cost to buy
+        public int cost = 100;  //購買成本
 
         public static List<PackData> pack_list = new List<PackData>();
 

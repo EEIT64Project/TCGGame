@@ -8,8 +8,8 @@ using TcgEngine.UI;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Represents the visual aspect of a card in hand.
-    /// Will take the data from Card.cs and display it
+    /// 代表手中牌的視覺呈現。
+    /// 將從 Card.cs 獲取數據並顯示它
     /// </summary>
 
     public class HandCard : MonoBehaviour

@@ -6,7 +6,7 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Clear temporary array of player's card
+    /// 清除玩家卡的臨時數組
     /// </summary>
 
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/ClearTemp ", order = 10)]

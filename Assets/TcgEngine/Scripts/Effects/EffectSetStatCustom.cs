@@ -6,9 +6,9 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Effect that sets custom stats to a specific value
+    /// 將自定義統計數據設置為特定值的效果
     /// </summary>
-    
+
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/SetStatCustom", order = 10)]
     public class EffectSetStatCustom : EffectData
     {

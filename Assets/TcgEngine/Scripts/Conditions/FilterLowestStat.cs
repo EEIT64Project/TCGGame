@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TcgEngine
 {
-    //Pick all targets with the lowest stat
+    //選擇所有統計數據最低的目標
 
     [CreateAssetMenu(fileName = "filter", menuName = "TcgEngine/Filter/LowestStat", order = 10)]
     public class FilterLowestStat : FilterData
@@ -13,7 +13,7 @@ namespace TcgEngine
 
         public override List<Card> FilterTargets(Game data, AbilityData ability, Card caster, List<Card> source, List<Card> dest)
         {
-            //Find lowest
+            //找到最低的
             int lowest = 99999;
             foreach (Card card in source)
             {
@@ -22,7 +22,7 @@ namespace TcgEngine
                     lowest = stat;
             }
 
-            //Add all lowest
+            //添加所有最低值
             foreach (Card card in source)
             {
                 int stat = GetStat(card);

@@ -24,21 +24,21 @@ namespace TcgEngine
     }
 
     /// <summary>
-    /// Hold all client's game settings, like game mode, game uid and scene to load
-    /// will be sent to server when a match start
+    /// 保存所有客戶端的遊戲設置，如游戲模式、遊戲 uid 和要加載的場景
+    /// 比賽開始時將發送到服務器
     /// </summary>
 
     [System.Serializable]
     public class GameSettings : INetworkSerializable
     {
-        public string server_url;   //Server to connect to
-        public string game_uid;     //Game uid on that server
-        public string scene;        //Which scene to load
-        public int nb_players;      //How many players, including AI (UI only supports 2)
+        public string server_url;   //要連接的服務器
+        public string game_uid;     //該服務器上的遊戲 uid
+        public string scene;        //要加載哪個場景
+        public int nb_players;      //多少玩家，包括AI（UI僅支持2）
 
-        public GameType game_type = GameType.Solo;      //Multiplayer? Solo? Observer?
-        public GameMode game_mode = GameMode.Casual;    //Ranked or not? Other special game mode?
-        public string level;                            //Adventure level ID
+        public GameType game_type = GameType.Solo;      //多人遊戲？獨玩？觀察員？
+        public GameMode game_mode = GameMode.Casual;    //有排名還是沒排名？還有其他特殊的遊戲模式嗎？
+        public string level;                            //冒險關卡ID
 
         public virtual bool IsHost()
         {
@@ -136,8 +136,8 @@ namespace TcgEngine
     }
 
     /// <summary>
-    /// Hold all client's player settings, like avatar, cardback, and deck being used
-    /// will be sent to server when a match start
+    /// 保存所有客戶端的玩家設置，例如頭像、卡背和正在使用的牌組
+    /// 比賽開始時將發送到服務器
     /// </summary>
 
     [System.Serializable]
@@ -207,7 +207,7 @@ namespace TcgEngine
             FixData();
         }
 
-        //Make sure data isnt broken
+        //確保數據沒有損壞
         public void FixData()
         {
             if (id == null) id = "";

@@ -6,7 +6,7 @@ using TcgEngine.Client;
 namespace TcgEngine.FX
 {
     /// <summary>
-    /// The crosshair target that appears when targeting with a spell
+    /// 使用咒語瞄準時出現的十字準線目標
     /// </summary>
 
     public class AimTargetFX : MonoBehaviour

@@ -14,7 +14,7 @@ namespace TcgEngine.Client
 
     /// <summary>
     /// A reference to a position on the board,
-    /// It is currently being used by the PackOpen board
+    /// 目前由 PackOpen 板使用
     /// </summary>
 
     public class BoardRef : MonoBehaviour

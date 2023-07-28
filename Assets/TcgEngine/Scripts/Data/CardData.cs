@@ -15,7 +15,7 @@ namespace TcgEngine
     }
 
     /// <summary>
-    /// Defines all card data
+    /// 定義所有卡數據
     /// </summary>
 
     [CreateAssetMenu(fileName = "card", menuName = "TcgEngine/CardData", order = 5)]

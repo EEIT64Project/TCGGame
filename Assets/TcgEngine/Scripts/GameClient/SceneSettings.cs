@@ -6,7 +6,7 @@ using UnityEngine;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Component added to a scene to add some generic sfx/music to the arena
+    /// 添加到場景中的組件，以向競技場添加一些通用的 sfx/音樂
     /// </summary>
 
     public class SceneSettings : MonoBehaviour

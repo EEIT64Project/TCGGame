@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// Defines all cardback data
+    /// 定義所有卡背數據
     /// </summary>
 
     [CreateAssetMenu(fileName = "Cardback", menuName = "TcgEngine/Cardback", order = 10)]

@@ -10,8 +10,8 @@ using TcgEngine.FX;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Represents the visual aspect of a card on the board.
-    /// Will take the data from Card.cs and display it
+    /// 代表面板上卡片的視覺效果。
+    /// 將從 Card.cs 獲取數據並顯示它
     /// </summary>
 
     public class BoardCard : MonoBehaviour
@@ -69,7 +69,7 @@ namespace TcgEngine.Client
 
         private void Start()
         {
-            //Random slight rotation
+            //隨機輕微旋轉
             Vector3 board_rot = GameBoard.Get().GetAngles();
             transform.rotation = Quaternion.Euler(board_rot.x, board_rot.y, board_rot.z + Random.Range(-1f, 1f));
         }
@@ -107,23 +107,23 @@ namespace TcgEngine.Client
             card_sprite.color = card.HasStatus(StatusType.Stealth) ? Color.gray : Color.white;
             card_ui.hp.color = (destroyed || card.damage > 0) ? Color.yellow : Color.white;
 
-            //armor
+            //護甲
             int armor_val = card.GetStatusValue(StatusType.Armor);
             armor.text = armor_val.ToString();
             armor.enabled = armor_val > 0;
             armor_icon.enabled = armor_val > 0;
 
-            //Update card image
+            //更新卡片圖像
             Sprite sprite = card.CardData.GetBoardArt(card.VariantData);
             if (sprite != card_sprite.sprite)
                 card_sprite.sprite = sprite;
 
-            //Update frame image
+            //更新幀圖像
             Sprite frame = card.VariantData.frame_board;
             if (frame != null && card_ui.frame_image != null)
                 card_ui.frame_image.sprite = frame;
 
-            //Ability buttons
+            //能力按鈕
             foreach (AbilityButton button in buttons)
                 button.Hide();
 
@@ -148,7 +148,7 @@ namespace TcgEngine.Client
                 }
             }
 
-            //Status bar
+            //狀態欄
             if (status_group != null)
                 status_group.alpha = Mathf.MoveTowards(status_group.alpha, status_alpha_target, 5f * Time.deltaTime);
         }

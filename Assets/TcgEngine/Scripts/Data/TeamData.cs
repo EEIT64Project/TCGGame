@@ -5,9 +5,9 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// Defines all factions data
+    /// 定義所有陣營數據
     /// </summary>
-    
+
     [CreateAssetMenu(fileName = "TeamData", menuName = "TcgEngine/TeamData", order = 1)]
     public class TeamData : ScriptableObject
     {

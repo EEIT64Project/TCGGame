@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Main script for the client-side of the game, should be in game scene only
-    /// Will connect to server, then connect to the game on that server (with uid) and then will send game settings
-    /// During the game, will send all actions performed by the player and receive game refreshes
+    /// 遊戲客戶端的主要腳本，只能在遊戲場景中
+    /// 將連接到服務器，然後連接到該服務器上的遊戲（帶有 uid），然後發送遊戲設置
+    /// 在遊戲期間，將發送玩家執行的所有操作並接收遊戲刷新
     /// </summary>
 
     public class GameClient : MonoBehaviour
     {
-        //--- These settings are set in the menu scene and when the game start will be sent to server
+        //--- 這些設置在菜單場景中設置，遊戲開始時將發送到服務器
 
         public static GameSettings game_settings = GameSettings.Default;
         public static PlayerSettings player_settings = PlayerSettings.Default;
         public static PlayerSettings ai_settings = PlayerSettings.DefaultAI;
-        public static string observe_user = null; //Which user should it observe, null if not an obs
+        public static string observe_user = null; //它應該觀察哪個用戶，如果不是 obs，則為 null
 
         //-----
 
@@ -28,8 +28,8 @@ namespace TcgEngine.Client
         public UnityAction onConnectGame;
         public UnityAction<int> onPlayerReady;
         public UnityAction onGameStart;
-        public UnityAction<int> onGameEnd;              //winner player_id
-        public UnityAction<int> onNewTurn;              //current player_id
+        public UnityAction<int> onGameEnd;              //勝利者 player_id
+        public UnityAction<int> onNewTurn;              //當前玩家 player_id
         public UnityAction<Card, Slot> onCardPlayed;
         public UnityAction<Card, Slot> onCardMoved;
         public UnityAction<Slot> onCardSummoned;
@@ -39,23 +39,23 @@ namespace TcgEngine.Client
         public UnityAction<int> onValueRolled;
 
         public UnityAction<AbilityData, Card> onAbilityStart;
-        public UnityAction<AbilityData, Card, Card> onAbilityTargetCard;      //Ability, Caster, Target
+        public UnityAction<AbilityData, Card, Card> onAbilityTargetCard;      //能力、施法者、目標
         public UnityAction<AbilityData, Card, Player> onAbilityTargetPlayer;
         public UnityAction<AbilityData, Card, Slot> onAbilityTargetSlot;
         public UnityAction<AbilityData, Card> onAbilityEnd;
-        public UnityAction<Card, Card> onSecretTrigger;    //Secret, Triggerer
-        public UnityAction<Card, Card> onSecretResolve;    //Secret, Triggerer
+        public UnityAction<Card, Card> onSecretTrigger;    //秘密、觸發者
+        public UnityAction<Card, Card> onSecretResolve;    //秘密、觸發者
 
-        public UnityAction<Card, Card> onAttackStart;   //Attacker, Defender
-        public UnityAction<Card, Card> onAttackEnd;     //Attacker, Defender
+        public UnityAction<Card, Card> onAttackStart;   //攻擊者、防守者
+        public UnityAction<Card, Card> onAttackEnd;     //攻擊者、防守者
         public UnityAction<Card, Player> onAttackPlayerStart;
         public UnityAction<Card, Player> onAttackPlayerEnd;
 
-        public UnityAction<int, string> onChatMsg;  //player_id, msg
-        public UnityAction< string> onServerMsg;  //msg
+        public UnityAction<int, string> onChatMsg;  //玩家 ID、訊息
+        public UnityAction< string> onServerMsg;  //訊息
         public UnityAction onRefreshAll;
 
-        private int player_id = 0; //Player playing on this device;
+        private int player_id = 0; //在此設備上玩遊戲的玩家；
         private Game game_data;
 
         private bool observe_mode = false;
@@ -121,7 +121,7 @@ namespace TcgEngine.Client
 
         protected virtual void Update()
         {
-            //Exit game scene if cannot connect after a while
+            //如果一段時間後無法連接，請退出遊戲場景
             if (game_data == null || game_data.state == GameState.Connecting || game_data.state == GameState.Starting)
             {
                 timer += Time.deltaTime;
@@ -136,8 +136,8 @@ namespace TcgEngine.Client
 
         public virtual void ConnectToAPI()
         {
-            //Should already be connected to API from the menu
-            //If not connected, start in test mode (this means game scene was launched directly from Unity)
+            //應該已經從菜單連接到 API
+            //如果未連接，則以測試模式啟動（代表遊戲場景是直接從 Unity 啟動的）
             if (!Authenticator.Get().IsSignedIn())
             {
                 Authenticator.Get().LoginTest("Player");
@@ -146,8 +146,8 @@ namespace TcgEngine.Client
                 ai_settings.deck = new PlayerDeckSettings(GameplayData.Get().test_deck_ai);
                 ai_settings.ai_level = GameplayData.Get().ai_level;
             }
-            
-            //Set avatar, cardback based on your api data
+
+            //根據您的api數據設置頭像、卡背
             UserData udata = Authenticator.Get().UserData;
             if (udata != null)
             {
@@ -158,10 +158,10 @@ namespace TcgEngine.Client
 
         public virtual async void ConnectToServer()
         {
-            await Task.Yield(); //Wait for initialization to finish
+            await Task.Yield(); //等待初始化完成
 
             if (TcgNetwork.Get().IsActive())
-                return; // Already connected
+                return; // 已經連接
 
             if (game_settings.IsHost())
                 TcgNetwork.Get().StartHost(NetworkData.Get().port);
@@ -171,10 +171,10 @@ namespace TcgEngine.Client
 
         public virtual async void ConnectToGame(string uid)
         {
-            await Task.Yield(); //Wait for initialization to finish
+            await Task.Yield(); //等待初始化完成
 
             if (!TcgNetwork.Get().IsActive())
-                return; //Not connected to server
+                return; //未連接到服務器
 
             MsgPlayerConnect nplayer = new MsgPlayerConnect();
             nplayer.user_id = Authenticator.Get().UserID;
@@ -190,14 +190,14 @@ namespace TcgEngine.Client
         {
             if (game_settings.IsOffline())
             {
-                //Solo mode, send both your settings and AI settings
+                //單人模式，發送您的設置和 AI 設置
                 SendGameplaySettings(game_settings);
                 SendPlayerSettingsAI(ai_settings);
                 SendPlayerSettings(player_settings);
             }
             else
             {
-                //Online mode, only send your own settings
+                //在線模式，僅發送您自己的設置
                 SendGameplaySettings(game_settings);
                 SendPlayerSettings(player_settings);
             }
@@ -341,7 +341,7 @@ namespace TcgEngine.Client
 
         public void SetObserverMode(string username)
         {
-            observe_player_id = 0; //Default value of observe_user not found
+            observe_player_id = 0; //未找到observe_user的默認值
 
             Game data = GetGameData();
             foreach (Player player in data.players)
@@ -379,7 +379,7 @@ namespace TcgEngine.Client
             writer.Dispose();
         }
 
-        //--- Receive Refresh ----------------------
+        //--- 接收刷新 ----------------------
 
         protected virtual void OnConnectServer()
         {
@@ -392,7 +392,7 @@ namespace TcgEngine.Client
             MsgAfterConnected msg = sdata.Get<MsgAfterConnected>();
             player_id = msg.player_id;
             game_data = msg.game_data;
-            observe_mode = player_id < 0; //Will usually return -1 if its an observer
+            observe_mode = player_id < 0; //如果是觀察者通常會返回-1
 
             if (observe_mode)
                 SetObserverMode(observe_user);
@@ -642,7 +642,7 @@ namespace TcgEngine.Client
 
         private void OnApplicationQuit()
         {
-            Resign(); //Auto Resign before closing the app. NOTE: doesn't seem to work since the msg dont have time to be sent before it closes
+            Resign(); //關閉應用程序之前自動退出。但似乎不起作用，可能因為消息在關閉之前沒有時間發送
         }
 
         public bool IsHost { get { return TcgNetwork.Get().IsHost; } }

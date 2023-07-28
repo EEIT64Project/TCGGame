@@ -8,8 +8,8 @@ using TcgEngine.UI;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// GameBoard takes care of spawning and despawning BoardCards, based on the refreshed data received from the server
-    /// It also ends the game when the server sends a endgame
+    /// GameBoard 根據從服務器接收到的刷新數據來處理 BoardCard 的生成和消失
+    /// 當服務器發送結束遊戲時，也會結束遊戲
     /// </summary>
 
     public class GameBoard : MonoBehaviour
@@ -41,11 +41,11 @@ namespace TcgEngine.Client
             int player_id = GameClient.Get().GetPlayerID();
             Game data = GameClient.Get().GetGameData();
 
-            //--- Battle cards --------
+            //--- 戰鬥卡牌 --------
 
             List<BoardCard> cards = BoardCard.GetAll();
 
-            //Add missing cards
+            //添加缺失的卡片
             foreach (Player p in data.players)
             {
                 foreach (Card card in p.cards_board)
@@ -56,7 +56,7 @@ namespace TcgEngine.Client
                 }
             }
 
-            //Vanish removed cards
+            //消失已移除的卡片
             for (int i = cards.Count - 1; i >= 0; i--)
             {
                 BoardCard card = cards[i];
@@ -128,7 +128,7 @@ namespace TcgEngine.Client
             EndGamePanel.Get().ShowWinner(data.current_player);
         }
 
-        //Raycast mouse position to board position
+        //將鼠標位置光線投射到面板位置
         public Vector3 RaycastMouseBoard()
         {
             Ray ray = GameCamera.Get().MouseToRay(Input.mousePosition);

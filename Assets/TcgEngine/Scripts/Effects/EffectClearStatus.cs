@@ -6,8 +6,8 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Effect that removes a status,
-    /// Will remove all status if the public field is empty
+    /// 消除狀態的效果，
+    /// 如果公共字段為空，將刪除所有狀態
     /// </summary>
 
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/ClearStatus", order = 10)]

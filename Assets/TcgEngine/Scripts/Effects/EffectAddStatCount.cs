@@ -6,9 +6,9 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Effect that sets stats equal to a dynamic calculated value from a pile (number of cards on board/hand/deck)
+    /// 將統計數據設置為等於一堆動態計算值（船上/手牌/牌組上的牌數）的效果
     /// </summary>
-    
+
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/SetStatCustomCount", order = 10)]
     public class EffectAddStatCount : EffectData
     {

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// Defines all avatar data
+    /// 定義所有頭像數據
     /// </summary>
 
     [CreateAssetMenu(fileName = "Avatar", menuName = "TcgEngine/Avatar", order = 10)]

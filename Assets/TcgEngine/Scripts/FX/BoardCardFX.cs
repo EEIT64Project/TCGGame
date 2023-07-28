@@ -9,7 +9,7 @@ using TcgEngine;
 namespace TcgEngine.FX
 {
     /// <summary>
-    /// All FX/anims related to a card on the board
+    /// 與面板上的卡片相關的所有 FX/動畫
     /// </summary>
 
     public class BoardCardFX : MonoBehaviour
@@ -58,7 +58,7 @@ namespace TcgEngine.FX
 
             Card card = bcard.GetCard();
 
-            //Status FX
+            //狀態 FX
             List<CardStatus> status_all = card.GetAllStatus();
             foreach (CardStatus status in status_all)
             {
@@ -71,7 +71,7 @@ namespace TcgEngine.FX
                 }
             }
 
-            //Remove status FX
+            //移除狀態 FX
             List<StatusType> remove_list = new List<StatusType>();
             foreach (KeyValuePair<StatusType, GameObject> pair in status_fx_list)
             {
@@ -85,7 +85,7 @@ namespace TcgEngine.FX
             foreach (StatusType status in remove_list)
                 status_fx_list.Remove(status);
 
-            //Exhausted add/remove
+            //已耗盡添加/刪除
             if (exhausted_fx != null && !exhausted_fx.isPlaying && card.exhausted)
                 exhausted_fx.Play();
             if (exhausted_fx != null && exhausted_fx.isPlaying && !card.exhausted)
@@ -96,15 +96,15 @@ namespace TcgEngine.FX
         {
             CardData icard = bcard.GetCardData();
 
-            //Spawn Audio
+            //召喚音頻
             AudioClip audio = icard?.spawn_audio != null ? icard.spawn_audio : AssetData.Get().card_spawn_audio;
             AudioTool.Get().PlaySFX("card_spawn", audio);
 
-            //Spawn FX
+            //召喚 FX
             GameObject spawn_fx = icard.spawn_fx != null ? icard.spawn_fx : AssetData.Get().card_spawn_fx;
             FXTool.DoFX(spawn_fx, transform.position);
 
-            //Spawn dissolve fx
+            //召喚失敗 fx
             if (GameTool.IsURP())
             {
                 SpriteRenderer render = bcard.card_sprite;
@@ -114,7 +114,7 @@ namespace TcgEngine.FX
                 FadeKill(bcard.card_sprite, 1f, 0.5f);
             }
 
-            //Exhausted fx
+            //筋疲力盡 fx
             if (AssetData.Get().card_exhausted_fx != null)
             {
                 GameObject efx = Instantiate(AssetData.Get().card_exhausted_fx, transform);
@@ -122,7 +122,7 @@ namespace TcgEngine.FX
                 exhausted_fx = efx.GetComponent<ParticleSystem>();
             }
 
-            //Idle status
+            //空閒狀態
             TimeTool.WaitFor(1f, () =>
             {
                 if (icard.idle_fx != null)
@@ -144,15 +144,15 @@ namespace TcgEngine.FX
 
             CardData icard = bcard.GetCardData();
 
-            //Death FX
+            //死亡 FX
             GameObject death_fx = icard.death_fx != null ? icard.death_fx : AssetData.Get().card_destroy_fx;
             FXTool.DoFX(death_fx, transform.position);
 
-            //Death audio
+            //死亡音頻
             AudioClip audio = icard?.death_audio != null ? icard.death_audio : AssetData.Get().card_destroy_audio;
             AudioTool.Get().PlaySFX("card_spawn", audio);
 
-            //Death dissolve fx
+            //死亡失敗 fx
             if (GameTool.IsURP())
             {
                 FadeKill(bcard.card_sprite, 0f, 0.5f);
@@ -190,7 +190,7 @@ namespace TcgEngine.FX
                 {
                     TimeTool.WaitFor(0.5f, () =>
                     {
-                        //Damage Number Text FX
+                        //損壞編號文本 FX
                         int value = card == attacker ? target.GetAttack() : attacker.GetAttack();
                         value = value - target.GetStatusValue(StatusType.Armor);
                         GameObject fx = FXTool.DoSnapFX(AssetData.Get().damage_fx, transform);
@@ -204,10 +204,10 @@ namespace TcgEngine.FX
                 BoardCard btarget = BoardCard.Get(target.uid);
                 if (btarget != null)
                 {
-                    //Card charge into target
+                    //卡牌衝入目標
                     ChargeInto(btarget);
 
-                    //Attack FX and Audio
+                    //攻擊 FX and 音頻
                     GameObject fx = icard.attack_fx != null ? icard.attack_fx : AssetData.Get().card_attack_fx;
                     FXTool.DoSnapFX(fx, transform);
                     AudioClip audio = icard?.attack_audio != null ? icard.attack_audio : AssetData.Get().card_attack_audio;
@@ -232,8 +232,8 @@ namespace TcgEngine.FX
 
                 int value = bcard.GetCard().GetAttack();
                 TimeTool.WaitFor(0.5f, () =>
-                { 
-                    //Damage Number Text FX
+                {
+                    //損壞編號文本 FX
                     GameObject fx = FXTool.DoFX(AssetData.Get().damage_fx, zone.transform.position);
                     fx.GetComponent<DamageFX>().SetValue(value);
                 });
@@ -249,7 +249,7 @@ namespace TcgEngine.FX
                 CardData icard = target.GetCardData();
                 TimeTool.WaitFor(0.25f, () =>
                 {
-                    //Damage fx and audio
+                    //受傷 fx and 音頻
                     GameObject prefab = icard.damage_fx ? icard.damage_fx : AssetData.Get().card_damage_fx;
                     AudioClip audio = icard.damage_audio ? icard.damage_audio : AssetData.Get().card_damage_audio;
                     FXTool.DoFX(prefab, target.transform.position);
@@ -266,7 +266,7 @@ namespace TcgEngine.FX
 
                 TimeTool.WaitFor(0.25f, () =>
                 {
-                    //Damage fx and audio
+                    //受傷 fx and 音頻
                     FXTool.DoFX(AssetData.Get().player_damage_fx, target.transform.position);
                     AudioClip audio = AssetData.Get().player_damage_audio;
                     AudioTool.Get().PlaySFX("card_hit", audio);

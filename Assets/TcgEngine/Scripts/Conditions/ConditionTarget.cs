@@ -6,7 +6,7 @@ using TcgEngine.AI;
 namespace TcgEngine
 {
     /// <summary>
-    /// Condition that compares the target category of an ability to the actual target (card, player or slot)
+    /// 將能力的目標類別與實際目標（卡牌、玩家或插槽）進行比較的條件
     /// </summary>
 
     [CreateAssetMenu(fileName = "condition", menuName = "TcgEngine/Condition/Player", order = 10)]
@@ -18,17 +18,17 @@ namespace TcgEngine
 
         public override bool IsTargetConditionMet(Game data, AbilityData ability, Card caster, Card target)
         {
-            return CompareBool(type == ConditionTargetType.Card, oper); //Is Card
+            return CompareBool(type == ConditionTargetType.Card, oper); //是否卡牌
         }
 
         public override bool IsTargetConditionMet(Game data, AbilityData ability, Card caster, Player target)
         {
-            return CompareBool(type == ConditionTargetType.Player, oper); //Is Player
+            return CompareBool(type == ConditionTargetType.Player, oper); //是否玩家
         }
 
         public override bool IsTargetConditionMet(Game data, AbilityData ability, Card caster, Slot target)
         {
-            return CompareBool(type == ConditionTargetType.Slot, oper); //Is Player
+            return CompareBool(type == ConditionTargetType.Slot, oper); //是否玩家
         }
     }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TcgEngine.FX
 {
     /// <summary>
-    /// Dice roll FX, coded for 6 faces only
+    /// 擲骰子 FX，僅針對 6 個面進行編碼
     /// </summary>
 
     public class DiceRollFX : MonoBehaviour
@@ -29,14 +29,14 @@ namespace TcgEngine.FX
 
         void Start()
         {
-            //Direction of each face
+            //每個面的方向
             dir = new Vector3[6];
-            dir[0] = Vector3.forward;  //one
-            dir[1] = Vector3.up;  //two
-            dir[2] = Vector3.right;  //three
-            dir[3] = Vector3.left;  //four
-            dir[4] = Vector3.down;  //five
-            dir[5] = Vector3.back;  //six
+            dir[0] = Vector3.forward;  //1
+            dir[1] = Vector3.up;  //2
+            dir[2] = Vector3.right;  //3
+            dir[3] = Vector3.left;  //4
+            dir[4] = Vector3.down;  //5
+            dir[5] = Vector3.back;  //6
 
             AudioTool.Get().PlaySFX("dice", start_audio);
         }

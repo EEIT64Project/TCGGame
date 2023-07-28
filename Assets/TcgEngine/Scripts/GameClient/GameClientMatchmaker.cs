@@ -8,8 +8,8 @@ using TcgEngine.UI;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Main client script for the matchmaker
-    /// Will send requests to server and receive a response when a matchmaking succeed or fail
+    /// 匹配器的主要客戶端腳本
+    /// 當匹配成功或失敗時，將向服務器發送請求並接收響應
     /// </summary>
 
     public class GameClientMatchmaker : MonoBehaviour
@@ -43,7 +43,7 @@ namespace TcgEngine.Client
 
         private void OnDestroy()
         {
-            Disconnect(); //Disconnect when switching scene
+            Disconnect(); //切換場景時斷開連接
 
             if (TcgNetwork.Get() != null)
             {
@@ -62,14 +62,14 @@ namespace TcgEngine.Client
                 timer += Time.deltaTime;
                 match_timer += Time.deltaTime;
 
-                //Send periodic request
+                //發送定期請求
                 if (IsConnected() && timer > 2f)
                 {
                     timer = 0f;
                     SendMatchRequest(true, matchmaking_group, matchmaking_players);
                 }
 
-                //Disconnected, stop
+                //斷開連接，停止
                 if (!IsConnected() && !IsConnecting() && timer > 5f)
                 {
                     StopMatchmaking();
@@ -134,14 +134,14 @@ namespace TcgEngine.Client
 
         public void Connect(string url, ushort port, UnityAction<bool> callback=null)
         {
-            //Must be logged in to API to connect
-            if(!Authenticator.Get().IsSignedIn())
+            //必須登錄 API 才能連接
+            if (!Authenticator.Get().IsSignedIn())
             {
                 callback?.Invoke(false);
                 return;
             }
 
-            //Check if already connected
+            //檢查是否已經連接
             if (IsConnected() || IsConnecting())
             {
                 callback?.Invoke(IsConnected());
@@ -166,7 +166,7 @@ namespace TcgEngine.Client
 
         private void OnDisconnect()
         {
-            StopMatchmaking(); //Stop if currently running
+            StopMatchmaking(); //如果當前正在運行則停止
             connect_callback?.Invoke(false);
             connect_callback = null;
             matchmaking = false;
@@ -189,7 +189,7 @@ namespace TcgEngine.Client
         private void SendMatchmakingListRequest()
         {
             MsgMatchmakingList msg_match = new MsgMatchmakingList();
-            msg_match.username = ""; //Return all users
+            msg_match.username = ""; //返回所有用戶
             Messaging.SendObject("matchmaking_list", ServerID, msg_match, NetworkDelivery.Reliable);
         }
 
@@ -206,7 +206,7 @@ namespace TcgEngine.Client
 
             if (IsConnected() && matchmaking && matchmaking_group == msg.group)
             {
-                matchmaking = !msg.success; //Stop matchmaking if success
+                matchmaking = !msg.success; //匹配成功則停止匹配
                 onMatchingComplete?.Invoke(msg);
             }
         }

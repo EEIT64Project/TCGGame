@@ -12,8 +12,8 @@ namespace TcgEngine
     }
 
     /// <summary>
-    /// Trigger condition that count the amount of cards in pile of your choise (deck/discard/hand/board...)
-    /// Can also only count cards of a specific type/team/trait
+    /// 觸發條件，計算您選擇的牌堆中的牌數（套牌/棄牌/手牌/面板...）
+    /// 也可只計算特定類型/陣營/特質的卡牌
     /// </summary>
 
     [CreateAssetMenu(fileName = "condition", menuName = "TcgEngine/Condition/Count", order = 10)]

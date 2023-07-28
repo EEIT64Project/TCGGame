@@ -5,14 +5,14 @@ using UnityEngine.Events;
 namespace TcgEngine
 {
     /// <summary>
-    /// List of game actions and refreshes, that can be performed by the player or received
+    /// 玩家可以執行或接收的遊戲操作和刷新列表
     /// </summary>
 
     public static class GameAction
     {
         public const ushort None = 0;
 
-        //Commands (client to server)
+        //命令（客戶端到服務器）
         public const ushort PlayCard = 1000;
         public const ushort Attack = 1010;
         public const ushort AttackPlayer = 1012;
@@ -27,11 +27,11 @@ namespace TcgEngine
         public const ushort Resign = 1050;
         public const ushort ChatMessage = 1090;
 
-        public const ushort PlayerSettings = 1100; //After connect, send player data
-        public const ushort PlayerSettingsAI = 1102; //After connect, send player data
-        public const ushort GameSettings = 1105; //After connect, send gameplay settings
+        public const ushort PlayerSettings = 1100; //連接後，發送玩家數據
+        public const ushort PlayerSettingsAI = 1102; //連接後，發送玩家數據
+        public const ushort GameSettings = 1105; //連接後，發送遊戲設置
 
-        //Refresh (server to client)
+        //刷新（服務器到客戶端）
         public const ushort Connected = 2000;
         public const ushort PlayerReady = 2001;
 
@@ -61,7 +61,7 @@ namespace TcgEngine
         public const ushort SecretResolved = 2061;
         public const ushort ValueRolled = 2070;
 
-        public const ushort ServerMessage = 2190; //Server warning msg
+        public const ushort ServerMessage = 2190; //服務器警告訊息
         public const ushort RefreshAll = 2100;
 
         public static string GetString(ushort type)

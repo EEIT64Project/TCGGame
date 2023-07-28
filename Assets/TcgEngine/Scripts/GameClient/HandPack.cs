@@ -8,7 +8,7 @@ using TcgEngine.FX;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Visual representation of a booster pack in hand, for the OpenPack scene
+    /// OpenPack 場景中手持補充包的視覺呈現
     /// </summary>
 
     public class HandPack : MonoBehaviour

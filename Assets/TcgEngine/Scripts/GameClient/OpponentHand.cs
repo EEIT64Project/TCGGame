@@ -6,8 +6,8 @@ using TcgEngine.Client;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Same as HandCardArea but for the opponents hand
-    /// Simpler version with display only (no draging of card)
+    /// 與 HandCardArea 相同，但針對對手的手牌
+    /// 更簡單的版本，僅顯示（無需拖動卡片）
     /// </summary>
 
     public class OpponentHand : MonoBehaviour

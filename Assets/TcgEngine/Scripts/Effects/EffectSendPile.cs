@@ -5,9 +5,9 @@ using TcgEngine.Gameplay;
 
 namespace TcgEngine
 {
-    //Sends the target card to a pile of your choice (deck/discard/hand)
-    //Dont use to send to board since it needs a slot, use EffectPlay instead to send to board
-    //Also dont send to discard from the board because it wont trigger OnKill effects, use EffectDestroy instead
+    //將目標牌發送到您選擇的一堆（牌組/棄牌/手牌）
+    //因為它需要一個插槽，所以無法使用發送到面板，使用 EffectPlay 來發送到面板
+    //也不要從面板上發送到丟棄，因為不會觸發 OnKill 效果，而是使用 EffectDestroy
 
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/SendPile", order = 10)]
     public class EffectSendPile : EffectData

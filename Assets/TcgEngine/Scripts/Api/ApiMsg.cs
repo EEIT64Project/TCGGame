@@ -4,7 +4,7 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// List of data structure used by the ApiClient requests and responses
+    /// ApiClient 請求和響應使用的數據結構列表
     /// </summary>
 
     //--------- Requests -----------

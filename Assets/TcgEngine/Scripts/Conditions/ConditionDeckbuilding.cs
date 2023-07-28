@@ -5,9 +5,9 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// Condition that check if the CardData is a valid deckbuilding card (not a summon token)
+    /// 檢查 CardData 是否是有效的牌組構建卡（不是召喚令牌）的條件
     /// </summary>
-    
+
     [CreateAssetMenu(fileName = "condition", menuName = "TcgEngine/Condition/CardDeckbuilding", order = 10)]
     public class ConditionDeckbuilding : ConditionData
     {

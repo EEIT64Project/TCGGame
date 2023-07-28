@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// Contain UserData retrieved from the web api database
+    /// 包含從 Web api 數據庫檢索的 UserData
     /// </summary>
 
 

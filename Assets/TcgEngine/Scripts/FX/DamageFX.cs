@@ -7,7 +7,7 @@ using TcgEngine.UI;
 namespace TcgEngine.FX
 {
     /// <summary>
-    /// Text number FX that appear when a card receives damage
+    /// 卡牌受到傷害時出現的文本數字 FX
     /// </summary>
 
     public class DamageFX : MonoBehaviour

@@ -7,13 +7,13 @@ using UnityEngine.Profiling;
 namespace TcgEngine.Gameplay
 {
     /// <summary>
-    /// Execute and resolves game rules and logic
+    /// 執行並解決遊戲規則和邏輯
     /// </summary>
 
     public class GameLogic
     {
         public UnityAction onGameStart;
-        public UnityAction<Player> onGameEnd;          //Winner
+        public UnityAction<Player> onGameEnd;          //勝利玩家
 
         public UnityAction onTurnStart;
         public UnityAction onTurnPlay;
@@ -28,18 +28,18 @@ namespace TcgEngine.Gameplay
         public UnityAction<int> onRollValue;
 
         public UnityAction<AbilityData, Card> onAbilityStart;        
-        public UnityAction<AbilityData, Card, Card> onAbilityTargetCard;  //Ability, Caster, Target
+        public UnityAction<AbilityData, Card, Card> onAbilityTargetCard;  //能力、施法者、目標
         public UnityAction<AbilityData, Card, Player> onAbilityTargetPlayer;
         public UnityAction<AbilityData, Card, Slot> onAbilityTargetSlot;
         public UnityAction<AbilityData, Card> onAbilityEnd;
 
-        public UnityAction<Card, Card> onAttackStart;  //Attacker, Defender
-        public UnityAction<Card, Card> onAttackEnd;     //Attacker, Defender
+        public UnityAction<Card, Card> onAttackStart;  //攻擊者、防守者
+        public UnityAction<Card, Card> onAttackEnd;     //攻擊者、防守者
         public UnityAction<Card, Player> onAttackPlayerStart;
         public UnityAction<Card, Player> onAttackPlayerEnd;
 
-        public UnityAction<Card, Card> onSecretTrigger;    //Secret, Triggerer
-        public UnityAction<Card, Card> onSecretResolve;    //Secret, Triggerer
+        public UnityAction<Card, Card> onSecretTrigger;    //秘密、觸發者
+        public UnityAction<Card, Card> onSecretResolve;    //秘密、觸發者
 
         public UnityAction onSelectorStart;
         public UnityAction onSelectorSelect;
@@ -57,7 +57,7 @@ namespace TcgEngine.Gameplay
 
         public GameLogic(bool is_instant)
         {
-            //is_instant ignores all gameplay delays and process everything immediately, needed for AI prediction
+            //is_instant 忽略所有遊戲延遲並立即處理 AI 預測所需的所有內容
             resolve_queue = new ResolveQueue(null, is_instant); 
         }
 
@@ -78,20 +78,20 @@ namespace TcgEngine.Gameplay
             resolve_queue.Update(delta);
         }
 
-        //----- Turn Phases ----------
+        //----- 轉向階段 ----------
 
         public virtual void StartGame()
         {
             if (game_data.state == GameState.GameEnded)
                 return;
 
-            //Choose first player
+            //選擇第一位玩家
             game_data.state = GameState.Starting;
             game_data.first_player = random.NextDouble() < 0.5 ? 0 : 1;
             game_data.current_player = game_data.first_player;
             game_data.turn_count = 1;
 
-            //Adventure settings
+            //冒險設定
             LevelData level = null;
             if (game_data.settings.game_type == GameType.Adventure)
             {
@@ -103,7 +103,7 @@ namespace TcgEngine.Gameplay
                 game_data.current_player = game_data.first_player;
             }
 
-            //Init each player
+            //初始化每個玩家
             foreach (Player player in game_data.players)
             {
                 //Puzzle level deck
@@ -117,11 +117,11 @@ namespace TcgEngine.Gameplay
                 player.mana_max = pdeck != null ? pdeck.start_mana : GameplayData.Get().mana_start;
                 player.mana = player.mana_max;
 
-                //Draw starting cards
+                //抽取起始卡牌
                 int dcards = pdeck != null ? pdeck.start_cards : GameplayData.Get().cards_start;
                 DrawCard(player.player_id, dcards);
 
-                //Add coin second player
+                //添加硬幣第二個玩家
                 bool is_random = level == null || level.first_player == LevelFirst.Random;
                 if (is_random && player.player_id != game_data.first_player && GameplayData.Get().second_bonus != null)
                 {
@@ -131,7 +131,7 @@ namespace TcgEngine.Gameplay
                 }
             }
 
-            //Start state
+            //初始狀態
             onGameStart?.Invoke();
 
             StartTurn();
@@ -148,29 +148,29 @@ namespace TcgEngine.Gameplay
 
             Player player = game_data.GetActivePlayer();
 
-            //Cards draw
+            //抽牌
             if (game_data.turn_count > 1 || player.player_id != game_data.first_player)
             {
                 DrawCard(player.player_id, GameplayData.Get().cards_per_turn);
             }
 
-            //Mana 
+            //法力值
             player.mana_max += GameplayData.Get().mana_per_turn;
             player.mana_max = Mathf.Min(player.mana_max, GameplayData.Get().mana_max);
             player.mana = player.mana_max;
 
-            //Turn timer and history
+            //轉動計時器和歷史記錄
             game_data.turn_timer = GameplayData.Get().turn_duration;
             player.history_list.Clear();
 
-            //Player poison
+            //玩家中毒
             if (player.HasStatusEffect(StatusType.Poisoned))
                 player.hp -= player.GetStatusEffectValue(StatusType.Poisoned);
 
             if (player.hero != null)
                 player.hero.Refresh();
 
-            //Refresh Cards and Status Effects
+            //刷新卡牌和狀態效果
             for (int i = player.cards_board.Count - 1; i >= 0; i--)
             {
                 Card card = player.cards_board[i];
@@ -182,10 +182,10 @@ namespace TcgEngine.Gameplay
                     DamageCard(card, card.GetStatusValue(StatusType.Poisoned));
             }
 
-            //Ongoing Abilities
+            //持續能力
             UpdateOngoingAbilities();
 
-            //StartTurn Abilities
+            //開始回合能力
             TriggerPlayerCardsAbilityType(player, AbilityTrigger.StartOfTurn);
 
             resolve_queue.AddCallback(StartPlayPhase);
@@ -223,7 +223,7 @@ namespace TcgEngine.Gameplay
             game_data.selector = SelectorType.None;
             game_data.state = GameState.EndTurn;
 
-            //Reduce status effects with duration
+            //隨著持續時間減少狀態影響
             foreach (Player aplayer in game_data.players)
             {
                 foreach (Card card in aplayer.cards_board)
@@ -232,7 +232,7 @@ namespace TcgEngine.Gameplay
                 }
             }
 
-            //End of turn abilities
+            //回合結束能力
             Player player = game_data.GetActivePlayer();
             TriggerPlayerCardsAbilityType(player, AbilityTrigger.EndOfTurn);
 
@@ -242,19 +242,19 @@ namespace TcgEngine.Gameplay
             resolve_queue.ResolveAll(0.2f);
         }
 
-        //End game with winner
+        //以獲勝者結束遊戲
         public virtual void EndGame(int winner)
         {
             if (game_data.state != GameState.GameEnded)
             {
                 game_data.state = GameState.GameEnded;
-                game_data.current_player = winner; //Winner player
+                game_data.current_player = winner; //勝利玩家
                 Player player = game_data.GetPlayer(winner);
                 onGameEnd?.Invoke(player);
             }
         }
 
-        //Progress to the next step/phase 
+        //進入下一步/階段
         public virtual void NextStep()
         {
             if (game_data.selector != SelectorType.None)
@@ -267,8 +267,8 @@ namespace TcgEngine.Gameplay
             }
         }
 
-        //Check if a player is winning the game, if so end the game
-        //Change or edit this function for a new win condition
+        //檢查玩家是否贏得了遊戲，如果是則結束遊戲
+        //更改或編輯此功能以獲得新的獲勝條件
         protected virtual void CheckForWinner()
         {
             int count_alive = 0;
@@ -284,11 +284,11 @@ namespace TcgEngine.Gameplay
 
             if (count_alive == 0)
             {
-                EndGame(-1); //Everyone is dead, Draw
+                EndGame(-1); //大家都死了，抽獎
             }
             else if (count_alive == 1)
             {
-                EndGame(alive.player_id); //Player win
+                EndGame(alive.player_id); //玩家獲勝
             }
         }
 
@@ -310,7 +310,7 @@ namespace TcgEngine.Gameplay
 
         //--- Setup ------
 
-        //Set deck using a Deck in Resources
+        //使用資源中的套牌設置套牌
         public virtual void SetPlayerDeck(int player_id, DeckData deck)
         {
             Player player = game_data.GetPlayer(player_id);
@@ -337,7 +337,7 @@ namespace TcgEngine.Gameplay
 
             DeckPuzzleData puzzle = deck as DeckPuzzleData;
 
-            //Board cards
+            //面板卡牌
             if (puzzle != null)
             {
                 foreach (DeckCardSlot card in puzzle.board_cards)
@@ -349,12 +349,12 @@ namespace TcgEngine.Gameplay
                 }
             }
 
-            //Shuffle deck
+            //洗牌
             if(puzzle == null || !puzzle.dont_shuffle_deck)
                 ShuffleDeck(player.cards_deck);
         }
 
-        //Set deck using custom deck in save file or database
+        //在保存文件或數據庫中使用自定義牌組設置牌組
         public virtual void SetPlayerDeck(int player_id, UserDeckData deck)
         {
             SetPlayerDeck(player_id, deck.tid, deck.hero, deck.cards);
@@ -386,11 +386,11 @@ namespace TcgEngine.Gameplay
                 player.cards_deck.Add(acard);
             }
 
-            //Shuffle deck
+            //洗牌
             ShuffleDeck(player.cards_deck);
         }
 
-        //---- Gameplay Actions --------------
+        //---- 遊戲動作 --------------
 
         public virtual void PlayCard(Card card, Slot slot, bool skip_cost = false)
         {
@@ -401,22 +401,22 @@ namespace TcgEngine.Gameplay
             
             if (game_data.CanPlayCard(card, slot, skip_cost))
             {
-                //Cost
+                //花費
                 if (!skip_cost)
                     player.PayMana(card);
 
-                //Play card
+                //打出卡牌
                 player.RemoveCardFromAllGroups(card);
                 card.Cleanse();
 
-                //Add to board
+                //加入到面板
                 CardData icard = card.CardData;
                 if (icard.IsBoardCard())
                 {
                     player.cards_board.Add(card);
                     card.slot = slot;
-                    card.SetCard(icard, card.VariantData);      //Reset all stats to default
-                    card.exhausted = true; //Cant attack first turn
+                    card.SetCard(icard, card.VariantData);      //將所有統計數據重置為默認值
+                    card.exhausted = true; //第一回合無法攻擊
                 }
                 else if (icard.IsSecret())
                 {
@@ -425,19 +425,19 @@ namespace TcgEngine.Gameplay
                 else
                 {
                     player.cards_discard.Add(card);
-                    card.slot = slot; //Save slot in case spell has PlayTarget
+                    card.slot = slot; //保存插槽以防拼寫有 PlayTarget
                 }
 
-                //History
+                //歷史資訊
                 if(!icard.IsSecret())
                     player.AddHistory(GameAction.PlayCard, card);
 
-                //Update ongoing effects
+                //更新正在進行的效果
                 game_data.last_played = card;
                 UpdateOngoingAbilities();
 
-                //Trigger abilities
-                TriggerSecrets(AbilityTrigger.OnPlayOther, card); //After playing card
+                //觸發能力
+                TriggerSecrets(AbilityTrigger.OnPlayOther, card); //打出卡牌後
                 TriggerCardAbilityType(AbilityTrigger.OnPlay, card);
                 TriggerOtherCardsAbilityType(AbilityTrigger.OnPlayOther, card);
 
@@ -454,15 +454,15 @@ namespace TcgEngine.Gameplay
             Player player = game_data.GetPlayer(card.player_id);
             Card slot_card = game_data.GetSlotCard(slot);
             if (slot_card != null || !slot.IsValid())
-                return; //Cant move to already occipied slot
+                return; //無法移動到已佔用的插槽
 
             if (game_data.CanMoveCard(card, slot, skip_cost))
             {
                 card.slot = slot;
 
-                //Moving doesn't really have any effect in demo so can be done indefinitely
+                //移動在演示中實際上沒有任何影響，因此可以無限期地進行
                 //if(!skip_cost)
-                    //card.exhausted = true;
+                //card.exhausted = true;
                 //card.RemoveStatus(StatusEffect.Stealth);
                 //player.AddHistory(GameAction.Move, card);
 
@@ -504,13 +504,13 @@ namespace TcgEngine.Gameplay
             Player player = game_data.GetPlayer(attacker.player_id);
             player.AddHistory(GameAction.Attack, attacker, target);
 
-            //Trigger before attack abilities
+            //攻擊前觸發技能
             TriggerCardAbilityType(AbilityTrigger.OnBeforeAttack, attacker, target);
             TriggerCardAbilityType(AbilityTrigger.OnBeforeDefend, target, attacker);
             TriggerSecrets(AbilityTrigger.OnBeforeAttack, attacker);
             TriggerSecrets(AbilityTrigger.OnBeforeDefend, target);
 
-            //Resolve attack
+            //解決攻擊
             resolve_queue.AddAttack(attacker, target, ResolveAttack, skip_cost);
             resolve_queue.ResolveAll();
         }
@@ -528,22 +528,22 @@ namespace TcgEngine.Gameplay
 
         protected virtual void ResolveAttackHit(Card attacker, Card target, bool skip_cost)
         {
-            //Count attack damage
+            //計算攻擊傷害
             int datt1 = attacker.GetAttack();
             int datt2 = target.GetAttack();
 
-            //Damage Cards
+            //傷害卡
             DamageCard(attacker, target, datt1);
             DamageCard(target, attacker, datt2);
 
-            //Save attack and exhaust
+            //保存攻擊和排氣
             if (!skip_cost)
                 ExhaustBattle(attacker);
 
-            //Recalculate bonus
+            //重新計算獎金
             UpdateOngoingAbilities();
 
-            //Abiltiies
+            //能力
             bool att_board = game_data.IsOnBoard(attacker);
             bool def_board = game_data.IsOnBoard(target);
             if (att_board)
@@ -572,11 +572,11 @@ namespace TcgEngine.Gameplay
             Player player = game_data.GetPlayer(attacker.player_id);
             player.AddHistory(GameAction.AttackPlayer, attacker, target);
 
-            //Resolve abilities
+            //解決能力
             TriggerSecrets(AbilityTrigger.OnBeforeAttack, attacker);
             TriggerCardAbilityType(AbilityTrigger.OnBeforeAttack, attacker, target);
 
-            //Resolve attack
+            //解決攻擊
             resolve_queue.AddAttack(attacker, target, ResolveAttackPlayer, skip_cost);
             resolve_queue.ResolveAll();
         }
@@ -594,16 +594,16 @@ namespace TcgEngine.Gameplay
 
         protected virtual void ResolveAttackPlayerHit(Card attacker, Player target, bool skip_cost)
         {
-            //Damage player
+            //傷害玩家
             int datt1 = attacker.GetAttack();
             target.hp -= datt1;
             target.hp = Mathf.Clamp(target.hp, 0, target.hp_max);
 
-            //Save attack and exhaust
+            //保存攻擊和排氣
             if (!skip_cost)
                 ExhaustBattle(attacker);
 
-            //Recalculate bonus
+            //重新計算獎金
             UpdateOngoingAbilities();
 
             if (game_data.IsOnBoard(attacker))
@@ -617,7 +617,7 @@ namespace TcgEngine.Gameplay
             resolve_queue.ResolveAll(0.2f);
         }
 
-        //Exhaust after battle
+        //戰鬥結束後的排氣
         public virtual void ExhaustBattle(Card attacker)
         {
             bool attacked_before = game_data.cards_attacked.Contains(attacker.uid);
@@ -626,7 +626,7 @@ namespace TcgEngine.Gameplay
             attacker.exhausted = !attack_again;
         }
 
-        //Redirect attack to a new target
+        //將攻擊重定向到新目標
         public virtual void RedirectAttack(Card attacker, Card new_target)
         {
             foreach (AttackQueueElement att in resolve_queue.GetAttackQueue())
@@ -682,7 +682,7 @@ namespace TcgEngine.Gameplay
             onCardDrawn?.Invoke(nb);
         }
 
-        //Put a card from deck into discard
+        //將牌組中的一張牌放入棄牌中
         public virtual void DrawDiscardCard(int player_id, int nb = 1)
         {
             Player player = game_data.GetPlayer(player_id);
@@ -697,21 +697,21 @@ namespace TcgEngine.Gameplay
             }
         }
 
-        //Summon copy of an exiting card
+        //召喚現有卡牌的副本
         public virtual Card SummonCopy(int player_id, Card copy, Slot slot)
         {
             CardData icard = copy.CardData;
             return SummonCard(player_id, icard, copy.VariantData, slot);
         }
 
-        //Summon copy of an exiting card into hand
+        //將現有卡牌的副本召喚到手上
         public virtual Card SummonCopyHand(int player_id, Card copy)
         {
             CardData icard = copy.CardData;
             return SummonCardHand(player_id, icard, copy.VariantData);
         }
 
-        //Create a new card and send it to the board
+        //創建一張新卡並將其發送到看板
         public virtual Card SummonCard(int player_id, CardData card, VariantData variant, Slot slot)
         {
             if (!slot.IsValid())
@@ -728,7 +728,7 @@ namespace TcgEngine.Gameplay
             return acard;
         }
 
-        //Create a new card and send it to your hand
+        //創建一張新卡並將其發送到手上
         public virtual Card SummonCardHand(int player_id, CardData card, VariantData variant)
         {
             string uid = "s_" + GameTool.GenerateRandomID();
@@ -739,7 +739,7 @@ namespace TcgEngine.Gameplay
             return acard;
         }
 
-        //Transform card into another one
+        //將卡變成另一張卡
         public virtual Card TransformCard(Card card, CardData transform_to)
         {
             card.SetCard(transform_to, card.VariantData);
@@ -749,7 +749,7 @@ namespace TcgEngine.Gameplay
             return card;
         }
 
-        //Change owner of a card
+        //更改卡的所有者
         public virtual void ChangeOwner(Card card, Player owner)
         {
             if (card.player_id != owner.player_id)
@@ -762,7 +762,7 @@ namespace TcgEngine.Gameplay
             }
         }
 
-        //Heal a card
+        //治愈一張卡
         public virtual void HealCard(Card target, int value)
         {
             if (target == null)
@@ -775,17 +775,17 @@ namespace TcgEngine.Gameplay
             target.damage = Mathf.Max(target.damage, 0);
         }
 
-        //Generic damage that doesnt come from another card
+        //並非來自其他卡牌的一般傷害
         public virtual void DamageCard(Card target, int value)
         {
             if(target == null)
                 return;
 
             if (target.HasStatus(StatusType.Invincibility))
-                return; //Invincible
+                return; //無敵
 
             if (target.HasStatus(StatusType.SpellImmunity))
-                return; //Spell immunity
+                return; //法術免疫
 
             target.damage += value;
 
@@ -793,19 +793,19 @@ namespace TcgEngine.Gameplay
                 DiscardCard(target);
         }
 
-        //Damage a card with attacker/caster
+        //用攻擊者/施法者傷害一張卡牌
         public virtual void DamageCard(Card attacker, Card target, int value)
         {
             if (attacker == null || target == null)
                 return;
 
             if (target.HasStatus(StatusType.Invincibility))
-                return; //Invincible
+                return; //無敵
 
             if (target.HasStatus(StatusType.SpellImmunity) && attacker.CardData.type != CardType.Character)
-                return; //Spell immunity
+                return; //法術免疫
 
-            //Shell
+            //護盾
             bool doublelife = target.HasStatus(StatusType.Shell);
             if (doublelife)
             {
@@ -813,22 +813,22 @@ namespace TcgEngine.Gameplay
                 return;
             }
 
-            //Armor
+            //護甲
             if (target.HasStatus(StatusType.Armor))
                 value = Mathf.Max(value - target.GetStatusValue(StatusType.Armor), 0);
 
             int extra = value - target.GetHP();
             target.damage += value;
 
-            //Trample
+            //踐踏
             Player tplayer = game_data.GetPlayer(target.player_id);
             if (extra > 0 && attacker.HasStatus(StatusType.Trample))
                 tplayer.hp -= extra;
 
-            //Remove sleep on damage
+            //被傷害時移除睡眠狀態
             target.RemoveStatus(StatusType.Sleep);
 
-            //Deathtouch
+            //死亡之觸
             if (value > 0 && attacker.HasStatus(StatusType.Deathtouch) && target.CardData.type == CardType.Character)
                 KillCard(attacker, target);
 
@@ -837,7 +837,7 @@ namespace TcgEngine.Gameplay
                 KillCard(attacker, target);
         }
 
-        //A card that kills another card
+        //一張牌可以殺死另一張牌
         public virtual void KillCard(Card attacker, Card target)
         {
             if (attacker == null || target == null)
@@ -859,26 +859,26 @@ namespace TcgEngine.Gameplay
             TriggerCardAbilityType(AbilityTrigger.OnKill, attacker, target);
         }
 
-        //Send card into discard
+        //將卡牌送入棄牌區
         public virtual void DiscardCard(Card card)
         {
             if (card == null)
                 return;
 
             if (game_data.IsInDiscard(card))
-                return; //Already discarded
+                return; //已經廢棄
 
             CardData icard = card.CardData;
             Player player = game_data.GetPlayer(card.player_id);
             bool was_on_board = game_data.IsOnBoard(card);
 
-            //Remove card from board and add to discard
+            //從面板上取出卡片並添加到丟棄
             player.RemoveCardFromAllGroups(card);
             player.cards_discard.Add(card);
 
             if (was_on_board)
             {
-                //Trigger on death abilities
+                //死亡時技能觸發
                 TriggerCardAbilityType(AbilityTrigger.OnDeath, card);
                 TriggerOtherCardsAbilityType(AbilityTrigger.OnDeathOther, card);
             }
@@ -900,7 +900,7 @@ namespace TcgEngine.Gameplay
             return game_data.rolled_value;
         }
 
-        //--- Abilities --
+        //--- 能力 --
 
         public virtual void TriggerCardAbilityType(AbilityTrigger type, Card caster, Card triggerer = null)
         {
@@ -947,7 +947,7 @@ namespace TcgEngine.Gameplay
         
         public virtual void TriggerCardAbility(AbilityData iability, Card caster, Card triggerer = null)
         {
-            Card trigger_card = triggerer != null ? triggerer : caster; //Triggerer is the caster if not set
+            Card trigger_card = triggerer != null ? triggerer : caster; //如果沒有設置，觸發者就是施法者
             if (!caster.HasStatus(StatusType.Silenced) && iability.AreTriggerConditionsMet(game_data, caster, trigger_card))
             {
                 resolve_queue.AddAbility(iability, caster, triggerer, ResolveCardAbility);
@@ -962,11 +962,11 @@ namespace TcgEngine.Gameplay
             }
         }
 
-        //Resolve a card ability, may stop to ask for target
+        //解決卡牌能力，可以停下來詢問目標
         protected virtual void ResolveCardAbility(AbilityData iability, Card caster, Card triggerer)
         {
             if (!caster.CanDoAbilities())
-                return; //Silenced card cant cast
+                return; //沉默卡無法施放
 
             //Debug.Log("Trigger Ability " + iability.id + " : " + caster.card_id);
 
@@ -976,7 +976,7 @@ namespace TcgEngine.Gameplay
 
             bool is_selector = ResolveCardAbilitySelector(iability, caster);
             if (is_selector)
-                return; //Wait for player to select
+                return; //等待玩家選擇
 
             ResolveCardAbilityPlayTarget(iability, caster);
             ResolveCardAbilityPlayers(iability, caster);
@@ -991,7 +991,7 @@ namespace TcgEngine.Gameplay
         {
             if (iability.target == AbilityTarget.SelectTarget)
             {
-                //Wait for target
+                //等待目標
                 GoToSelectTarget(iability, caster);
                 return true;
             }
@@ -1035,10 +1035,10 @@ namespace TcgEngine.Gameplay
 
         protected virtual void ResolveCardAbilityPlayers(AbilityData iability, Card caster)
         {
-            //Get Player Targets based on conditions
+            //根據條件獲取玩家目標
             List<Player> targets = iability.GetPlayerTargets(game_data, caster, player_array);
 
-            //Resolve effects
+            //解決效果
             foreach (Player target in targets)
             {
                 ResolveEffectTarget(iability, caster, target);
@@ -1047,10 +1047,10 @@ namespace TcgEngine.Gameplay
 
         protected virtual void ResolveCardAbilityCards(AbilityData iability, Card caster)
         {
-            //Get Cards Targets based on conditions
+            //根據條件獲取卡牌目標
             List<Card> targets = iability.GetCardTargets(game_data, caster, card_array);
 
-            //Resolve effects
+            //解決效果
             foreach (Card target in targets)
             {
                 ResolveEffectTarget(iability, caster, target);
@@ -1059,10 +1059,10 @@ namespace TcgEngine.Gameplay
 
         protected virtual void ResolveCardAbilitySlots(AbilityData iability, Card caster)
         {
-            //Get Slot Targets based on conditions
+            //根據條件獲取槽位目標
             List<Slot> targets = iability.GetSlotTargets(game_data, caster, slot_array);
 
-            //Resolve effects
+            //解決效果
             foreach (Slot target in targets)
             {
                 ResolveEffectTarget(iability, caster, target);
@@ -1071,10 +1071,10 @@ namespace TcgEngine.Gameplay
 
         protected virtual void ResolveCardAbilityCardData(AbilityData iability, Card caster)
         {
-            //Get Cards Targets based on conditions
+            //根據條件獲取卡牌目標
             List<CardData> targets = iability.GetCardDataTargets(game_data, caster, card_data_array);
 
-            //Resolve effects
+            //解決效果
             foreach (CardData target in targets)
             {
                 ResolveEffectTarget(iability, caster, target);
@@ -1118,21 +1118,21 @@ namespace TcgEngine.Gameplay
         {
             Player player = game_data.GetPlayer(caster.player_id);
 
-            //Add to played
+            //添加到已打出的
             game_data.ability_played.Add(iability.id);
 
-            //Pay cost
+            //支付費用
             if (iability.trigger == AbilityTrigger.Activate)
             {
                 player.mana -= iability.mana_cost;
                 caster.exhausted = caster.exhausted || iability.exhaust;
             }
 
-            //Recalculate and clear
+            //重新計算並清除
             UpdateOngoingAbilities();
             CheckForWinner();
 
-            //Chain ability
+            //連鎖能力
             if (iability.target != AbilityTarget.ChoiceSelector && game_data.state != GameState.GameEnded)
             {
                 foreach (AbilityData chain_ability in iability.chain_abilities)
@@ -1147,9 +1147,9 @@ namespace TcgEngine.Gameplay
             onAbilityEnd?.Invoke(iability, caster);
         }
 
-        //This function is called often to update status/stats affected by ongoing abilities
-        //It basically first reset the bonus to 0 (CleanOngoing) and then recalculate it to make sure it it still present
-        //Only cards in hand and on board are updated in this way
+        //經常調用此函數來更新受持續能力影響的狀態/統計數據
+        //基本上首先將獎金重置為 0 (CleanOngoing)，然後重新計算它以確保它仍然存在
+        //僅手牌和機上牌會以這種方式更新
         public virtual void UpdateOngoingAbilities()
         {
             Profiler.BeginSample("Update Ongoing");
@@ -1168,7 +1168,7 @@ namespace TcgEngine.Gameplay
             for (int p = 0; p < game_data.players.Length; p++)
             {
                 Player player = game_data.players[p];
-                UpdateOngoingAbilities(player, player.hero);  //Remove this line if hero is on the board
+                UpdateOngoingAbilities(player, player.hero);  //如果英雄在面板上，請刪除此行
 
                 for (int c = 0; c < player.cards_board.Count; c++)
                 {
@@ -1177,7 +1177,7 @@ namespace TcgEngine.Gameplay
                 }
             }
 
-            //Stats bonus
+            //統計獎金
             for (int p = 0; p < game_data.players.Length; p++)
             {
                 Player player = game_data.players[p];
@@ -1185,7 +1185,7 @@ namespace TcgEngine.Gameplay
                 {
                     Card card = player.cards_board[c];
 
-                    //Taunt effect
+                    //嘲諷效果
                     if (card.HasStatus(StatusType.Protection))
                     {
                         player.AddOngoingStatus(StatusType.Protected, 0);
@@ -1200,7 +1200,7 @@ namespace TcgEngine.Gameplay
                         }
                     }
 
-                    //Status bonus
+                    //狀態獎金
                     foreach (CardStatus status in card.status)
                         AddOngoingStatusBonus(card, status);
                     foreach (CardStatus status in card.ongoing_status)
@@ -1269,10 +1269,10 @@ namespace TcgEngine.Gameplay
                     {
                         for (int tp = 0; tp < game_data.players.Length; tp++)
                         {
-                            //Looping on all cards is very slow, since there are no ongoing effects that works out of board/hand we loop on those only
+                            //在所有卡上循環非常慢，因為沒有在棋盤/手牌之外起作用的持續效果，我們僅在這些卡上循環
                             Player tplayer = game_data.players[tp];
 
-                            //Hand Cards
+                            //手牌
                             if (ability.target == AbilityTarget.AllCardsAllPiles || ability.target == AbilityTarget.AllCardsHand)
                             {
                                 for (int tc = 0; tc < tplayer.cards_hand.Count; tc++)
@@ -1285,7 +1285,7 @@ namespace TcgEngine.Gameplay
                                 }
                             }
 
-                            //Board Cards
+                            //面板卡牌
                             if (ability.target == AbilityTarget.AllCardsAllPiles || ability.target == AbilityTarget.AllCardsBoard)
                             {
                                 for (int tc = 0; tc < tplayer.cards_board.Count; tc++)
@@ -1311,12 +1311,12 @@ namespace TcgEngine.Gameplay
                 card.hp_ongoing += status.value;
         }
 
-        //---- Secrets ------------
+        //---- 秘密(陷阱) ------------
 
         public virtual bool TriggerSecrets(AbilityTrigger secret_trigger, Card trigger_card)
         {
             if (trigger_card.HasStatus(StatusType.SpellImmunity))
-                return false; //Spell Immunity, triggerer is the one that trigger the trap, target is the one attacked, so usually the player who played the trap, so we dont check the target
+                return false; //技能免疫，觸發者是觸發陷阱的人，目標是被攻擊的人，所以通常是下陷阱的玩家，所以不檢查目標
 
             bool success = false;
             for(int p=0; p < game_data.players.Length; p++ )
@@ -1340,7 +1340,7 @@ namespace TcgEngine.Gameplay
                                 if (onSecretTrigger != null)
                                     onSecretTrigger.Invoke(card, trigger_card);
 
-                                return success; //Trigger only 1 secret per trigger
+                                return success; //每個觸發器僅觸發 1 個秘密
                             }
                         }
                     }
@@ -1366,7 +1366,7 @@ namespace TcgEngine.Gameplay
             }
         }
 
-        //---- Resolve Selector -----
+        //---- 解析選擇器 -----
 
         public virtual void SelectCard(Card target)
         {
@@ -1382,7 +1382,7 @@ namespace TcgEngine.Gameplay
             if (game_data.selector == SelectorType.SelectTarget)
             {
                 if (!ability.CanTarget(game_data, caster, target))
-                    return; //Can't target that target
+                    return; //無法瞄準該目標
 
                 Player player = game_data.GetPlayer(caster.player_id);
                 player.AddHistory(GameAction.CastAbility, caster, ability, target);
@@ -1395,7 +1395,7 @@ namespace TcgEngine.Gameplay
             if (game_data.selector == SelectorType.SelectorCard)
             {
                 if (!ability.IsCardSelectionValid(game_data, caster, target, card_array))
-                    return; //Supports conditions and filters
+                    return; //支持條件和過濾器
 
                 game_data.selector = SelectorType.None;
                 ResolveEffectTarget(ability, caster, target);
@@ -1418,7 +1418,7 @@ namespace TcgEngine.Gameplay
             if (game_data.selector == SelectorType.SelectTarget)
             {
                 if (!ability.CanTarget(game_data, caster, target))
-                    return; //Can't target that target
+                    return; //無法瞄準該目標
 
                 Player player = game_data.GetPlayer(caster.player_id);
                 player.AddHistory(GameAction.CastAbility, caster, ability, target);
@@ -1443,7 +1443,7 @@ namespace TcgEngine.Gameplay
             if (game_data.selector == SelectorType.SelectTarget)
             {
                 if(!ability.CanTarget(game_data, caster, target))
-                    return; //Conditions not met
+                    return; //不滿足條件
 
                 Player player = game_data.GetPlayer(caster.player_id);
                 player.AddHistory(GameAction.CastAbility, caster, ability, target);
@@ -1485,13 +1485,13 @@ namespace TcgEngine.Gameplay
         {
             if (game_data.selector != SelectorType.None)
             {
-                //End selection
+                //結束選擇
                 game_data.selector = SelectorType.None;
                 onSelectorSelect?.Invoke();
             }
         }
 
-        //-----Trigger Selector-----
+        //-----觸發選擇器-----
 
         protected virtual void GoToSelectTarget(AbilityData iability, Card caster)
         {

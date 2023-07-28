@@ -6,7 +6,7 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Effect to redirect an attack (usually triggered with OnBeforeAttack or OnBeforeDefend)
+    /// 重定向攻擊的效果（通常由 OnBeforeAttack 或 OnBeforeDefend 觸發）
     /// </summary>
 
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/AttackRedirect", order = 10)]

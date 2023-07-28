@@ -7,12 +7,12 @@ using UnityEngine.Events;
 namespace TcgEngine
 {
     /// <summary>
-    /// Useful tool static functions for the ApiClient
+    /// ApiClient 的有用工具靜態函數
     /// </summary>
 
     public class ApiTool : MonoBehaviour
     {
-        // ----- Convertions ------
+        // ----- 轉換 ------
 
         public static T JsonToObject<T>(string json)
         {

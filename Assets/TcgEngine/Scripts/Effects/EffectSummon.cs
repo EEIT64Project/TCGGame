@@ -5,8 +5,8 @@ using TcgEngine.Gameplay;
 
 namespace TcgEngine
 {
-    //Effect to Summon an entirely new card (not in anyones deck)
-    //And places it on the board
+    //召喚一張全新卡牌的效果（不在任何人的牌組中）
+    //並將其放置在面板上
 
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/Summon", order = 10)]
     public class EffectSummon : EffectData
@@ -15,12 +15,12 @@ namespace TcgEngine
 
         public override void DoEffect(GameLogic logic, AbilityData ability, Card caster, Player target)
         {
-            logic.SummonCardHand(target.player_id, summon, caster.VariantData); //Summon to hand
+            logic.SummonCardHand(target.player_id, summon, caster.VariantData); //召喚到手牌
         }
 
         public override void DoEffect(GameLogic logic, AbilityData ability, Card caster, Card target)
         {
-            logic.SummonCard(caster.player_id, summon, caster.VariantData, target.slot); //Assumes the target has just been killed, so the slot is empty
+            logic.SummonCard(caster.player_id, summon, caster.VariantData, target.slot); //假設目標剛剛被殺死，所以槽位是空的
         }
 
         public override void DoEffect(GameLogic logic, AbilityData ability, Card caster, Slot target)

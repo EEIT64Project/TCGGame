@@ -10,7 +10,7 @@ using System;
 namespace TcgEngine.EditorTool
 {
     /// <summary>
-    /// Add symbols and sorting layers
+    /// 添加符號和排序圖層
     /// </summary>
 
     [InitializeOnLoad]
@@ -29,17 +29,17 @@ namespace TcgEngine.EditorTool
             {
                 SessionState.SetBool(import_done, true);
 
-                //Add TCG_ENGINE symbol
+                //Add
                 string symbolSEO = "TCG_ENGINE";
                 if (!HasSymbol(symbolSEO))
                 {
                     AddSymbol(symbolSEO);
                 }
 
-                //Add Sorting Layer
+                //添加排序層
                 AddSortingLayer(3127249329, "UI");
 
-                //Check version
+                //檢查版本
                 FindNetcodeVersion();
             }
         }
@@ -56,7 +56,7 @@ namespace TcgEngine.EditorTool
                     return; //Already there
             }
 
-            //Add layer
+            //添加圖層
             sortingLayersProp.InsertArrayElementAtIndex(sortingLayersProp.arraySize);
             SerializedProperty newlayer = sortingLayersProp.GetArrayElementAtIndex(sortingLayersProp.arraySize - 1);
             newlayer.FindPropertyRelative("uniqueID").longValue = id;

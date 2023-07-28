@@ -13,7 +13,7 @@ namespace TcgEngine
     }
 
     /// <summary>
-    /// Compares basic card or player stats such as attack/hp/mana
+    /// 比較基本卡牌或玩家統計數據，例如攻擊力/生命值/法力值
     /// </summary>
 
     [CreateAssetMenu(fileName = "condition", menuName = "TcgEngine/Condition/Stat", order = 10)]

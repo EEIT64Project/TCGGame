@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace TcgEngine
 {
-    //Checks if a player or card has a status effect
-    
+    //檢查玩家或卡牌是否具有狀態效果
+
     [CreateAssetMenu(fileName = "condition", menuName = "TcgEngine/Condition/CardStatus", order = 10)]
     public class ConditionStatus : ConditionData
     {

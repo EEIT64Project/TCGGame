@@ -7,8 +7,8 @@ using TcgEngine.UI;
 namespace TcgEngine.FX
 {
     /// <summary>
-    /// FX that are not related to any card/player, and appear in the middle of the board
-    /// Usually when big abilities are played
+    /// 與任何卡牌/玩家無關且出現在面版中間的FX
+    /// 通常在發揮大能力的時候
     /// </summary>
 
     public class GameBoardFX : MonoBehaviour

@@ -7,6 +7,6 @@ namespace TcgEngine.Client
 {
     public class PlayerAttackZone1 : MonoBehaviour
     {
-        //Renamed to BoardSlotPlayer, kept file to override file in update
+        //重命名為 BoardSlotPlayer，保留文件以覆蓋更新中的文件
     }
 }

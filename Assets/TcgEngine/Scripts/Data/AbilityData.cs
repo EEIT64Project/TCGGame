@@ -6,7 +6,7 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Defines all ability data
+    /// 定義所有能力數據
     /// </summary>
 
     [CreateAssetMenu(fileName = "ability", menuName = "TcgEngine/AbilityData", order = 4)]
@@ -15,26 +15,26 @@ namespace TcgEngine
         public string id;
 
         [Header("Trigger")]
-        public AbilityTrigger trigger;             //WHEN does the ability trigger?
-        public ConditionData[] conditions_trigger; //Condition checked on the card triggering the ability (usually the caster)
+        public AbilityTrigger trigger;             //該能力何時觸發？
+        public ConditionData[] conditions_trigger; //觸發該能力的卡上檢查的條件（通常是施法者）
 
         [Header("Target")]
-        public AbilityTarget target;               //WHO is targeted?
-        public ConditionData[] conditions_target;  //Condition checked on the target to know if its a valid taget
-        public FilterData[] filters_target;  //Condition checked on the target to know if its a valid taget
+        public AbilityTarget target;               //誰是目標？
+        public ConditionData[] conditions_target;  //檢查目標的條件以確定其是否有效
+        public FilterData[] filters_target;  //檢查目標的條件以確定其是否有效
 
         [Header("Effect")]
-        public EffectData[] effects;              //WHAT this does?
-        public StatusData[] status;               //Status added by this ability  
-        public int value;                         //Value passed to the effect (deal X damage)
-        public int duration;                      //Duration passed to the effect (usually for status, 0=permanent)
+        public EffectData[] effects;              //這是做什麼的？
+        public StatusData[] status;               //通過該能力添加的狀態  
+        public int value;                         //傳遞給效果的值（造成 X 點傷害）
+        public int duration;                      //傳遞到效果的持續時間（通常用於狀態，0=永久）
 
         [Header("Chain/Choices")]
-        public AbilityData[] chain_abilities;    //Abilities that will be triggered after this one
+        public AbilityData[] chain_abilities;    //在此之後將觸發的能力
 
         [Header("Activated Ability")]
-        public int mana_cost;                   //Mana cost for  activated abilities
-        public bool exhaust;                    //Action cost for activated abilities
+        public int mana_cost;                   //激活技能的法力消耗
+        public bool exhaust;                    //激活能力的行動成本
 
         [Header("FX")]
         public GameObject board_fx;
@@ -76,13 +76,13 @@ namespace TcgEngine
             return dsc;
         }
 
-        //Generic condition for the ability to trigger
+        //觸發能力的一般條件
         public bool AreTriggerConditionsMet(Game data, Card caster)
         {
-            return AreTriggerConditionsMet(data, caster, caster); //Triggerer is the caster
+            return AreTriggerConditionsMet(data, caster, caster); //觸發者是施法者
         }
 
-        //Some abilities are caused by another card (PlayOther), otherwise most of the time the triggerer is the caster, check condition on triggerer
+        //有些能力是由另一張牌（PlayOther）引起的，否則大多數時候觸發者是施法者，檢查觸發者的情況
         public bool AreTriggerConditionsMet(Game data, Card caster, Card trigger_card)
         {
             foreach (ConditionData cond in conditions_trigger)
@@ -98,7 +98,7 @@ namespace TcgEngine
             return true;
         }
 
-        //Some abilities are caused by an action on a player (OnFight when attacking the player), check condition on that player
+        //有些能力是由玩家的動作引起的（攻擊玩家時OnFight），檢查該玩家的狀況
         public bool AreTriggerConditionsMet(Game data, Card caster, Player trigger_player)
         {
             foreach (ConditionData cond in conditions_trigger)
@@ -114,7 +114,7 @@ namespace TcgEngine
             return true;
         }
 
-        //Check if the card target is valid
+        //檢查卡目標是否有效
         public bool AreTargetConditionsMet(Game data, Card caster, Card target_card)
         {
             foreach (ConditionData cond in conditions_target)
@@ -125,7 +125,7 @@ namespace TcgEngine
             return true;
         }
 
-        //Check if the player target is valid
+        //檢查玩家目標是否有效
         public bool AreTargetConditionsMet(Game data, Card caster, Player target_player)
         {
             foreach (ConditionData cond in conditions_target)
@@ -136,7 +136,7 @@ namespace TcgEngine
             return true;
         }
 
-        //Check if the slot target is valid
+        //檢查槽目標是否有效
         public bool AreTargetConditionsMet(Game data, Card caster, Slot target_slot)
         {
             foreach (ConditionData cond in conditions_target)
@@ -147,7 +147,7 @@ namespace TcgEngine
             return true;
         }
 
-        //Check if the card data target is valid
+        //檢查卡數據目標是否有效
         public bool AreTargetConditionsMet(Game data, Card caster, CardData target_card)
         {
             foreach (ConditionData cond in conditions_target)
@@ -158,20 +158,20 @@ namespace TcgEngine
             return true;
         }
 
-        //CanTarget is similar to AreTargetConditionsMet but only applies to targets on the board, with extra board-only conditions
+        //CanTarget 與 AreTargetConditionsMet 類似，但僅適用於板上的目標，並具有額外的僅板條件
         public bool CanTarget(Game data, Card caster, Card target)
         {
             if (target.HasStatus(StatusType.Stealth))
-                return false; //Hidden
+                return false; //隱身
 
             if (target.HasStatus(StatusType.SpellImmunity))
-                return false; //Spell immunity
+                return false; //法術免疫
 
             bool condition_match = AreTargetConditionsMet(data, caster, target);
             return condition_match;
         }
 
-        //Can target check additional restrictions and is usually for SelectTarget or PlayTarget abilities
+        //可以目標檢查附加限制，用於 SelectTarget 或 PlayTarget 功能
         public bool CanTarget(Game data, Card caster, Player target)
         {
             bool condition_match = AreTargetConditionsMet(data, caster, target);
@@ -180,16 +180,16 @@ namespace TcgEngine
 
         public bool CanTarget(Game data, Card caster, Slot target)
         {
-            return AreTargetConditionsMet(data, caster, target); //No additional conditions for slots
+            return AreTargetConditionsMet(data, caster, target); //插槽無附加條件
         }
 
-        //AI has additional restrictions based on if the effect is positive or not
+        //人工智能根據效果是否積極而有額外的限制
         public bool CanAiTarget(Game data, Card caster, Card target_card)
         {
             return CanTarget(data, caster, target_card) && CanAiTarget(caster.player_id, target_card.player_id);
         }
 
-        //AI has additional restrictions based on if the effect is positive or not
+        //人工智能根據效果是否積極而有額外的限制
         public bool CanAiTarget(Game data, Card caster, Player target_player)
         {
             return CanTarget(data, caster, target_player) && CanAiTarget(caster.player_id, target_player.player_id);
@@ -197,24 +197,24 @@ namespace TcgEngine
 
         public bool CanAiTarget(Game data, Card caster, Slot target_slot)
         {
-            return CanTarget(data, caster, target_slot); //No additional condition
+            return CanTarget(data, caster, target_slot); //無附加條件
         }
 
         public bool CanAiTarget(int caster_pid, int target_pid)
         {
             int ai_value = GetAiValue();
             if (ai_value > 0 && caster_pid != target_pid)
-                return false; //Positive effect, dont target others
+                return false; //正面效果，不針對他人
             if (ai_value < 0 && caster_pid == target_pid)
-                return false; //Negative effect, dont target self
+                return false; //負面影響，不要針對自己
             return true;
         }
 
-        //Check if destination array has the target after being filtered, used to support filters in CardSelector
+        //檢查目標數組過濾後是否有目標，用於支持CardSelector中的過濾
         public bool IsCardSelectionValid(Game data, Card caster, Card target, ListSwap<Card> card_array = null)
         {
             List<Card> targets = GetCardTargets(data, caster, card_array);
-            return targets.Contains(target); //Card is still in array after filtering
+            return targets.Contains(target); //過濾後卡片仍在數組中
         }
 
         public void DoEffects(GameLogic logic, Card caster)
@@ -298,11 +298,11 @@ namespace TcgEngine
             }
         }
 
-        //Return cards targets,  memory_array is used for optimization and avoid allocating new memory
+        //返回卡片目標，內存數組用於優化並避免分配新內存
         public List<Card> GetCardTargets(Game data, Card caster, ListSwap<Card> memory_array = null)
         {
             if (memory_array == null)
-                memory_array = new ListSwap<Card>(); //Slow operation
+                memory_array = new ListSwap<Card>(); //運行緩慢
 
             List<Card> targets = memory_array.Get();
 
@@ -377,7 +377,7 @@ namespace TcgEngine
                     targets.Add(target);
             }
 
-            //Filter targets
+            //過濾目標
             if (filters_target != null && targets.Count > 0)
             {
                 foreach (FilterData filter in filters_target)
@@ -390,11 +390,11 @@ namespace TcgEngine
             return targets;
         }
 
-        //Return player targets,  memory_array is used for optimization and avoid allocating new memory
+        //返回玩家目標，memory_array用於優化並避免分配新內存
         public List<Player> GetPlayerTargets(Game data, Card caster, ListSwap<Player> memory_array = null)
         {
             if (memory_array == null)
-                memory_array = new ListSwap<Player>(); //Slow operation
+                memory_array = new ListSwap<Player>(); //運行緩慢
 
             List<Player> targets = memory_array.Get();
 
@@ -419,7 +419,7 @@ namespace TcgEngine
                 targets.AddRange(data.players);
             }
 
-            //Filter targets
+            //過濾目標
             if (filters_target != null && targets.Count > 0)
             {
                 foreach (FilterData filter in filters_target)
@@ -432,11 +432,11 @@ namespace TcgEngine
             return targets;
         }
 
-        //Return slot targets,  memory_array is used for optimization and avoid allocating new memory
+        //返回槽目標，memory_array用於優化並避免分配新內存
         public List<Slot> GetSlotTargets(Game data, Card caster, ListSwap<Slot> memory_array = null)
         {
             if (memory_array == null)
-                memory_array = new ListSwap<Slot>(); //Slow operation
+                memory_array = new ListSwap<Slot>(); //運行緩慢
 
             List<Slot> targets = memory_array.Get();
 
@@ -450,7 +450,7 @@ namespace TcgEngine
                 }
             }
 
-            //Filter targets
+            //過濾目標
             if (filters_target != null && targets.Count > 0)
             {
                 foreach (FilterData filter in filters_target)
@@ -466,7 +466,7 @@ namespace TcgEngine
         public List<CardData> GetCardDataTargets(Game data, Card caster, ListSwap<CardData> memory_array = null)
         {
             if (memory_array == null)
-                memory_array = new ListSwap<CardData>(); //Slow operation
+                memory_array = new ListSwap<CardData>(); //運行緩慢
 
             List<CardData> targets = memory_array.Get();
 
@@ -508,23 +508,23 @@ namespace TcgEngine
     {
         None = 0,
 
-        Ongoing = 2,  //Always active (does not work with all effects)
-        Activate = 5, //Action
+        Ongoing = 2,  //始終處於活動狀態（不適用於所有效果）
+        Activate = 5, //動作
 
-        OnPlay = 10,  //When playeds
-        OnPlayOther = 12,  //When another card played
+        OnPlay = 10,  //打出時
+        OnPlayOther = 12,  //當另一張牌打出時
 
-        StartOfTurn = 20, //Every turn
-        EndOfTurn = 22, //Every turn
+        StartOfTurn = 20, //每一回合
+        EndOfTurn = 22, //每一回合
 
-        OnBeforeAttack = 30, //When attacking, before damage
-        OnAfterAttack = 31, //When attacking, after damage if still alive
-        OnBeforeDefend = 32, //When being attacked, before damage
-        OnAfterDefend = 33, //When being attacked, after damage if still alive
-        OnKill = 35,        //When killing another card during an attack
+        OnBeforeAttack = 30, //攻擊時、傷害前
+        OnAfterAttack = 31, //攻擊時、受傷後如果還活著
+        OnBeforeDefend = 32, //受到攻擊時、受到傷害之前
+        OnAfterDefend = 33, //受到攻擊時、受傷後如果還活著
+        OnKill = 35,        //在攻擊中殺死另一張卡時
 
-        OnDeath = 40, //When dying
-        OnDeathOther = 42, //When another dying
+        OnDeath = 40, //臨終時
+        OnDeathOther = 42, //當另一個生物死去時
     }
 
     public enum AbilityTarget
@@ -540,18 +540,18 @@ namespace TcgEngine
         AllCardsHand = 11,
         AllCardsAllPiles = 12,
         AllSlots = 15,
-        AllCardData = 17,       //For card Create effects only
+        AllCardData = 17,       //僅適用於卡創建效果
 
-        PlayTarget = 20,        //The target selected at the same time the spell was played (spell only)      
-        AbilityTriggerer = 25,   //The card that triggered the trap
+        PlayTarget = 20,        //在施展法術的同時選擇的目標（僅限法術）      
+        AbilityTriggerer = 25,   //觸發陷阱的卡牌
 
-        SelectTarget = 30,        //Select a card, player or slot on board
-        CardSelector = 40,          //Card selector menu
-        ChoiceSelector = 50,        //Choice selector menu
+        SelectTarget = 30,        //選擇面板上的卡牌、玩家或插槽
+        CardSelector = 40,          //卡選擇器菜單
+        ChoiceSelector = 50,        //選擇選擇器菜單
 
-        LastPlayed = 70,            //Last card that was played
-        LastTargeted = 72,          //Last card that was targeted with an ability
-        LastKilled = 74,            //Last card that was killed
+        LastPlayed = 70,            //最後打出的牌
+        LastTargeted = 72,          //最後一張以能力為目標的卡牌
+        LastKilled = 74,            //最後一張被殺死的牌
 
     }
 

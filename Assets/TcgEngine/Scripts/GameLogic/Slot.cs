@@ -6,23 +6,23 @@ using Unity.Netcode;
 namespace TcgEngine
 {
     /// <summary>
-    /// Represent a slot in gameplay (data only)
+    /// 代表遊戲中的一個位置（僅數據）
     /// </summary>
 
     [System.Serializable]
     public struct Slot : INetworkSerializable
     {
         public int x; //From 1 to 5
-        public int y; //Not in use, could be used to add more rows or different locations on the board
-        public int p; //0 or 1, represent player ID
+        public int y; //未使用，可用於在板上添加更多行或不同位置
+        public int p; //0 or 1, 代表玩家ID
 
-        public static int x_min = 1; //Dont change this, should start at 1  (0,0,0 represent invalid slot)
-        public static int x_max = 5; //Number of slots in a row/zone
+        public static int x_min = 1; //不要改變這個，從 1 開始（0,0,0 代表無效槽）
+        public static int x_max = 5; //行/區域中的槽數
 
-        public static int y_min = 1; //Dont change this, should start at 1  (0,0,0 represent invalid slot)
-        public static int y_max = 1; //Set this to the number of rows/locations you want to have
+        public static int y_min = 1; //不要改變這個，從 1 開始（0,0,0 代表無效槽）
+        public static int y_max = 1; //將其設置為您想要的行數/位置數
 
-        public static bool ignore_p = false; //Set to true if you dont want to use P value
+        public static bool ignore_p = false; //如果不想使用 P 值，則設置為 true
 
         private static Dictionary<int, List<Slot>> player_slots = new Dictionary<int, List<Slot>>();
         private static List<Slot> all_slots = new List<Slot>();
@@ -63,14 +63,14 @@ namespace TcgEngine
             return Mathf.Abs(p - slot.p) <= range;
         }
 
-        //No Diagonal, Diagonal = 2 dist
+        //無對角線，對角線 = 2 距離
         public bool IsInDistanceStraight(Slot slot, int dist)
         {
             int r = Mathf.Abs(x - slot.x) + Mathf.Abs(y - slot.y) + Mathf.Abs(p - slot.p);
             return r <= dist;
         }
 
-        //Diagonal = 1 dist
+        //對角線 = 1 距離
         public bool IsInDistance(Slot slot, int dist)
         {
             int dx = Mathf.Abs(x - slot.x);
@@ -84,13 +84,13 @@ namespace TcgEngine
             return x == 0 && y == 0;
         }
 
-        //Check if the slot is valid one (or if out of board)
+        //檢查插槽是否有效（或者是否不在板上）
         public bool IsValid()
         {
             return x >= x_min && x <= x_max && y >= y_min && y <= y_max && p >= 0;
         }
 
-        //Return slot P-value of player, usually its same as player_id, unless we ignore P value then its 0 for all
+        //返回玩家的槽P值，通常與player_id相同，除非我們忽略P值，否則全部為0
         public static int GetP(int pid)
         {
             return ignore_p ? 0 : pid;

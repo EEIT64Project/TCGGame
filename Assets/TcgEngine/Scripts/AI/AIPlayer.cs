@@ -6,7 +6,7 @@ using TcgEngine.Gameplay;
 namespace TcgEngine.AI
 {
     /// <summary>
-    /// AI player base class, other AI inherit from this
+    /// AI玩家基類，其他AI繼承此
     /// </summary>
 
     public abstract class AIPlayer 
@@ -18,8 +18,8 @@ namespace TcgEngine.AI
 
         public virtual void Update()
         {
-            //Script called by game server to update AI
-            //Override this to let the AI play
+            //遊戲服務器調用腳本更新AI
+            //覆蓋此啟動AI
         }
 
         public bool CanPlay()
@@ -42,7 +42,7 @@ namespace TcgEngine.AI
 
     public enum AIType
     {
-        Random = 0,      //Dumb AI that just do random moves, useful for testing cards without getting destroyed
-        MiniMax = 10,    //Stronger AI using Minimax algo with alpha-beta pruning
+        Random = 0,      //最笨的AI，只會做隨機動作，測試卡牌用
+        MiniMax = 10,    //使用 Minimax 算法和 alpha-beta 剪枝增強人工智能
     }
 }

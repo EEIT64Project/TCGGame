@@ -8,23 +8,23 @@ using TcgEngine.Gameplay;
 namespace TcgEngine.AI
 {
     /// <summary>
-    /// Minimax algorithm for AI. 
+    /// AI 的極小極大算法
     /// </summary>
 
     public class AILogic
     {
-        //-------- AI Logic Params ------------------
+        //-------- AI Logic 參數 ------------------
 
-        public int ai_depth = 3;                //How many turns in advance does it check, higher number takes exponentially longer
-        public int ai_depth_wide = 1;           //For these first few turns, will consider more options, slow!
-        public int actions_per_turn = 2;        //AI wont execute more than this number of commands per turn
-        public int actions_per_turn_wide = 3;   //Same but in wide depth
-        public int actions_per_node = 4;         //In a single node, cannot evaluate more than this number of AIActions, if more, will only use the ones with best score
-        public int actions_per_node_wide = 7;    //Same but in wide depth
+        public int ai_depth = 3;                //提前檢查多少圈，次數越多，花費的時間就越長
+        public int ai_depth_wide = 1;           //對於最初的幾個回合，會考慮更多的選擇
+        public int actions_per_turn = 2;        //AI 每回合不會執行超過此數量的命令
+        public int actions_per_turn_wide = 3;   //如上但深度較廣
+        public int actions_per_node = 4;         //在單個節點中，無法評估超過此數量的AIActions，如果超過，僅使用得分最高的AIActions
+        public int actions_per_node_wide = 7;    //如上但深度較廣
 
         //-----
 
-        public int ai_player_id;                    //AI player_id  (usually its 1)
+        public int ai_player_id;                    //AIplayer_id（設定是1）
         public int ai_level = 10;                   //AI level
 
         private GameLogic game_logic;
@@ -54,7 +54,7 @@ namespace TcgEngine.AI
             job.ai_level = level;
 
             job.heuristic = new AIHeuristic(player_id, level);
-            job.game_logic = new GameLogic(true); //Skip all delays for the AI calculations
+            job.game_logic = new GameLogic(true); //跳過 AI 計算的所有延遲
 
             return job;
         }
@@ -64,10 +64,10 @@ namespace TcgEngine.AI
             if (running)
                 return;
 
-            game_data = Game.CloneNew(data);        //Clone game data to keep original data unaffected
-            game_logic.ClearResolve();                 //Clear temp memory
-            game_logic.SetData(game_data);          //Assign data to game logic
-            random_gen = new System.Random();       //Reset random seed
+            game_data = Game.CloneNew(data);        //複製遊戲數據，保持原始數據不受影響
+            game_logic.ClearResolve();                 //清除臨時內存
+            game_logic.SetData(game_data);          //將數據分配給遊戲邏輯
+            random_gen = new System.Random();       //重置隨機種子
 
             first_node = null;
             reached_depth = 0;
@@ -80,11 +80,11 @@ namespace TcgEngine.AI
         {
             running = true;
 
-            //Uncomment these lines to run on separate thread (and comment Execute()), better for production so it doesn't freeze the UI while calculating the AI
+            //取消註釋這些行以在單獨的線程上運行（並註釋 Execute()），這樣更適合生產，因此在計算 AI 時不會凍結 UI
             ai_thread = new Thread(Execute);
             ai_thread.Start();
 
-            //Uncomment this line to run on main thread (and comment the thread one), better for debuging since you will be able to use breakpoints, profiler and Debug.Log
+            //取消註釋此行以在主線程上運行（並註釋線程），這樣可以更好地進行調試，將能夠使用斷點、分析器和 Debug.Log
             //Execute();
         }
 
@@ -97,7 +97,7 @@ namespace TcgEngine.AI
 
         public void Execute()
         {
-            //Create first node
+            //創建第一個節點
             first_node = CreateNode(null, null, ai_player_id, 0, 0);
             first_node.hvalue = heuristic.CalculateHeuristic(game_data, first_node);
             first_node.alpha = int.MinValue;
@@ -106,18 +106,18 @@ namespace TcgEngine.AI
             Profiler.BeginSample("AI");
             System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
 
-            //Calculate first node
+            //計算第一個節點
             CalculateNode(game_data, first_node);
 
             Debug.Log("AI: Time " + watch.ElapsedMilliseconds + "ms Depth " + reached_depth + " Nodes " + nb_calculated);
             Profiler.EndSample();
 
-            //Save best move
+            //保存最佳動作
             best_move = first_node.best_child;
             running = false;
         }
 
-        //Add list of all possible orders and search in all of them
+        //添加所有可能order的列表並在所有orders中進行搜索
         private void CalculateNode(Game data, NodeState node)
         {
             Profiler.BeginSample("Add Orders");
@@ -129,21 +129,21 @@ namespace TcgEngine.AI
             {
                 if (data.selector == SelectorType.None)
                 {
-                    //Play card
+                    //打出卡牌
                     for (int c = 0; c < player.cards_hand.Count; c++)
                     {
                         Card card = player.cards_hand[c];
                         AddActions(action_list, data, node, GameAction.PlayCard, card);
                     }
 
-                    //Action on board
+                    //面板上的動作
                     for (int c = 0; c < player.cards_board.Count; c++)
                     {
                         Card card = player.cards_board[c];
                         AddActions(action_list, data, node, GameAction.Attack, card);
                         AddActions(action_list, data, node, GameAction.AttackPlayer, card);
                         AddActions(action_list, data, node, GameAction.CastAbility, card);
-                        //AddActions(action_list, data, node, GameAction.Move, card);        //Uncomment to consider move actions
+                        //AddActions(action_list, data, node, GameAction.Move, card);        //取消註釋以考慮移動操作
                     }
 
                     if (player.hero != null)
@@ -155,7 +155,7 @@ namespace TcgEngine.AI
                 }
             }
 
-            //End Turn (dont add action if ai can still attack player, or ai hasnt spent any mana)
+            //結束回合 (如果人工智能仍然可以攻擊玩家，或者人工智能沒有消耗任何法力，則不要添加動作)
             bool is_full_mana = HasAction(action_list, GameAction.PlayCard) && player.mana >= player.mana_max;
             bool can_attack_player = HasAction(action_list, GameAction.AttackPlayer);
             bool can_end = !can_attack_player && !is_full_mana && data.selector == SelectorType.None;
@@ -165,11 +165,11 @@ namespace TcgEngine.AI
                 action_list.Add(actiont);
             }
 
-            //Remove actions with low score
+            //刪除低分動作
             FilterActions(data, node, action_list);
             Profiler.EndSample();
 
-            //Execute valid action and search child node
+            //執行有效動作並蒐索子節點
             for (int o = 0; o < action_list.Count; o++)
             {
                 AIAction action = action_list[o];
@@ -183,7 +183,7 @@ namespace TcgEngine.AI
             list_pool.Dispose(action_list);
         }
 
-        //Mark valid/invalid on each action, if too many actions, will keep only the ones with best score
+        //對每個動作標記有效/無效，如果動作太多，將只保留得分最高的動作
         private void FilterActions(Game data, NodeState node, List<AIAction> action_list)
         {
             int count_valid = 0;
@@ -197,11 +197,11 @@ namespace TcgEngine.AI
             }
 
             int max_actions = node.tdepth < ai_depth_wide ? actions_per_node_wide : actions_per_node;
-            int max_actions_skip = max_actions + 2; //No need to calculate all scores if its just to remove 1-2 actions
+            int max_actions_skip = max_actions + 2; //如果只是刪除1-2個動作，則無需計算所有分數
             if (count_valid <= max_actions_skip)
-                return; //No filtering needed
+                return; //無需過濾
 
-            //Calculate scores
+            //計算分數
             for (int o = 0; o < action_list.Count; o++)
             {
                 AIAction action = action_list[o];
@@ -211,7 +211,7 @@ namespace TcgEngine.AI
                 }
             }
 
-            //Sort, and invalidate actions with low score
+            //排序並使低分動作無效
             action_list.Sort((AIAction a, AIAction b) => { return b.score.CompareTo(a.score); });
             for (int o = 0; o < action_list.Count; o++)
             {
@@ -220,7 +220,7 @@ namespace TcgEngine.AI
             }
         }
 
-        //Create a child node for parent, and calculate it
+        //為parent創建子節點，並計算
         private void CalculateChildNode(Game data, NodeState parent, AIAction action)
         {
             if (action.type == GameAction.None)
@@ -228,7 +228,7 @@ namespace TcgEngine.AI
 
             int player_id = data.current_player;
 
-            //Clone data so we can update it in a new node
+            //複製數據，以便可以在新節點中更新它
             Profiler.BeginSample("Clone Data");
             Game ndata = data_pool.Create();
             Game.Clone(data, ndata); //Clone
@@ -236,12 +236,12 @@ namespace TcgEngine.AI
             game_logic.SetData(ndata);
             Profiler.EndSample();
 
-            //Execute move and update data
+            //執行移動並更新數據
             Profiler.BeginSample("Execute AIAction");
             DoAIAction(ndata, action, player_id);
             Profiler.EndSample();
 
-            //Update depth
+            //更新深度
             bool new_turn = action.type == GameAction.EndTurn;
             int next_tdepth = parent.tdepth;
             int next_taction = parent.taction + 1;
@@ -252,31 +252,31 @@ namespace TcgEngine.AI
                 next_taction = 0;
             }
 
-            //Create node
+            //創建節點
             Profiler.BeginSample("Create Node");
             NodeState child_node = CreateNode(parent, action, player_id, next_tdepth, next_taction);
             parent.childs.Add(child_node);
             Profiler.EndSample();
 
-            //Calculate Quick heuristic for win conditions
+            //計算獲勝條件的快速函式
             child_node.hvalue = heuristic.CalculateWinHeuristic(ndata, child_node);
 
-            //Set minimum sort for next AIActions, if new turn, reset to 0
+            //設置下一個AIActions的最小排序，如果是新回合，則重置為0
             child_node.sort_min = new_turn ? 0 : Mathf.Max(action.sort, child_node.sort_min);
 
-            //If win or reached max depth, stop searching deeper
+            //如果獲勝或達到最大深度，則停止更深的搜索
             if (!heuristic.IsWin(child_node) && child_node.tdepth < ai_depth)
             {
-                //Calculate child
+                //計算子節點
                 CalculateNode(ndata, child_node);
             }
             else
             {
-                //End of tree, calculate full Heuristic
+                //計算完整的函式
                 child_node.hvalue = heuristic.CalculateHeuristic(ndata, child_node, child_node.hvalue);
             }
 
-            //Update parents hvalue, alpha, beta, and best child
+            //更新parents hvalue、alpha、beta 和最佳子節點
             if (player_id == ai_player_id)
             {
                 //AI player
@@ -289,7 +289,7 @@ namespace TcgEngine.AI
             }
             else
             {
-                //Opponent player
+                //對手
                 if (parent.best_child == null || child_node.hvalue < parent.hvalue)
                 {
                     parent.best_child = child_node;
@@ -298,13 +298,13 @@ namespace TcgEngine.AI
                 }
             }
 
-            //Just for debug, keep track of node/depth count
+            //用於調試，跟踪節點/深度計數
             nb_calculated++;
             if (child_node.tdepth > reached_depth)
                 reached_depth = child_node.tdepth;
 
-            //We are done with this game data, dispose it.
-            //Dont dispose NodeState here (node_pool) since we want to retrieve the full tree path later
+            //處理完這個遊戲數據，將其處理掉。
+            //不處理 NodeState (node_pool)，因為想稍後檢索完整的路徑
             data_pool.Dispose(ndata);
         }
 
@@ -323,7 +323,7 @@ namespace TcgEngine.AI
             return nnode;
         }
 
-        //Add all possible moves for card to list of actions
+        //將卡牌所有可能的動作添加到動作列表中
         private void AddActions(List<AIAction> actions, Game data, NodeState node, ushort type, Card card)
         {
             Player player = data.GetPlayer(data.current_player);
@@ -338,7 +338,7 @@ namespace TcgEngine.AI
             {
                 if (card.CardData.IsBoardCard())
                 {
-                    //Doesn't matter where the card is played
+                    //這張牌打在哪裡並不重要
                     Slot slot = Slot.None;
                     List<Slot> slots = player.GetEmptySlots();
                     if (slots.Count > 0)
@@ -456,7 +456,7 @@ namespace TcgEngine.AI
             }
         }
 
-        //Add all possible moves for a selection
+        //添加所有可能的動作以進行選擇
         private void AddSelectActions(List<AIAction> actions, Game data, NodeState node)
         {
             if (data.selector == SelectorType.None)
@@ -527,7 +527,7 @@ namespace TcgEngine.AI
                 }
             }
 
-            //Add option to cancel, if no valid options
+            //添加取消選項（如果沒有有效選項）
             if (actions.Count == 0)
             {
                 AIAction caction = CreateAction(GameAction.CancelSelect, caster);
@@ -554,7 +554,7 @@ namespace TcgEngine.AI
             return action;
         }
 
-        //Simulate AI action
+        //模擬AI動作
         private void DoAIAction(Game data, AIAction action, int player_id)
         {
             Player player = data.GetPlayer(player_id);
@@ -679,7 +679,7 @@ namespace TcgEngine.AI
             action_pool.DisposeAll();
             list_pool.DisposeAll();
 
-            System.GC.Collect(); //Free memory from AI
+            System.GC.Collect(); //從 AI 中釋放內存
         }
 
         public int GetNbNodesCalculated()
@@ -715,12 +715,12 @@ namespace TcgEngine.AI
 
     public class NodeState
     {
-        public int tdepth;      //Depth in number of turns
-        public int taction;     //How many orders in current turn
-        public int sort_min;    //Sorting minimum value, orders below this value will be ignored to avoid calculate both path A -> B and path B -> A
-        public int hvalue;      //Heuristic value, this AI tries to maximize it, opponent tries to minimize it
-        public int alpha;       //Highest heuristic reached by the AI player, used for optimization and ignore some tree branch
-        public int beta;        //Lowest heuristic reached by the opponent player, used for optimization and ignore some tree branch
+        public int tdepth;      //深度（圈數）
+        public int taction;     //當前回合有多少orders
+        public int sort_min;    //排序最小值，低於該值的順序將被忽略，以避免同時計算路徑 A -> B 和路徑 B -> A
+        public int hvalue;      //函式價值，人工智能試圖最大化它，對手試圖最小化它
+        public int alpha;       //AI玩家達到的最高函式，用於優化並忽略一些分支
+        public int beta;        //對手玩家達到的最低函式，用於優化並忽略某些分支
 
         public AIAction last_action = null;
         public int current_player;
@@ -760,9 +760,9 @@ namespace TcgEngine.AI
         public Slot slot;
         public int value;
 
-        public int score;           //Score to determine which orders get cut and ignored
-        public int sort;            //Orders must be executed in sort order
-        public bool valid;          //If false, this order will be ignored
+        public int score;           //評分以確定哪些orders被削減和忽略
+        public int sort;            //Orders 必須按排序順序執行
+        public bool valid;          //如果為 false，則該order將被忽略
 
         public AIAction() { }
         public AIAction(ushort t) { type = t; }

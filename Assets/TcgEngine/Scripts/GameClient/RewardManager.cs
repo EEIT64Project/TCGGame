@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TcgEngine.Client
 {
-    //Grants rewards for adventure solo mode
+    //為冒險單人模式提供獎勵
 
     public class RewardManager : MonoBehaviour
     {

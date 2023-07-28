@@ -8,8 +8,8 @@ using TcgEngine.UI;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Script that contain main controls for clicking on cards, attacking, activating abilities
-    /// Holds the currently selected card and will send action to GameClient on click release
+    /// 包含用於點擊卡牌、攻擊、激活能力的主要控件的腳本
+    /// 保存當前選定的卡牌，並在單擊釋放時將操作發送到 GameClient
     /// </summary>
 
     public class PlayerControls : MonoBehaviour
@@ -47,12 +47,12 @@ namespace TcgEngine.Client
 
             if (gdata.selector == SelectorType.SelectTarget && player_id == gdata.selector_player)
             {
-                //Target selector, select this card
+                //目標選擇器，選擇這張卡
                 GameClient.Get().SelectCard(bcard.GetCard());
             }
             else if (gdata.state == GameState.Play && gdata.selector == SelectorType.None && yourcard && yourturn)
             {
-                //Start dragging card
+                //開始拖動卡片
                 selected_card = bcard;
             }
         }
@@ -61,7 +61,7 @@ namespace TcgEngine.Client
         {
             if (!Input.GetMouseButton(0))
             {
-                //Nothing on right-click
+                //右鍵什麼也沒有
             }
         }
 

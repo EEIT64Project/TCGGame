@@ -5,9 +5,9 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// Defines all fixed deck data (for user custom decks, check UserData.cs)
+    /// 定義所有固定牌組數據（對於用戶自定義牌組，請檢查 UserData.cs）
     /// </summary>
-    
+
     [CreateAssetMenu(fileName = "DeckData", menuName = "TcgEngine/DeckData", order = 7)]
     public class DeckData : ScriptableObject
     {

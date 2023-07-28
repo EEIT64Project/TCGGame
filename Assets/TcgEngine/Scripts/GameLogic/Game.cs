@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TcgEngine
 {
-    //Contains all gameplay state data that is sync across network
+    //包含跨網絡同步的所有遊戲狀態數據
 
     [System.Serializable]
     public class Game
@@ -13,7 +13,7 @@ namespace TcgEngine
         public GameSettings settings;
         public string game_uid;
 
-        //Game state
+        //遊戲狀態
         public int first_player = 0;
         public int current_player = -1;
         public int turn_count = 0;
@@ -21,23 +21,23 @@ namespace TcgEngine
 
         public GameState state = GameState.Connecting;
 
-        //Players
+        //玩家
         public Player[] players;
 
-        //Selector
+        //選擇器
         public SelectorType selector = SelectorType.None;
         public int selector_player = 0;
         public string selector_ability_id;
         public string selector_caster_uid;
 
-        //Other values
+        //其他值
         public Card last_played;
         public Card last_target;
         public Card last_killed;
         public Card ability_triggerer;
         public int rolled_value;
 
-        //Other arrays 
+        //其他陣列 
         public HashSet<string> ability_played = new HashSet<string>();
         public HashSet<string> cards_attacked = new HashSet<string>();
 
@@ -75,7 +75,7 @@ namespace TcgEngine
             return ready >= nb_players;
         }
 
-        //Check if its player's turn
+        //檢查是否輪到其玩家
         public virtual bool IsPlayerTurn(Player player)
         {
             return IsPlayerActionTurn(player) || IsPlayerSelectorTurn(player);
@@ -92,8 +92,8 @@ namespace TcgEngine
             return player != null && selector_player == player.player_id 
                 && state == GameState.Play && selector != SelectorType.None;
         }
-        
-        //Check if a card is allowed to be played on slot
+
+        //檢查某張牌是否允許在空槽上打出
         public virtual bool CanPlayCard(Card card, Slot slot, bool skip_cost = false)
         {
             if (card == null)
@@ -101,64 +101,64 @@ namespace TcgEngine
 
             Player player = GetPlayer(card.player_id);
             if (!skip_cost && !player.CanPayMana(card))
-                return false; //Cant pay mana
+                return false; //無法支付法力
             if (!player.HasCard(player.cards_hand, card))
-                return false; // Card not in hand
+                return false; // 卡不在手
 
             if (card.CardData.IsBoardCard())
             {
                 if (!slot.IsValid() || IsCardOnSlot(slot))
-                    return false;   //Slot already occupied
+                    return false;   //槽位已被佔用
                 if (Slot.GetP(card.player_id) != slot.p)
-                    return false; //Cant play on opponent side
+                    return false; //不能打在對手方
                 return true;
             }
             if (card.CardData.IsRequireTarget())
             {
-                return IsPlayTargetValid(card, slot); //Check play target on slot
+                return IsPlayTargetValid(card, slot); //檢查插槽上的播放目標
             }
             return true;
         }
 
-        //Check if a card is allowed to move to slot
+        //檢查是否允許將卡移動到插槽
         public virtual bool CanMoveCard(Card card, Slot slot, bool skip_cost = false)
         {
             if (card == null || !slot.IsValid())
                 return false;
 
             if (!card.CanMove(skip_cost))
-                return false; //Card cant move
+                return false; //卡不能移動
 
             if (Slot.GetP(card.player_id) != slot.p)
-                return false; //Card played wrong side
+                return false; //牌打錯了位置
 
             if (card.slot == slot)
-                return false; //Cant move to same slot
+                return false; //無法移動到同一個插槽
 
             Card slot_card = GetSlotCard(slot);
             if (slot_card != null)
-                return false; //Already a card there
+                return false; //那裡已經有卡了
 
             return true;
         }
 
-        //Check if a card is allowed to attack a player
+        //檢查是否允許卡牌攻擊玩家
         public virtual bool CanAttackTarget(Card attacker, Player target, bool skip_cost = false)
         {
             if(attacker == null || target == null)
                 return false;
 
             if (!attacker.CanAttack(skip_cost))
-                return false; //Card cant attack
+                return false; //卡牌無法攻擊
 
             if (attacker.player_id == target.player_id)
-                return false; //Cant attack same player
+                return false; //無法攻擊同一玩家
 
             if (!IsOnBoard(attacker) || !attacker.CardData.IsCharacter())
-                return false; //Cards not on board
+                return false; //卡未帶上面板
 
             if (target.HasStatusEffect(StatusType.Protected) && !attacker.HasStatus(StatusType.Flying))
-                return false; //Protected by taunt
+                return false; //受到嘲諷保護
 
             return true;
         }
@@ -208,7 +208,7 @@ namespace TcgEngine
             return true;
         }
 
-        //Check if Player play target is valid, play target is the target when a spell requires to drag directly onto another card
+        //檢查玩家播放目標是否有效，播放目標是咒語需要直接拖到另一張卡上時的目標
         public virtual bool IsPlayTargetValid(Card caster, Player target, bool ai_check = false)
         {
             if (caster == null || target == null)
@@ -226,7 +226,7 @@ namespace TcgEngine
             return true;
         }
 
-        //Check if Card play target is valid, play target is the target when a spell requires to drag directly onto another card
+        //檢查卡牌打出目標是否有效，打出目標是咒語需要直接拖到另一張卡上時的目標
         public virtual bool IsPlayTargetValid(Card caster, Card target, bool ai_check = false)
         {
             if (caster == null || target == null)
@@ -244,18 +244,18 @@ namespace TcgEngine
             return true;
         }
 
-        //Check if Slot play target is valid, play target is the target when a spell requires to drag directly onto another card
+        //檢查插槽播放目標是否有效，播放目標是咒語需要直接拖到另一張卡上時的目標
         public virtual bool IsPlayTargetValid(Card caster, Slot target, bool ai_check = false)
         {
             if (caster == null || target == null)
                 return false;
 
             if (target.IsPlayerSlot())
-                return IsPlayTargetValid(caster, GetPlayer(target.p)); //Slot 0,0, means we are targeting a player
+                return IsPlayTargetValid(caster, GetPlayer(target.p)); //插槽 0,0，表示我們正在瞄準一個玩家
 
             Card slot_card = GetSlotCard(target);
             if (slot_card != null)
-                return IsPlayTargetValid(caster, slot_card, ai_check); //Slot has card, check play target on that card
+                return IsPlayTargetValid(caster, slot_card, ai_check); //插槽有卡，檢查該卡上的播放目標
 
             foreach (AbilityData ability in caster.CardData.abilities)
             {
@@ -452,7 +452,7 @@ namespace TcgEngine
             return state == GameState.GameEnded;
         }
 
-        //Same as clone, but also instantiates the variable (much slower)
+        //與複製相同，但也實例化變量（慢得多）
         public static Game CloneNew(Game source)
         {
             Game game = new Game();
@@ -460,7 +460,7 @@ namespace TcgEngine
             return game;
         }
 
-        //Clone all variables into another var, used mostly by the AI when building a prediction tree
+        //將所有變量複製到另一個變量中，主要由人工智能在構建預測分支時使用
         public static void Clone(Game source, Game dest)
         {
             dest.game_uid = source.game_uid;
@@ -489,7 +489,7 @@ namespace TcgEngine
             dest.selector_ability_id = source.selector_ability_id;
             dest.rolled_value = source.rolled_value;
 
-            //Some values are commented for optimization, you can uncomment if you want more accurate slower AI
+            //一些值被註釋以進行優化，如果想要更準確更慢的AI，可以取消註釋
             //Card.CloneNull(source.last_played, ref dest.last_played);
             //Card.CloneNull(source.last_killed, ref dest.last_killed);
             //Card.CloneNull(source.last_target, ref dest.last_target);
@@ -510,12 +510,12 @@ namespace TcgEngine
     [System.Serializable]
     public enum GameState
     {
-        Connecting = 0, //Players are not connected
-        Starting = 1,  //Players are ready and connected, game is setting-up
+        Connecting = 0, //玩家未連接
+        Starting = 1,  //玩家已準備好並已連接，遊戲正在設置
 
-        StartTurn = 10, //Start of turn effects
-        Play = 20,      //Play step
-        EndTurn = 30,   //End of turn effects
+        StartTurn = 10, //回合開始效果
+        Play = 20,      //播放步驟
+        EndTurn = 30,   //回合結束效果
 
         GameEnded = 99,
     }

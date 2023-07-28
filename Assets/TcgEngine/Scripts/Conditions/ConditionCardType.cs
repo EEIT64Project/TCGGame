@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// Condition that checks the type, team and traits of a card
+    /// 檢查卡牌類型、陣營和特徵的條件
     /// </summary>
 
     [CreateAssetMenu(fileName = "condition", menuName = "TcgEngine/Condition/CardType", order = 10)]
@@ -25,12 +25,12 @@ namespace TcgEngine
 
         public override bool IsTargetConditionMet(Game data, AbilityData ability, Card caster, Player target)
         {
-            return false; //Not a card
+            return false; //非卡牌
         }
 
         public override bool IsTargetConditionMet(Game data, AbilityData ability, Card caster, Slot target)
         {
-            return false; //Not a card
+            return false; //非卡牌
         }
 
         public override bool IsTargetConditionMet(Game data, AbilityData ability, Card caster, CardData target)

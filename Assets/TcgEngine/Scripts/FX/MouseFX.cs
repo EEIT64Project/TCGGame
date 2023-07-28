@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TcgEngine.FX
 {
     /// <summary>
-    /// FX that follows the mouse
+    /// 跟隨鼠標的 FX
     /// </summary>
 
     public class MouseFX : MonoBehaviour
@@ -17,7 +17,7 @@ namespace TcgEngine.FX
 
         }
 
-        // Update is called once per frame
+        // 每幀調用一次更新
         void Update()
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

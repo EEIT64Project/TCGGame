@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace TcgEngine.FX
 {
     /// <summary>
-    /// Useful tool to define animation sequences on materials
+    /// 用於定義材質動畫序列的有用工具
     /// </summary>
 
     public class AnimMatFX : MonoBehaviour

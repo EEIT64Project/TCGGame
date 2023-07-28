@@ -5,30 +5,30 @@ using UnityEngine;
 namespace TcgEngine.AI
 {
     /// <summary>
-    /// Values and calculations for various values of the AI decision-making, adjusting these can improve your AI
-    /// Heuristic: Represent the score of a board state, high score favor AI, low score favor the opponent
-    /// Action Score: Represent the score of an individual action, to proritize actions if too many in a single node
-    /// Action Sort Order: Value to determine the order actions should be executed in a single turn to avoid searching same things in different order, executed in ascending order
+    /// AI決策的數值和計算
+    /// Heuristic：代表面板上狀態的得分，高分有利於AI，低分有利於對手
+    /// 動作得分：表示單個動作的得分，如果單個節點中的動作太多，則優先考慮動作
+    /// Action Sort Order：確定動作單輪執行順序的值，以避免不同順序搜索相同的內容，按升序執行
     /// </summary>
 
     public class AIHeuristic
     {
-        //---------- Heuristic PARAMS -------------
+        //---------- Heuristic 參數 -------------
 
-        public int board_card_value = 10;       //Score of having cards on board
-        public int hand_card_value = 5;         //Score of having cards in hand
-        public int kill_value = 5;              //Score of killing a card
+        public int board_card_value = 10;       //面板上的持卡分數
+        public int hand_card_value = 5;         //手牌上的持卡分數
+        public int kill_value = 5;              //殺死卡牌的分數
 
-        public int player_hp_value = 4;         //Score per player hp
-        public int card_attack_value = 3;       //Score per board card attack
-        public int card_hp_value = 2;           //Score per board card hp
-        public int card_status_value = 5;       //Score per status on card (multiplied by hvalue of StatusData)
+        public int player_hp_value = 4;         //每個玩家HP得分
+        public int card_attack_value = 3;       //面板上的卡牌攻擊得分
+        public int card_hp_value = 2;           //面板上每張卡牌的HP得分
+        public int card_status_value = 5;       //卡上每個狀態的分數（乘以 StatusData 的 h 值）
 
         //-----------
 
-        private int ai_player_id;           //ID of this AI, usually the human is 0 and AI is 1
-        private int ai_level;               //ai level (level 10 is the best, level 1 is the worst)
-        private int heuristic_modifier;     //Randomize heuristic for lower level ai
+        private int ai_player_id;           //該AI的ID，設定玩家為0，AI為1
+        private int ai_level;               //AI等級（設定10級最好，1級最差）
+        private int heuristic_modifier;     //較低級別人工智能的隨機函式
         private System.Random random_gen;
 
         public AIHeuristic(int player_id, int level)
@@ -39,7 +39,7 @@ namespace TcgEngine.AI
             random_gen = new System.Random();
         }
 
-        //Caculate the full heuristic (winscore + fullscore)
+        //計算完整函式（winscore + fullscore）
         public int CalculateHeuristic(Game data, NodeState node)
         {
             Player aiplayer = data.GetPlayer(ai_player_id);
@@ -48,7 +48,7 @@ namespace TcgEngine.AI
             return CalculateHeuristic(data, node, aiplayer, oplayer, winscore);
         }
 
-        //Calculate full heuristic if you already pre-calculed the winscore
+        //如果已經預先計算了勝利分數，則計算完整的函式
         public int CalculateHeuristic(Game data, NodeState node, int winscore)
         {
             Player aiplayer = data.GetPlayer(ai_player_id);
@@ -56,13 +56,13 @@ namespace TcgEngine.AI
             return CalculateHeuristic(data, node, aiplayer, oplayer, winscore);
         }
 
-        //Calculate full heuristic if you already pre-calculed the winscore
-        //Should return a value between -10000 and 10000 (to not confuse it with a win)
+        //如果已經預先計算了勝利分數，則計算完整的函式
+        //返回 -10000 到 10000 之間的值（不要將其與勝利混淆）
         public int CalculateHeuristic(Game data, NodeState node, Player aiplayer, Player oplayer, int winscore)
         {
             int score = winscore;
 
-            //Board state
+            //面板狀態
             score += aiplayer.cards_board.Count * board_card_value;
             score += aiplayer.cards_hand.Count * hand_card_value;
             score += aiplayer.kill_count * kill_value;
@@ -101,7 +101,7 @@ namespace TcgEngine.AI
             return score;
         }
 
-        //Calculate win score only, useful to know you can stop searching down a path if there is already a win
+        //僅計算勝利分數，如果已經有勝利，可以停止搜索路徑
         public int CalculateWinHeuristic(Game data, NodeState node)
         {
             Player aiplayer = data.GetPlayer(ai_player_id);
@@ -110,8 +110,8 @@ namespace TcgEngine.AI
             return score;
         }
 
-        //Calculate win score only, useful to know you can stop searching down a path if there is already a win
-        //Should return more than 50000 or less than -50000
+        //僅計算勝利分數，如果已經有勝利，可以停止搜索路徑
+        //返回大於 50000 或小於 -50000
         private int CalculateWinHeuristic(Game data, NodeState node, Player aiplayer, Player oplayer)
         {
             int score = 0;
@@ -125,9 +125,9 @@ namespace TcgEngine.AI
             return score;
         }
 
-        //This calculates the score of an individual action, instead of the board state
-        //When too many actions are possible in a single node, only the ones with best action score will be evaluated
-        //Make sure to return a positive value
+        //這計算的是單個動作的分數，非面板狀態
+        //當單個節點中可能有太多操作時，只有具有最佳操作得分的操作才會被評估
+        //確保返回正值
         public int CalculateActionScore(Game data, AIAction order)
         {
             if (order.type == GameAction.EndTurn)
@@ -171,20 +171,20 @@ namespace TcgEngine.AI
                 return 150;
             }
 
-            return 100; //Other orders are better than End/Cancel
+            return 100; //其他order比結束/取消更好
         }
 
-        //Within the same turn, actions can only be executed in sorting order, make sure it returns positive value higher than 0 or it wont be sorted
-        //This prevents calculating all possibilities of A->B->C  B->C->A   C->A->B  etc..
-        //If two AIActions with same sorting value, or if storing value is 0, ai will test all ordering variations (slower)
-        //This would not be necessary in a game with only 1 action per turn (such as chess) but is useful for AI that can perform multiple actions in 1 turn
-        //Ordering could be improved, pretty much random now
+        //同一回合內，動作只能按排序順序執行，確保返回大於0的正值，否則不會排序
+        //可以防止計算 A->B->C B->C->A C->A->B 等的所有可能性。
+        //如果兩個 AIAction 具有相同的排序值，或者存儲值為 0，ai 將測試所有排序變化（較慢）
+        //讓AI可以在 1 回合內執行多個動作
+        //暫定隨機排序
         public int CalculateActionSort(Game data, AIAction order)
         {
             if (order.type == GameAction.EndTurn)
-                return 0; //End turn can always be performed, 0 means any order
+                return 0; //結束回合動作一定可以執行，0表示任意順序
             if (data.selector != SelectorType.None)
-                return 0; //Selector actions not affected by sorting
+                return 0; //選擇能力的操作不受排序影響
 
             Card card = data.GetCard(order.card_uid);
             Card target = order.target_uid != null ? data.GetCard(order.target_uid) : null;
@@ -192,17 +192,17 @@ namespace TcgEngine.AI
 
             int type_sort = 0;
             if (order.type == GameAction.PlayCard && is_spell)
-                type_sort = 1; //Positive Spells
+                type_sort = 1; //積極使用咒語類
             if (order.type == GameAction.CastAbility)
-                type_sort = 2; //Card Abilities
+                type_sort = 2; //卡牌能力
             if (order.type == GameAction.Move)
-                type_sort = 3; //Move
+                type_sort = 3; //移動
             if (order.type == GameAction.Attack)
-                type_sort = 4; //Attacks
+                type_sort = 4; //攻擊
             if (order.type == GameAction.AttackPlayer)
-                type_sort = 5; //Player attacks
+                type_sort = 5; //攻擊玩家
             if (order.type == GameAction.PlayCard && !is_spell)
-                type_sort = 7; //Characters
+                type_sort = 7; //生物
 
             int card_sort = card.Hash % 100;
             int target_sort = target != null ? (target.Hash % 100) : 0;
@@ -210,7 +210,7 @@ namespace TcgEngine.AI
             return sort;
         }
 
-        //Lower level AI add a random number to their heuristic
+        //較低級別的人工智能在函式中添加一個隨機數
         private int GetHeuristicModifier()
         {
             if (ai_level >= 10)
@@ -236,7 +236,7 @@ namespace TcgEngine.AI
             return 0;
         }
 
-        //Check if this node represent one of the players winning
+        //檢查該節點是否代表獲勝的玩家之一
         public bool IsWin(NodeState node)
         {
             return node.hvalue > 50000 || node.hvalue < -50000;

@@ -5,9 +5,9 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// Compares cards or players custom stats
+    /// 比較卡牌或玩家的自定義統計數據
     /// </summary>
-    
+
     [CreateAssetMenu(fileName = "condition", menuName = "TcgEngine/Condition/StatCustom", order = 10)]
     public class ConditionStatCustom : ConditionData
     {

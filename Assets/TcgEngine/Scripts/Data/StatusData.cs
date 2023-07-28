@@ -9,34 +9,34 @@ namespace TcgEngine
     {
         None = 0,
 
-        AttackBonus = 4,      //Attack status can be used for attack boost limited for X turns 
-        HPBonus = 5,          //Attack status can be used for hp boost limited for X turns 
+        AttackBonus = 4,      //攻擊狀態可用於攻擊提升，限制 X 回合 
+        HPBonus = 5,          //攻擊狀態可用於HP提升，限制X回合 
 
-        Stealth = 10,       //Cant be attacked until do action
-        Invincibility = 12, //Cant be attacked for X turns
-        Shell = 13,         //Receives no damage the first time
-        Protection = 14,    //Taunt, gives Protected to other cards
-        Protected = 15,     //Cards that are protected by taunt
-        Armor = 16,         //Receives less damage
-        SpellImmunity = 18, //Cant be targeted/damaged by spells
+        Stealth = 10,       //行動之前無法受到攻擊
+        Invincibility = 12, //X回合內無法被攻擊
+        Shell = 13,         //第一次沒有受到任何傷害
+        Protection = 14,    //嘲諷，為其他卡牌提供保護
+        Protected = 15,     //受嘲諷保護的卡牌
+        Armor = 16,         //受到較少的傷害
+        SpellImmunity = 18, //無法被法術瞄準/傷害
 
-        Deathtouch = 20,    //Kills when attacking a character
-        Fury = 22,          //Can attack twice per turn
-        Flying = 24,         //Can ignore taunt
-        Trample = 26,         //Extra damage is assigned to player
+        Deathtouch = 20,    //攻擊角色時死亡
+        Fury = 22,          //每回合可攻擊兩次
+        Flying = 24,         //可以無視嘲諷
+        Trample = 26,         //額外傷害分配給玩家
 
-        Silenced = 30,      //All abilities canceled
-        Paralysed = 32,     //Cant do any actions for X turns
-        Poisoned = 34,     //Lose hp each start of turn
-        Sleep = 36,         //Doesnt untap at the start of turn
+        Silenced = 30,      //所有能力被取消
+        Paralysed = 32,     //X 回合內無法執行任何操作
+        Poisoned = 34,     //每次回合開始都會失去生命值
+        Sleep = 36,         //在回合開始時不重置
 
 
     }
 
     /// <summary>
-    /// Defines all status effects data
-    /// Status are effects that can be gained or lost with abilities, and that will affect gameplay
-    /// Status can have a duration
+    /// 定義所有狀態效果數據
+    /// 狀態是可以通過能力獲得或失去的效果，並且會影響遊戲玩法
+    /// 狀態可以有持續時間
     /// </summary>
 
     [CreateAssetMenu(fileName = "status", menuName = "TcgEngine/StatusData", order = 7)]

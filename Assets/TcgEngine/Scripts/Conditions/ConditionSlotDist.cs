@@ -5,8 +5,8 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// SlotDist is the travel distance from the caster to the target
-    /// Unlike SlotRange which is just checking each X,Y,P separately
+    /// SlotDist 是從施法者到目標的行進距離
+    /// 與 SlotRange 不同，SlotRange 只分別檢查每個 X、Y、P
     /// </summary>
 
     [CreateAssetMenu(fileName = "condition", menuName = "TcgEngine/Condition/SlotDist", order = 11)]

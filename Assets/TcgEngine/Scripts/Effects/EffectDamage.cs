@@ -6,7 +6,7 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Effect that damages a card or a player (lose hp)
+    /// 對卡牌或玩家造成傷害的效果（失去生命值）
     /// </summary>
 
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/Damage", order = 10)]
@@ -19,7 +19,7 @@ namespace TcgEngine
             int damage = GetDamage(logic.GameData, caster, ability.value);
             target.hp -= damage;
             target.hp = Mathf.Clamp(target.hp, 0, target.hp_max);
-            //At the end of turn, CheckForWinner will check if player is dead
+            //在回合結束時，CheckForWinner 將檢查玩家是否死亡
         }
 
         public override void DoEffect(GameLogic logic, AbilityData ability, Card caster, Card target)

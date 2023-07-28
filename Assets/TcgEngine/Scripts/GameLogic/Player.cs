@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TcgEngine
 {
-    //Represent the current state of a player during the game (data only)
+    //表示玩家在遊戲過程中的當前狀態（僅數據）
 
     [System.Serializable]
     public class Player
@@ -17,8 +17,8 @@ namespace TcgEngine
         public bool is_ai = false;
         public int ai_level;
 
-        public bool connected = false; //Connected to server and game
-        public bool ready = false;     //Sent all player data, ready to play
+        public bool connected = false; //連接到服務器和遊戲
+        public bool ready = false;     //已發送所有玩家數據，準備開始比賽
 
         public int hp;
         public int hp_max;
@@ -51,7 +51,7 @@ namespace TcgEngine
 
         public virtual void CleanOngoing() { ongoing_status.Clear(); ongoing_traits.Clear(); }
 
-        //---- Cards ---------
+        //---- 卡牌 ---------
 
         public void AddCard(List<Card> card_list, Card card)
         {
@@ -153,7 +153,7 @@ namespace TcgEngine
         }
 
 
-        //---- Slots ---------
+        //---- 面板空槽 ---------
 
         public Slot GetRandomSlot(System.Random rand)
         {
@@ -180,7 +180,7 @@ namespace TcgEngine
             return valid;
         }
 
-        //------ Custom Traits/Stats ---------
+        //------ 自定義特徵/統計數據 ---------
 
         public void SetTrait(string id, int value)
         {
@@ -292,7 +292,7 @@ namespace TcgEngine
             return false;
         }
 
-        //---- Status ---------
+        //---- 狀態 ---------
 
         public void AddStatus(StatusData status, int value, int duration)
         {
@@ -391,7 +391,7 @@ namespace TcgEngine
             return status1.value + status2.value;
         }
 
-        //---- History ---------
+        //---- 歷史資訊 ---------
 
         public void AddHistory(ushort type, Card card)
         {
@@ -466,7 +466,7 @@ namespace TcgEngine
         }
 
 
-        //---- Action Check ---------
+        //---- 動作檢查 ---------
 
         public virtual bool CanPayMana(Card card)
         {
@@ -495,7 +495,7 @@ namespace TcgEngine
 
         //--------------------
 
-        //Clone all player variables into another var, used mostly by the AI when building a prediction tree
+        //將所有玩家變量複製到另一個變量中，主要由 AI 在構建預測分支時使用
         public static void Clone(Player source, Player dest)
         {
             dest.player_id = source.player_id;

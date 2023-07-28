@@ -6,7 +6,7 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Effect that sets basic stats (hp/attack/mana) to a specific value
+    /// 將基本統計數據（hp/attack/mana）設置為特定值的效果
     /// </summary>
 
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/SetStat", order = 10)]
@@ -54,12 +54,12 @@ namespace TcgEngine
         public override int GetAiValue(AbilityData ability)
         {
             if (type == EffectStatType.Mana)
-                return 0; //Mana unclear, depend of target (good for player, bad for card)
+                return 0; //法力值不明確，取決於目標（對玩家有利，對卡牌不利）
 
             if (ability.value <= 3)
-                return -1; //Set to low value
+                return -1; //設置為低值
             if (ability.value >= 7)
-                return 1; //Set to high value
+                return 1; //設置為高值
             return 0;
         }
     }

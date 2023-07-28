@@ -6,7 +6,7 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Effect that adds or removes basic card/player stats such as hp, attack, mana, by the value of the dice roll
+    /// 通過擲骰子的值添加或刪除基本卡牌/玩家統計數據（例如生命值、攻擊力、法力值）的效果
     /// </summary>
 
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/AddStatRoll", order = 10)]

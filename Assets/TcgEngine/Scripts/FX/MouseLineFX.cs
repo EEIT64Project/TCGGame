@@ -7,7 +7,7 @@ using TcgEngine;
 namespace TcgEngine.FX
 {
     /// <summary>
-    /// Line FX that appear when dragin a board card to attack
+    /// 拖動卡牌進行攻擊時出現的線路FX
     /// </summary>
 
     public class MouseLineFX : MonoBehaviour

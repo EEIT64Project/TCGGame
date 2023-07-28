@@ -7,9 +7,9 @@ using TcgEngine.Gameplay;
 namespace TcgEngine.AI
 {
     /// <summary>
-    /// AI player making completely random decisions, really bad AI but useful for testing
+    /// AI 玩家做出完全隨機的決定，最爛AI，for測試使用
     /// </summary>
-    
+
     public class AIPlayerRandom : AIPlayer
     {
         private bool is_playing = false;
@@ -41,21 +41,21 @@ namespace TcgEngine.AI
                 {
                     if (game_data.selector == SelectorType.SelectTarget)
                     {
-                        //AI select target
+                        //AI 選擇目標
                         is_selecting = true;
                         TimeTool.StartCoroutine(AiSelectTarget());
                     }
 
                     if (game_data.selector == SelectorType.SelectorCard)
                     {
-                        //AI select target
+                        //AI 選擇目標
                         is_selecting = true;
                         TimeTool.StartCoroutine(AiSelectCard());
                     }
 
                     if (game_data.selector == SelectorType.SelectorChoice)
                     {
-                        //AI select target
+                        //AI 選擇目標
                         is_selecting = true;
                         TimeTool.StartCoroutine(AiSelectChoice());
                     }
@@ -147,7 +147,7 @@ namespace TcgEngine.AI
                 Slot slot = player.GetRandomSlot(rand);
 
                 if (random != null && random.CardData.IsRequireTarget())
-                    slot = game_data.GetRandomSlot(rand); //Spell can target any slot, not just your side
+                    slot = game_data.GetRandomSlot(rand); //法術可以針對任何位置，而不僅僅是玩家這邊
 
                 if (random != null)
                     gameplay.PlayCard(random, slot);

@@ -6,49 +6,49 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Base class for all ability effects, override the IsConditionMet function
+    /// 所有能力效果的基類，重寫 IsConditionMet 函數
     /// </summary>
-    
+
     public class EffectData : ScriptableObject
     {
         public virtual void DoEffect(GameLogic logic, AbilityData ability, Card caster)
         {
-            //Server side gameplay logic
+            //服務器端遊戲邏輯
         }
 
         public virtual void DoEffect(GameLogic logic, AbilityData ability, Card caster, Card target)
         {
-            //Server side gameplay logic
+            //服務器端遊戲邏輯
         }
 
         public virtual void DoEffect(GameLogic logic, AbilityData ability, Card caster, Player target)
         {
-            //Server side gameplay logic
+            //服務器端遊戲邏輯
         }
 
         public virtual void DoEffect(GameLogic logic, AbilityData ability, Card caster, Slot target)
         {
-            //Server side gameplay logic
+            //服務器端遊戲邏輯
         }
 
         public virtual void DoEffect(GameLogic logic, AbilityData ability, Card caster, CardData target)
         {
-            //Server side gameplay logic
+            //服務器端遊戲邏輯
         }
 
         public virtual void DoOngoingEffect(GameLogic logic, AbilityData ability, Card caster, Card target)
         {
-            //Ongoing effect only
+            //僅持續效果
         }
 
         public virtual void DoOngoingEffect(GameLogic logic, AbilityData ability, Card caster, Player target)
         {
-            //Ongoing effect only
+            //僅持續效果
         }
 
         public virtual int GetAiValue(AbilityData ability)
         {
-            return 0; //Helps the AI know if this is a positive or negative ability effect (return 1, 0 or -1)
+            return 0; //幫助AI知道這是正面還是負面的能力效果（返回1、0或-1）
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TcgEngine.FX
 {
     /// <summary>
-    /// FX that snap to another object (target), and follows it
+    /// 捕捉到另一個對象（目標）並跟隨它的 FX
     /// </summary>
 
     public class SnapFX : MonoBehaviour

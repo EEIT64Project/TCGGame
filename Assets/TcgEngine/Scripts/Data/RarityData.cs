@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// Defines all rarities data (common, uncommon, rare, mythic)
+    /// 定義所有稀有度數據（普通、稀有、史詩、傳說）
     /// </summary>
 
     [CreateAssetMenu(fileName = "RarityData", menuName = "TcgEngine/RarityData", order = 1)]
@@ -14,7 +14,7 @@ namespace TcgEngine
         public string id;
         public string title;
         public Sprite icon;
-        public int rank;        //Index of the rarity, should start at 1 (common) and increase sequentially
+        public int rank;        //稀有度指數，應從 1（常見）開始並依次增加
 
         public static List<RarityData> rarity_list = new List<RarityData>();
 

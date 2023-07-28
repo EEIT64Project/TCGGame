@@ -5,9 +5,9 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// Checks if its your turn
+    /// 檢查是否輪到你了
     /// </summary>
-    
+
     [CreateAssetMenu(fileName = "condition", menuName = "TcgEngine/Condition/Turn", order = 10)]
     public class ConditionTurn : ConditionData
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TcgEngine
 {
-    //Default fx and audio, some can be overrided on each individual card
+    //默認效果和音頻，有些可以在每個單獨的卡上覆蓋
 
     [CreateAssetMenu(fileName = "AssetData", menuName = "TcgEngine/AssetData", order = 0)]
     public class AssetData : ScriptableObject

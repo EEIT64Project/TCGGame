@@ -8,18 +8,18 @@ using UnityEngine.Events;
 namespace TcgEngine
 {
     /// <summary>
-    /// API client communicates with the NodeJS web api
-    /// Can send requests and receive responses
+    /// API 客戶端與 NodeJS Web api 進行通信
+    /// 可以發送請求並接收響應
     /// </summary>
 
     public class ApiClient : MonoBehaviour
     {
         public bool is_server;
 
-        public UnityAction<RegisterResponse> onRegister; //Triggered after register, even if failed
-        public UnityAction<LoginResponse> onLogin; //Triggered after login, even if failed
-        public UnityAction<LoginResponse> onRefresh; //Triggered after login refresh, even if failed 
-        public UnityAction onLogout; //Triggered after logout
+        public UnityAction<RegisterResponse> onRegister; //註冊後觸發，即使失敗
+        public UnityAction<LoginResponse> onLogin; //登錄後觸發，即使失敗
+        public UnityAction<LoginResponse> onRefresh; //登錄刷新後觸發，即使失敗
+        public UnityAction onLogout; //登出後觸發
 
         private string user_id = "";
         private string username = "";
@@ -41,9 +41,9 @@ namespace TcgEngine
 
         void Awake()
         {
-            //API client should be on OnDestroyOnLoad
-            //dont assign here if already assigned cause new one will be destroyed in TheNetwork Awake
-            if(instance == null)
+            //API 客戶端應處於 OnDestroyOnLoad 狀態
+            //如果已經分配，不要在這裡分配，因為新的分配將在 TheNetwork Awake 中被銷毀
+            if (instance == null)
                 instance = this;
 
             LoadTokens();
@@ -53,14 +53,14 @@ namespace TcgEngine
         {
             if (logged_in)
             {
-                //Check expiration
+                //檢查過期時間
                 if (!expired)
                 {
                     expiration_timer += Time.deltaTime;
                     expired = expiration_timer > (expiration_duration - 10f);
                 }
 
-                //Every X seconds, check connection status
+                //每 X 秒檢查一次連接狀態
                 float refresh_interval = is_server ? 5f : 60f;
                 refresh_timer += Time.deltaTime;
                 if (refresh_timer >= refresh_interval)
@@ -92,9 +92,9 @@ namespace TcgEngine
         private async void Refresh()
         {
             if (expired)
-                await RefreshLogin(); //Try to relogin
+                await RefreshLogin(); //嘗試重新登錄
             else
-                await Validate(); //Check if expired
+                await Validate(); //檢查是否過期
         }
 
         public async Task<RegisterResponse> Register(string email, string user, string password)
@@ -109,7 +109,7 @@ namespace TcgEngine
 
         public async Task<RegisterResponse> Register(RegisterRequest data)
         {
-            Logout(); //Disconnect
+            Logout(); //斷線
 
             string url = ServerURL + "/users/register";
             string json = ApiTool.ToJson(data);
@@ -124,7 +124,7 @@ namespace TcgEngine
 
         public async Task<LoginResponse> Login(string user, string password)
         {
-            Logout(); //Disconnect
+            Logout(); //斷線
 
             LoginRequest data = new LoginRequest();
             data.password = password;
@@ -166,7 +166,7 @@ namespace TcgEngine
             login_res.success = res.success;
             login_res.error = res.error;
 
-            //Uncomment to force having same client version as api
+            //取消註釋以強制具有與 api 相同的客戶端版本
             /*if (!IsVersionValid())
             {
                 login_res.error = "Invalid Version";
@@ -223,7 +223,7 @@ namespace TcgEngine
             if (!IsConnected())
                 return false;
 
-            //Check if connection is still valid
+            //檢查連接是否仍然有效
             string url = ServerURL + "/auth/validate";
             WebResponse res = await SendGetRequest(url);
             expired = !res.success;
@@ -313,7 +313,7 @@ namespace TcgEngine
         {
             int wait = 0;
             int wait_max = request.timeout * 1000;
-            request.timeout += 1; //Add offset to make sure it aborts first
+            request.timeout += 1; //添加偏移量以確保它首先中止
             sending++;
 
             var async_oper = request.SendWebRequest();
@@ -322,7 +322,7 @@ namespace TcgEngine
                 await Task.Delay(200);
                 wait += 200;
                 if (wait >= wait_max)
-                    request.Abort(); //Abort to avoid unity errors on timeout
+                    request.Abort(); //中止以避免超時時出現統一錯誤
             }
 
             WebResponse response = WebRequest.GetResponse(request);
@@ -376,8 +376,8 @@ namespace TcgEngine
             return last_error;
         }
 
-        //Use this function if you want to prevent players to login with an outdated client
-        //Call it inside the login and loginrefresh functions after the api_version is set and return error if invalid
+        //如果想阻止玩家使用過時的客戶端登錄，使用此功能
+        //設置 api_version 後在登錄和登錄刷新函數中調用它，如果無效則返回錯誤
         public bool IsVersionValid()
         {
             return ClientVersion == ServerVersion; 

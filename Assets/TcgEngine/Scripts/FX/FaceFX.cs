@@ -6,7 +6,7 @@ using TcgEngine.Client;
 namespace TcgEngine.FX
 {
     /// <summary>
-    /// Rotate FX to face camera
+    /// 旋轉 FX 面向相機
     /// </summary>
 
     public class FaceFX : MonoBehaviour
@@ -51,8 +51,8 @@ namespace TcgEngine.FX
 
     public enum FaceType
     {
-        FaceCamera = 0,         //Set same rotation as camera rotation
-        FaceCameraCenter = 5,   //Face camera world position
-        FaceBoard = 10          //Set same rotation as to board rotation
+        FaceCamera = 0,         //設置與相機旋轉相同的旋轉
+        FaceCameraCenter = 5,   //臉部相機世界位置
+        FaceBoard = 10          //設置與板旋轉相同的旋轉
     }
 }

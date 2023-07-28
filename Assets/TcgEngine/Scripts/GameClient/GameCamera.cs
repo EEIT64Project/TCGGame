@@ -5,8 +5,8 @@ using UnityEngine;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Game Camera has some useful features such as shake
-    /// Or raycasting the mouse to a world/screen position
+    /// 遊戲相機有一些有用的功能，例如抖動
+    /// 或者將鼠標光線投射到世界/屏幕位置
     /// </summary>
 
     public class GameCamera : MonoBehaviour
@@ -29,7 +29,7 @@ namespace TcgEngine.Client
 
         void Update()
         {
-            //Shake FX
+            //抖動 FX
             if (shake_timer > 0f)
             {
                 shake_timer -= Time.deltaTime;

@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace TcgEngine
 {
-    //Pick X number of targets at random from the source array
+    //從源數組中隨機選取 X 個目標
 
     [CreateAssetMenu(fileName = "filter", menuName = "TcgEngine/Filter/Random", order = 10)]
     public class FilterRandom : FilterData
     {
-        public int amount = 1; //Number of random targets selected
+        public int amount = 1; //選擇的隨機目標數量
 
         public override List<Card> FilterTargets(Game data, AbilityData ability, Card caster, List<Card> source, List<Card> dest)
         {

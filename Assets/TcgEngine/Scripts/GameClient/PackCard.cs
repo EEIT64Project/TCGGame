@@ -8,8 +8,8 @@ using TcgEngine.FX;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Visual representation of a card found in a pack (once opened)
-    /// The card can be flipped by clicking on it
+    /// 包裝中卡片的視覺呈現（打開後）
+    /// 點擊卡片即可翻轉卡片
     /// </summary>
 
     public class PackCard : MonoBehaviour

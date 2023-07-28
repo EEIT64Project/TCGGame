@@ -8,7 +8,7 @@ using TcgEngine.UI;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Area of the hand of packs, will spawn/despawns visual packs based on what player has in the data
+    /// 包的手部區域，將根據玩家在數據中的內容生成/消失視覺包
     /// </summary>
 
     public class HandPackArea : MonoBehaviour
@@ -73,7 +73,7 @@ namespace TcgEngine.Client
                     SpawnNewPack(pack);
             }
 
-            //Remove removed cards
+            //移除移除的卡片
             for (int i = packs.Count - 1; i >= 0; i--)
             {
                 HandPack pack = packs[i];
@@ -90,11 +90,11 @@ namespace TcgEngine.Client
         {
             last_destroyed_timer += Time.deltaTime;
 
-            //Position
+            //位置
             Vector3 tpos = is_locked ? (start_pos + Vector3.down * 200f) : start_pos;
             hand_area.anchoredPosition = Vector3.MoveTowards(hand_area.anchoredPosition, tpos, 200f * Time.deltaTime);
 
-            //Set card index
+            //設置卡片索引
             int index = 0;
             float count_half = packs.Count / 2f;
             foreach (HandPack card in packs)
@@ -104,7 +104,7 @@ namespace TcgEngine.Client
                 index++;
             }
 
-            //Set target forcus
+            //設定目標重點
             HandPack drag_pack = HandPack.GetDrag();
             is_dragging = drag_pack != null;
         }

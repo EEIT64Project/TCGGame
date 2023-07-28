@@ -6,7 +6,7 @@ using TcgEngine.Gameplay;
 namespace TcgEngine.AI
 {
     /// <summary>
-    /// AI player using the MinMax AI algorithm
+    /// 使用 MinMax AI 算法的 AI 播放器
     /// </summary>
 
     public class AIPlayerMM : AIPlayer

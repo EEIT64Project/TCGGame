@@ -8,8 +8,8 @@ using TcgEngine.UI;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Area where all the hand cards are
-    /// Will take card of spawning/despawning hand cards based on the refresh data received from server
+    /// 所有手牌所在的區域
+    /// 將根據從服務器收到的刷新數據獲取生成/消失的手牌
     /// </summary>
 
     public class HandCardArea : MonoBehaviour
@@ -46,14 +46,14 @@ namespace TcgEngine.Client
 
             last_destroyed_timer += Time.deltaTime;
 
-            //Add missing cards
+            //添加缺失的卡片
             foreach (Card card in player.cards_hand)
             {
                 if (!HasCard(card.uid))
                     SpawnNewCard(card);
             }
 
-            //Remove removed cards
+            //移除移除的卡片
             for (int i = cards.Count - 1; i >= 0; i--)
             {
                 HandCard card = cards[i];
@@ -65,7 +65,7 @@ namespace TcgEngine.Client
                 }
             }
 
-            //Set card index
+            //設置卡片索引
             int index = 0;
             float count_half = cards.Count / 2f;
             foreach (HandCard card in cards)
@@ -75,7 +75,7 @@ namespace TcgEngine.Client
                 index++;
             }
 
-            //Set target forcus
+            //設定目標重點
             HandCard drag_card = HandCard.GetDrag();
             is_dragging = drag_card != null;
         }

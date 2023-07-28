@@ -6,7 +6,7 @@ using TcgEngine.UI;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Visual zone that can be attacked by opponent's card to damage the player HP
+    /// 可視區域可被對手卡牌攻擊，損害玩家生命值
     /// </summary>
 
     public class BoardSlotPlayer : MonoBehaviour
@@ -77,7 +77,7 @@ namespace TcgEngine.Client
 
             if (your_turn && drag_card != null && drag_card.CardData.IsRequireTarget() && gdata.IsPlayTargetValid(drag_card.GetCard(), GetPlayer()))
             {
-                target_alpha = 1f; //Highlight when dragin a spell with target
+                target_alpha = 1f; //拖動帶有目標的咒語時突出顯示
             }
 
             if (gdata.selector == SelectorType.SelectTarget && player.player_id == gdata.selector_player)
@@ -85,7 +85,7 @@ namespace TcgEngine.Client
                 Card caster = gdata.GetCard(gdata.selector_caster_uid);
                 AbilityData ability = AbilityData.Get(gdata.selector_ability_id);
                 if (ability != null && ability.AreTargetConditionsMet(gdata, caster, GetPlayer()))
-                    target_alpha = 1f; //Highlight when selecting a target and empty slots are valid
+                    target_alpha = 1f; //選擇目標時高亮顯示，空槽位有效
             }
 
             current_alpha = Mathf.MoveTowards(current_alpha, target_alpha * max_alpha, 2f * Time.deltaTime);

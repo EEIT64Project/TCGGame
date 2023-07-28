@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TcgEngine.FX
 {
     /// <summary>
-    /// FX that appear when hovering a target
+    /// 懸停目標時出現的 FX
     /// </summary>
 
     public class HoverFX : MonoBehaviour

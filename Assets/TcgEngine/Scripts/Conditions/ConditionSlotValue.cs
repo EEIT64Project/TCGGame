@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TcgEngine
 {
     /// <summary>
-    /// SlotValue compare each slot x and y to a specific value, like slot.x >=3 and slot.y < 5
+    /// SlotValue 將每個槽 x 和 y 與特定值進行比較，例如 slot.x >=3 且 slot.y < 5
     /// </summary>
 
     [CreateAssetMenu(fileName = "condition", menuName = "TcgEngine/Condition/SlotValue", order = 11)]

@@ -6,7 +6,7 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Effect that exhaust or unexhaust a card (means it can no longer perform actions or will be able to perform another action)
+    /// 耗盡或未耗盡一張卡牌的效果（意味著它不能再執行操作或將能夠執行另一操作）
     /// </summary>
 
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/Exhaust", order = 10)]

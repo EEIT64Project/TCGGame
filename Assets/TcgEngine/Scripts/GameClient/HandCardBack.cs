@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace TcgEngine.Client
 {
     /// <summary>
-    /// Same as HandCard, but simpler version for the opponent's cards
+    /// 與 HandCard 相同，但對手牌的版本更簡單
     /// </summary>
 
     public class HandCardBack : MonoBehaviour

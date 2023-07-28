@@ -6,8 +6,8 @@ using TcgEngine.Gameplay;
 namespace TcgEngine
 {
     /// <summary>
-    /// Effects that creates a new card from a CardData
-    /// Use for discover effects
+    /// 從 CardData 創建新卡的效果
+    /// 用於發現效果
     /// </summary>
 
     [CreateAssetMenu(fileName = "effect", menuName = "TcgEngine/Effect/Create", order = 10)]

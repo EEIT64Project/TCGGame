@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace TcgEngine
 {
-    //Pick X first cards from the source array
+    //從源數組中挑選 X 張第一張牌
 
     [CreateAssetMenu(fileName = "filter", menuName = "TcgEngine/Filter/First", order = 10)]
     public class FilterFirst : FilterData
     {
-        public int amount = 1; //Number of first targets selected
+        public int amount = 1; //選擇的第一個目標的數量
 
         public override List<Card> FilterTargets(Game data, AbilityData ability, Card caster, List<Card> source, List<Card> dest)
         {
