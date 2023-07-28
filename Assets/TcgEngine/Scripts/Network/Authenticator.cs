@@ -100,6 +100,11 @@ namespace TcgEngine
             return username;
         }
 
+        public virtual int GetPermission()
+        {
+            return logged_in ? 1 : 0;
+        }
+
         public virtual UserData GetUserData()
         {
             return null;

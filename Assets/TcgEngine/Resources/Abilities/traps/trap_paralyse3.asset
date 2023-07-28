@@ -35,6 +35,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Paralysis \u7671\u7613"
-  desc: "After an enemy creature attacks, paralyse it for 3 turns.\n\u6575\u65B9\u751F\u7269\u653B\u64CA\u5F8C\uFF0C\u4F7F\u5176\u7121\u6CD5\u884C\u52D5
+  title: "\u9AD8\u58D3\u96FB"
+  desc: "\u6575\u65B9\u751F\u7269\u653B\u64CA\u5F8C\uFF0C\u4F7F\u5176\u7121\u6CD5\u884C\u52D5
     3 \u56DE\u5408"

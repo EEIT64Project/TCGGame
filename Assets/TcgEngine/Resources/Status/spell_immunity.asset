@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: spell_immunity
   m_EditorClassIdentifier: 
   effect: 18
-  title: "Spell Immunity \u6CD5\u8853\u514D\u75AB"
+  title: "\u6CD5\u8853\u514D\u75AB"
   icon: {fileID: 0}
-  desc: "Cannot be targeted or damaged by spells and traps.\n\u4E0D\u80FD\u6210\u70BA\u6CD5\u8853\u548C\u9677\u9631\u7684\u76EE\u6A19\u6216\u50B7\u5BB3\u3002"
+  desc: "\u4E0D\u80FD\u6210\u70BA\u6CD5\u8853\u548C\u9677\u9631\u7684\u76EE\u6A19\u6216\u50B7\u5BB3\u3002"
   status_fx: {fileID: 2359911801270334615, guid: b3d90b2abb5dc0d419fa9393d64062fd,
     type: 3}
   hvalue: 1

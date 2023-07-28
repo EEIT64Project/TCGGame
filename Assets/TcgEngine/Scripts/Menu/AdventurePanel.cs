@@ -27,29 +27,10 @@ namespace TcgEngine.UI
 
         private void RefreshLevels()
         {
-            foreach (LevelUI ulvl in level_uis)
-                ulvl.Hide();
-
-            int index = 0;
-            foreach (LevelData level in LevelData.GetAll())
+            foreach (LevelUI level in level_uis)
             {
-                if (index < level_uis.Count)
-                {
-                    level_uis[index].SetLevel(level);
-                    index++;
-                }
+                level.RefreshLevel();
             }
-        }
-
-        public void OnClickAdventureLevel(LevelData level)
-        {
-            string uid = GameTool.GenerateRandomID();
-            GameClient.game_settings.level = level.id;
-            GameClient.game_settings.scene = level.scene;
-            GameClient.player_settings.deck = level.player_deck.id;
-            GameClient.ai_settings.deck = level.ai_deck.id;
-            GameClient.ai_settings.ai_level = level.ai_level;
-            MainMenu.Get().StartGame(PlayMode.Adventure, uid);
         }
 
         public override void Show(bool instant = false)

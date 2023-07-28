@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: sasquatch
   m_EditorClassIdentifier: 
   id: sasquatch
-  title: "Sasquatch \u4F50\u8CC0\u91CE\u4EBA"
+  title: "\u4F50\u8CC0\u91CE\u4EBA"
   art_full: {fileID: 21300000, guid: 5ead950ee3cbc5d4c8979120330038de, type: 3}
   art_board: {fileID: 21300000, guid: ebd136e861f797e4ab0a606a7ef4ab7b, type: 3}
   type: 10
@@ -26,8 +26,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: a5a8e3bb261f9344a9b7318a2e68783f, type: 2}
-  text: "<b>End Turn:</b> Go in stealth if you have other characters.\n<b>\u56DE\u5408\u7D50\u675F\u6642:</b>
-    \u5982\u679C\u4F60\u6709\u5176\u4ED6\u751F\u7269\u724C\uFF0C\u6B64\u724C\u9032\u5165\u6F5B\u884C\u72C0\u614B"
+  text: "<b>\u56DE\u5408\u7D50\u675F\u6642:</b> \u5982\u679C\u4F60\u6709\u5176\u4ED6\u751F\u7269\u724C\uFF0C\u6B64\u724C\u9032\u5165\u6F5B\u884C\u72C0\u614B"
   desc: 
   spawn_fx: {fileID: 5791330189299518109, guid: 1fa8fa11b2c6b9b4d976743e5bbb3956,
     type: 3}
@@ -35,12 +34,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 755f11fb17ee7470f953420a10117e5a, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

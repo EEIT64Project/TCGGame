@@ -79,6 +79,11 @@ namespace TcgEngine
             return dx <= dist && dy <= dist && dp <= dist;
         }
 
+        public bool IsPlayerSlot()
+        {
+            return x == 0 && y == 0;
+        }
+
         //Check if the slot is valid one (or if out of board)
         public bool IsValid()
         {
@@ -106,6 +111,17 @@ namespace TcgEngine
             if (y_max > y_min)
                 return new Slot(rand.Next(x_min, x_max + 1), rand.Next(y_min, y_max + 1), rand.Next(0, 2));
             return new Slot(rand.Next(x_min, x_max + 1), y_min, rand.Next(0, 2));
+        }
+		
+		public static Slot Get(int x, int y, int p)
+        {
+            List<Slot> slots = GetAll();
+            foreach (Slot slot in slots)
+            {
+                if (slot.x == x && slot.y == y && slot.p == p)
+                    return slot;
+            }
+            return new Slot(x, y, p);
         }
 
         //Get all slots on player side

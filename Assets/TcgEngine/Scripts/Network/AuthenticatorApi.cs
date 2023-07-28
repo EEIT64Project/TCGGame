@@ -12,6 +12,8 @@ namespace TcgEngine
 
     public class AuthenticatorApi : Authenticator
     {
+        private int permission = 0;
+
         public override async Task Initialize()
         {
             await base.Initialize();
@@ -25,6 +27,7 @@ namespace TcgEngine
                 this.logged_in = true;
                 this.user_id = res.id;
                 this.username = res.username;
+                permission = res.permission_level;
             }
             return res.success;
         }
@@ -68,6 +71,7 @@ namespace TcgEngine
         {
             base.Logout();
             Client.Logout();
+            permission = 0;
         }
 
         public override UserData GetUserData()
@@ -83,6 +87,11 @@ namespace TcgEngine
         public override bool IsExpired()
         {
             return Client.IsExpired();
+        }
+
+        public override int GetPermission()
+        {
+            return permission;
         }
 
         public override string GetError()

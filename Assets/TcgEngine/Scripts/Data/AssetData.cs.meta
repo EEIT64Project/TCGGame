@@ -3,35 +3,7 @@ guid: cca20da9cbfd28a449b51ac452845bc8
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - card_spawn_fx: {instanceID: 0}
-  - card_destroy_fx: {instanceID: 0}
-  - card_attack_fx: {instanceID: 0}
-  - card_damage_fx: {instanceID: 0}
-  - card_exhausted_fx: {instanceID: 0}
-  - player_damage_fx: {instanceID: 0}
-  - damage_fx: {instanceID: 0}
-  - play_card_fx: {instanceID: 0}
-  - play_card_other_fx: {instanceID: 0}
-  - play_secret_fx: {instanceID: 0}
-  - play_secret_other_fx: {instanceID: 0}
-  - dice_roll_fx: {instanceID: 0}
-  - hover_text_box: {instanceID: 0}
-  - new_turn_fx: {instanceID: 0}
-  - win_fx: {instanceID: 0}
-  - lose_fx: {instanceID: 0}
-  - tied_fx: {instanceID: 0}
-  - card_spawn_audio: {instanceID: 0}
-  - card_destroy_audio: {instanceID: 0}
-  - card_attack_audio: {instanceID: 0}
-  - card_damage_audio: {instanceID: 0}
-  - player_damage_audio: {instanceID: 0}
-  - hand_card_click_audio: {instanceID: 0}
-  - new_turn_audio: {instanceID: 0}
-  - win_audio: {fileID: 8300000, guid: 9b261acccb58d4443aab5349544b5610, type: 3}
-  - defeat_audio: {fileID: 8300000, guid: 5eff1e4749a5e42f2a85c0bda53c9b2b, type: 3}
-  - win_music: {instanceID: 0}
-  - defeat_music: {instanceID: 0}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

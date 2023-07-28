@@ -67,7 +67,7 @@ namespace TcgEngine.UI
 
         void Update()
         {
-            login_button.interactable = !clicked && !string.IsNullOrWhiteSpace(login_user.text);
+            login_button.interactable = !clicked && !string.IsNullOrWhiteSpace(login_user.text) && !string.IsNullOrWhiteSpace(login_password.text);
             register_button.interactable = !clicked && !string.IsNullOrWhiteSpace(register_username.text) && !string.IsNullOrWhiteSpace(register_email.text)
                 && !string.IsNullOrWhiteSpace(register_password.text) && register_password.text == register_password_confirm.text;
 

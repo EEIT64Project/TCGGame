@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: dragon_red
   m_EditorClassIdentifier: 
   id: dragon_red
-  title: "Red Dragon \u7D05\u9F8D\u70B8\u96DE\u584A"
+  title: "\u7D05\u9F8D\u70B8\u96DE\u584A"
   art_full: {fileID: 21300000, guid: 217ff30ab88fe704d9da8efdebdec2a7, type: 3}
   art_board: {fileID: 21300000, guid: 756c6d28a6a2dd149aeeeeee06ac4010, type: 3}
   type: 10
@@ -27,7 +27,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: 643b2aa17cd6c8847884a5771a5656b3, type: 2}
-  text: "Spell Immunity\n\u6CD5\u8853\u514D\u75AB"
+  text: "\u6CD5\u8853\u514D\u75AB"
   desc: 
   spawn_fx: {fileID: 9125387663047351618, guid: bac685160af4aff46ae561a51da6f5f4,
     type: 3}
@@ -35,12 +35,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 66f7e2dc334984023aad460b4446399c, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

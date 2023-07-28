@@ -299,7 +299,7 @@ MonoBehaviour:
     m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 0
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -307,7 +307,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Pack Title
+  m_Text: "\u5361\u724C\u5305\u540D\u7A31"
 --- !u!1 &8645258802130250707
 GameObject:
   m_ObjectHideFlags: 0

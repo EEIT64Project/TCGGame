@@ -34,5 +34,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Hot \u71B1\u50B7\u5BB3"
-  desc: "Deal 1 damage.\n\u9020\u6210 1 \u9EDE\u50B7\u5BB3"
+  title: "\u71B1\u50B7\u5BB3"
+  desc: "\u9020\u6210 1 \u9EDE\u50B7\u5BB3"

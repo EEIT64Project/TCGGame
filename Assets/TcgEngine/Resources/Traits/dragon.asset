@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: dragon
   m_EditorClassIdentifier: 
   id: dragon
-  title: Dragon
+  title: "\u9F8D\u65CF"
   icon: {fileID: 0}

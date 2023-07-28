@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: armored_beast
   m_EditorClassIdentifier: 
   id: armored_beast
-  title: "Armored Beast \u76AE\u514B"
+  title: "\u76AE\u53EF"
   art_full: {fileID: 21300000, guid: 99b2df2a79520804883a1959ed58d2d7, type: 3}
   art_board: {fileID: 21300000, guid: 189c8c57920274f4c84895dde3e00a75, type: 3}
   type: 10
@@ -26,7 +26,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: 2a11cb097ae04474693f6d6e1dd957ee, type: 2}
-  text: "Taunt\n\u5632\u8AF7"
+  text: "\u5632\u8AF7"
   desc: 
   spawn_fx: {fileID: 5791330189299518109, guid: 1fa8fa11b2c6b9b4d976743e5bbb3956,
     type: 3}
@@ -34,12 +34,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 7117323af20a946efae9881348dca17c, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

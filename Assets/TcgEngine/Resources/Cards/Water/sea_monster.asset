@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: sea_monster
   m_EditorClassIdentifier: 
   id: sea_monster
-  title: "Sea Monster \u6D77\u602A"
+  title: "\u6D77\u602A"
   art_full: {fileID: 21300000, guid: be765d1eb1d2a614b9dea6be103de5bd, type: 3}
   art_board: {fileID: 21300000, guid: 96402080ce8ff8e4689baa91e28fe07b, type: 3}
   type: 10
@@ -27,9 +27,8 @@ MonoBehaviour:
   abilities:
   - {fileID: 11400000, guid: 2ca645d57a4feee409d9793246812051, type: 2}
   - {fileID: 11400000, guid: 59161a18c189c7b4f8ebc48de1523c20, type: 2}
-  text: "Enemy characters have -1 attack.\n\u6575\u65B9\u751F\u7269\u7684\u653B\u64CA\u529B\u6E1B\u5C11
-    1 \u9EDE\n<b>Action:</b> +1 attack to allies.\n<b>\u52D5\u4F5C:</b> \u6211\u65B9\u751F\u7269\u589E\u52A0
-    1 \u9EDE\u653B\u64CA\u529B"
+  text: "\u6575\u65B9\u751F\u7269\u7684\u653B\u64CA\u529B\u6E1B\u5C11 1 \u9EDE\n<b>\u52D5\u4F5C:</b>
+    \u6211\u65B9\u751F\u7269\u589E\u52A0 1 \u9EDE\u653B\u64CA\u529B"
   desc: 
   spawn_fx: {fileID: 2106287953758554471, guid: a1e1ec86d02e969408bf2a6c17010f46,
     type: 3}
@@ -37,12 +36,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 47e642e1e27844f38af28a05c6b3b657, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

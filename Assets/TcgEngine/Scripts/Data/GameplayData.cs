@@ -6,7 +6,7 @@ using TcgEngine.AI;
 namespace TcgEngine
 {
     /// <summary>
-    /// Generic gameplay settings, such as starting stats, decks limit, scenes, and ai level
+    /// 通用遊戲設置，起始統計數據、牌組限制、場景和 AI 級別
     /// </summary>
 
     [CreateAssetMenu(fileName = "GameplayData", menuName = "TcgEngine/GameplayData", order = 0)]
@@ -15,8 +15,10 @@ namespace TcgEngine
         [Header("Gameplay")]
         public int hp_start = 20;
         public int mana_start = 1;
+        public int mana_per_turn = 1;
         public int mana_max = 10;
         public int cards_start = 5;
+        public int cards_per_turn = 1;
         public int cards_max = 10;
         public float turn_duration = 30f;
         public CardData second_bonus;
@@ -29,20 +31,20 @@ namespace TcgEngine
         public float sell_ratio = 0.8f;
 
         [Header("AI")]
-        public AIType ai_type;              //AI algorythm
-        public int ai_level = 10;           //AI level, 10=best, 1=weakest
+        public AIType ai_type;              //人工智能算法
+        public int ai_level = 10;           //AI level, 10=最強, 1=最弱
 
         [Header("Decks")]
-        public DeckData[] free_decks;       //These decks are always available in menu, useful for tests
-        public DeckData[] starter_decks;    //When API is enabled, each player can select ONE of those
-        public DeckData[] ai_decks;         //When player solo, AI will pick one of these at random
+        public DeckData[] free_decks;       //test環境下的牌組
+        public DeckData[] starter_decks;    //當API啟用時，每個玩家可以選擇其中之一
+        public DeckData[] ai_decks;         //單機模式時，AI會隨機選擇其中之一
 
         [Header("Scenes")]
-        public string[] arena_list;         //List of game scenes
+        public string[] arena_list;         //遊戲場景列表
 
         [Header("Test")]
-        public DeckData test_deck;          //For when starting the game directly from Unity game scene
-        public DeckData test_deck_ai;       //For when starting the game directly from Unity game scene
+        public DeckData test_deck;          //用於直接從 Unity 遊戲場景啟動遊戲時
+        public DeckData test_deck_ai;       //用於直接從 Unity 遊戲場景啟動遊戲時
         public bool ai_vs_ai;
 
         public int GetPlayerLevel(int xp)

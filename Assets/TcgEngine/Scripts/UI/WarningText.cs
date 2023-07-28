@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace TcgEngine.UI
 {
     /// <summary>
-    /// 當無法執行動作時顯示提示供玩家參考
+    /// Text that is displayed at the bottom of the screen when things cant be done
     /// </summary>
 
     public class WarningText : MonoBehaviour
@@ -48,12 +48,12 @@ namespace TcgEngine.UI
 
         public static void ShowNotYourTurn()
         {
-            ShowText("還不是你的回合");
+            ShowText("還沒輪到你的回合");
         }
 
         public static void ShowExhausted()
         {
-            ShowText("無法再執行動作");
+            ShowText("不能再做動作了");
         }
 
         public static void ShowNoMana()
@@ -63,12 +63,12 @@ namespace TcgEngine.UI
 
         public static void ShowSpellImmune()
         {
-            ShowText("目標法術免疫");
+            ShowText("法術免疫");
         }
 
         public static void ShowInvalidTarget()
         {
-            ShowText("無效目標");
+            ShowText("無法指定");
         }
 
         public static WarningText Get()

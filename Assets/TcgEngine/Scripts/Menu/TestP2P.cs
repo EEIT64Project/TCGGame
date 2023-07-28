@@ -69,8 +69,8 @@ namespace TcgEngine
         public void RefreshDeckList()
         {
             deck_selector.RefreshDeckList();
-            deck_selector.SelectDeck(GameClient.player_settings.deck);
-            RefreshDeck(deck_selector.GetDeck());
+            deck_selector.SelectDeck(GameClient.player_settings.deck.id);
+            RefreshDeck(deck_selector.GetDeckID());
         }
 
         private void RefreshDeck(string tid)
@@ -88,7 +88,7 @@ namespace TcgEngine
 
         public void OnChangeDeck(string tid)
         {
-            GameClient.player_settings.deck = tid;
+            GameClient.player_settings.deck.id = tid;
             PlayerPrefs.SetString("tcg_deck", tid);
             RefreshDeck(tid);
         }
@@ -103,15 +103,15 @@ namespace TcgEngine
 
         public void OnClickHost()
         {
-            GameClient.game_settings.play_mode = PlayMode.HostP2P;
+            GameClient.game_settings.game_type = GameType.HostP2P;
             GameClient.game_settings.server_url = "127.0.0.1";
-            GameClient.player_settings.deck = deck_selector.GetDeck();
+            GameClient.player_settings.deck.id = deck_selector.GetDeckID();
             StartGame();
         }
 
         public void OnClickGoJoin()
         {
-            GameClient.player_settings.deck = deck_selector.GetDeck();
+            GameClient.player_settings.deck.id = deck_selector.GetDeckID();
             deck_panel.Hide();
             join_panel.Show();
         }
@@ -121,7 +121,7 @@ namespace TcgEngine
             if (join_ip.text.Length == 0)
                 return;
 
-            GameClient.game_settings.play_mode = PlayMode.Multiplayer;
+            GameClient.game_settings.game_type = GameType.Multiplayer;
             GameClient.game_settings.server_url = join_ip.text;
             StartGame();
         }

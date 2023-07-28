@@ -100,7 +100,7 @@ namespace TcgEngine.UI
             else if (pwinner != null)
                 winner_text.text = "戰敗";
             else
-                winner_text.text = "和局";
+                winner_text.text = "平局";
 
             if (pwinner == player)
                 winner_glow.rectTransform.anchoredPosition = player_avatar.rectTransform.anchoredPosition;
@@ -133,7 +133,7 @@ namespace TcgEngine.UI
             }
 
             //Adventure Rewards
-            if (GameClient.game_settings.play_mode == PlayMode.Adventure)
+            if (GameClient.game_settings.game_type == GameType.Adventure)
             {
                 LevelData lvl = LevelData.Get(GameClient.game_settings.level);
                 if (lvl != null && RewardManager.Get().IsRewardGained())

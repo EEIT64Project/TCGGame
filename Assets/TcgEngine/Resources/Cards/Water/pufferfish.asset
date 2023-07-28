@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: pufferfish
   m_EditorClassIdentifier: 
   id: pufferfish
-  title: "Pufferfish \u6CB3\u8C5A\u597D\u5403"
+  title: "\u6CB3\u8C5A\u5403\u5403"
   art_full: {fileID: 21300000, guid: e2171587cdf01f345aafec22ae5ca887, type: 3}
   art_board: {fileID: 21300000, guid: 6e6bb7509ba520a48be2b3298e2cfb85, type: 3}
   type: 10
@@ -26,8 +26,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: b2a7fee1995653144b929fb5251bc098, type: 2}
-  text: "Has +3 attack during the opponent's turn.\n\u5728\u5C0D\u624B\u7684\u56DE\u5408\u4E2D\u589E\u52A0
-    3 \u9EDE\u653B\u64CA\u529B"
+  text: "\u5728\u5C0D\u624B\u7684\u56DE\u5408\u4E2D\u589E\u52A0 3 \u9EDE\u653B\u64CA\u529B"
   desc: 
   spawn_fx: {fileID: 2106287953758554471, guid: a1e1ec86d02e969408bf2a6c17010f46,
     type: 3}
@@ -35,12 +34,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: be57936424a2c4c129d8d8b0691146b7, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

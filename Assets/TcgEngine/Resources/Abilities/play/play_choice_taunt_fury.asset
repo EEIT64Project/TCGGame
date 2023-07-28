@@ -33,5 +33,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Choice \u9078\u64C7"
-  desc: "Gain Taunt or Fury\n\u7372\u5F97\u5632\u8AF7\u6216\u6216\u72C2\u6012\u72C0\u614B"
+  title: "\u9078\u64C7"
+  desc: "\u7372\u5F97\u5632\u8AF7\u6216\u6216\u72C2\u6012\u72C0\u614B"

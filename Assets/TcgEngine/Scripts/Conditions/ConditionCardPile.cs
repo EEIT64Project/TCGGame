@@ -45,6 +45,11 @@ namespace TcgEngine
                 return CompareBool(data.IsInSecret(target), oper);
             }
 
+            if (type == PileType.Temp)
+            {
+                return CompareBool(data.IsInTemp(target), oper);
+            }
+
             return false;
         }
 

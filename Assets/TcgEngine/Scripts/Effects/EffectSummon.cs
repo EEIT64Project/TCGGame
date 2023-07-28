@@ -27,5 +27,10 @@ namespace TcgEngine
         {
             logic.SummonCard(caster.player_id, summon, caster.VariantData, target);
         }
+
+        public override void DoEffect(GameLogic logic, AbilityData ability, Card caster, CardData target)
+        {
+            logic.SummonCardHand(caster.player_id, target, caster.VariantData);
+        }
     }
 }

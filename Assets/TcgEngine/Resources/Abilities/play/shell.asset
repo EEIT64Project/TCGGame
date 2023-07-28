@@ -32,5 +32,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Shell \u8B77\u76FE"
-  desc: "On the first hit, takes no damage.\n\u7B2C\u4E00\u6B21\u88AB\u653B\u64CA\u6642\uFF0C\u4E0D\u6703\u53D7\u5230\u50B7\u5BB3"
+  title: "\u8B77\u76FE"
+  desc: "\u7B2C\u4E00\u6B21\u88AB\u653B\u64CA\u6642\uFF0C\u4E0D\u6703\u53D7\u5230\u50B7\u5BB3"

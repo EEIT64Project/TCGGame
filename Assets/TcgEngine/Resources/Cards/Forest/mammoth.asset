@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: mammoth
   m_EditorClassIdentifier: 
   id: mammoth
-  title: "Mammoth \u6F8E\u6F8E"
+  title: "\u6F8E\u6F8E"
   art_full: {fileID: 21300000, guid: 81313c76fc0ffa1448298d6baa3d02a5, type: 3}
   art_board: {fileID: 21300000, guid: 1133f890fc2040a4aaeeb80d88520b18, type: 3}
   type: 10
@@ -26,7 +26,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: 12701b92080445044bf934c1dd5915ca, type: 2}
-  text: "Trample\n\u8E10\u8E0F"
+  text: "\u8E10\u8E0F"
   desc: 
   spawn_fx: {fileID: 5791330189299518109, guid: 1fa8fa11b2c6b9b4d976743e5bbb3956,
     type: 3}
@@ -34,12 +34,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: f898927e7fe7c46729681188021b0529, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

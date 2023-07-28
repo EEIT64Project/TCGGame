@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: growth
   m_EditorClassIdentifier: 
   id: growth
-  title: Growth
+  title: "\u6210\u9577"
   icon: {fileID: 0}

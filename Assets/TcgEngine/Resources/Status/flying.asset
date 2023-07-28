@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: flying
   m_EditorClassIdentifier: 
   effect: 24
-  title: "Flying \u98DB\u884C"
+  title: "\u98DB\u884C"
   icon: {fileID: 0}
-  desc: "Ignores Taunt.\n\u7121\u8996\u5632\u8AF7"
+  desc: "\u7121\u8996\u5632\u8AF7"
   status_fx: {fileID: 0}
   hvalue: 1

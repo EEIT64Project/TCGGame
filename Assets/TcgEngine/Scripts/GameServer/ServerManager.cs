@@ -77,7 +77,9 @@ namespace TcgEngine.Server
         protected virtual void AfterLogin()
         {
             bool success = Authenticator.Get().IsConnected();
-            Debug.Log("Server authentication: " + success);
+            int permission = Authenticator.Get().GetPermission();
+            string api = Authenticator.Get().IsApi() ? "API" : "Test";
+            Debug.Log(api + " authentication: " + success + " (" + permission + ")");
 
             //If auto-refresh fail, login again
             if (!success && !try_login)

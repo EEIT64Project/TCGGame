@@ -27,12 +27,14 @@ namespace TcgEngine
         public int kill_count = 0;
 
         public Dictionary<string, Card> cards_all = new Dictionary<string, Card>();
+        public Card hero = null;
 
         public List<Card> cards_deck = new List<Card>();
         public List<Card> cards_hand = new List<Card>();
         public List<Card> cards_board = new List<Card>();
         public List<Card> cards_discard = new List<Card>();
         public List<Card> cards_secret = new List<Card>();
+        public List<Card> cards_temp = new List<Card>();
 
         public List<CardTrait> traits = new List<CardTrait>();
         public List<CardTrait> ongoing_traits = new List<CardTrait>();
@@ -69,6 +71,7 @@ namespace TcgEngine
             cards_deck.Remove(card);
             cards_discard.Remove(card);
             cards_secret.Remove(card);
+            cards_temp.Remove(card);
         }
         
         public virtual Card GetRandomCard(List<Card> card_list, System.Random rand)
@@ -291,6 +294,18 @@ namespace TcgEngine
 
         //---- Status ---------
 
+        public void AddStatus(StatusData status, int value, int duration)
+        {
+            if (status != null)
+                AddStatus(status.effect, value, duration);
+        }
+
+        public void AddOngoingStatus(StatusData status, int value)
+        {
+            if (status != null)
+                AddOngoingStatus(status.effect, value);
+        }
+
         public void AddStatus(StatusType effect, int value, int duration)
         {
             if (effect != StatusType.None)
@@ -480,6 +495,7 @@ namespace TcgEngine
 
         //--------------------
 
+        //Clone all player variables into another var, used mostly by the AI when building a prediction tree
         public static void Clone(Player source, Player dest)
         {
             dest.player_id = source.player_id;
@@ -497,12 +513,14 @@ namespace TcgEngine
             dest.mana_max = source.mana_max;
             dest.kill_count = source.kill_count;
 
+            Card.CloneNull(source.hero, ref dest.hero);
             Card.CloneDict(source.cards_all, dest.cards_all);
             Card.CloneListRef(dest.cards_all, source.cards_board, dest.cards_board);
             Card.CloneListRef(dest.cards_all, source.cards_hand, dest.cards_hand);
             Card.CloneListRef(dest.cards_all, source.cards_deck, dest.cards_deck);
             Card.CloneListRef(dest.cards_all, source.cards_discard, dest.cards_discard);
             Card.CloneListRef(dest.cards_all, source.cards_secret, dest.cards_secret);
+            Card.CloneListRef(dest.cards_all, source.cards_temp, dest.cards_temp);
 
             CardStatus.CloneList(source.status_effects, dest.status_effects);
             CardStatus.CloneList(source.ongoing_status, dest.ongoing_status);

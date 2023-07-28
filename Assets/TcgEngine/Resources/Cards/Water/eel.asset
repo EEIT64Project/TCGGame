@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: eel
   m_EditorClassIdentifier: 
   id: eel
-  title: "Electric Eel \u96FB\u9C3B"
+  title: "\u96FB\u9C3B"
   art_full: {fileID: 21300000, guid: b72bc24b5d6aecb489310af562b78913, type: 3}
   art_board: {fileID: 21300000, guid: e7b6b8d655a48f44d88797c5e0687e6f, type: 3}
   type: 10
@@ -26,8 +26,8 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: 6d42d2cab11ca0d4ea5bd65f049aee22, type: 2}
-  text: "<b>Play:</b> Target character's attack is reduced to 1.\n<b>\u6253\u51FA:</b>
-    \u76EE\u6A19\u751F\u7269\u7684\u653B\u64CA\u529B\u964D\u4F4E\u70BA 1"
+  text: "<b>\u6253\u51FA:</b> \u76EE\u6A19\u751F\u7269\u7684\u653B\u64CA\u529B\u964D\u4F4E\u70BA
+    1"
   desc: 
   spawn_fx: {fileID: 2106287953758554471, guid: a1e1ec86d02e969408bf2a6c17010f46,
     type: 3}
@@ -35,12 +35,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 60dec01b692234c41b717550f88eea25, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

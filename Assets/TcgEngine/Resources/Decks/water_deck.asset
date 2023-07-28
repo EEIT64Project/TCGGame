@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: water_deck
   title: "\u6D77\u6D0B\u4E4B\u5FC3"
+  hero: {fileID: 11400000, guid: 111d60b13ae137f4597da2789d94ecce, type: 2}
   cards:
   - {fileID: 11400000, guid: 89f3d73097f233148896600d94d482c0, type: 2}
   - {fileID: 11400000, guid: f11bd6abea1b4c24ab733ae003dfa279, type: 2}

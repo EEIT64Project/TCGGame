@@ -36,6 +36,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Hibernate \u50AC\u7720\u8853"
-  desc: "Target character gains +4/4 and goes to sleep for the next 2 turns.\n\u76EE\u6A19\u89D2\u8272\u7372\u5F97
-    +4/4 \u4E26\u5728\u63A5\u4E0B\u4F86\u7684 2 \u56DE\u5408\u5167\u9032\u5165\u7761\u7720\u72C0\u614B\u3002"
+  title: "\u50AC\u7720\u8853"
+  desc: "\u76EE\u6A19\u89D2\u8272\u7372\u5F97 +4/4 \u4E26\u5728\u63A5\u4E0B\u4F86\u7684
+    2 \u56DE\u5408\u5167\u9032\u5165\u7761\u7720\u72C0\u614B\u3002"

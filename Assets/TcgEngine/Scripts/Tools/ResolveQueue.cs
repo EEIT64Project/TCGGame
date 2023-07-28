@@ -61,7 +61,7 @@ namespace TcgEngine
             }
         }
 
-        public virtual void AddAttack(Card attacker, Card target, Action<Card, Card> callback)
+        public virtual void AddAttack(Card attacker, Card target, Action<Card, Card, bool> callback, bool skip_cost = false)
         {
             if (attacker != null && target != null)
             {
@@ -69,12 +69,13 @@ namespace TcgEngine
                 elem.attacker = attacker;
                 elem.target = target;
                 elem.ptarget = null;
+                elem.skip_cost = skip_cost;
                 elem.callback = callback;
                 attack_queue.Enqueue(elem);
             }
         }
 
-        public virtual void AddAttack(Card attacker, Player target, Action<Card, Player> callback)
+        public virtual void AddAttack(Card attacker, Player target, Action<Card, Player, bool> callback, bool skip_cost = false)
         {
             if (attacker != null && target != null)
             {
@@ -82,6 +83,7 @@ namespace TcgEngine
                 elem.attacker = attacker;
                 elem.target = null;
                 elem.ptarget = target;
+                elem.skip_cost = skip_cost;
                 elem.pcallback = callback;
                 attack_queue.Enqueue(elem);
             }
@@ -132,9 +134,9 @@ namespace TcgEngine
                 AttackQueueElement elem = attack_queue.Dequeue();
                 attack_elem_pool.Dispose(elem);
                 if (elem.ptarget != null)
-                    elem.pcallback?.Invoke(elem.attacker, elem.ptarget);
+                    elem.pcallback?.Invoke(elem.attacker, elem.ptarget, elem.skip_cost);
                 else
-                    elem.callback?.Invoke(elem.attacker, elem.target);
+                    elem.callback?.Invoke(elem.attacker, elem.target, elem.skip_cost);
             }
             else if (callback_queue.Count > 0)
             {
@@ -198,6 +200,26 @@ namespace TcgEngine
             secret_queue.Clear();
             callback_queue.Clear();
         }
+
+        public Queue<AttackQueueElement> GetAttackQueue()
+        {
+            return attack_queue;
+        }
+
+        public Queue<AbilityQueueElement> GetAbilityQueue()
+        {
+            return ability_cast_queue;
+        }
+
+        public Queue<SecretQueueElement> GetSecretQueue()
+        {
+            return secret_queue;
+        }
+
+        public Queue<CallbackQueueElement> GetCallbackQueue()
+        {
+            return callback_queue;
+        }
     }
 
     public class AbilityQueueElement
@@ -213,8 +235,9 @@ namespace TcgEngine
         public Card attacker;
         public Card target;
         public Player ptarget;
-        public Action<Card, Card> callback;
-        public Action<Card, Player> pcallback;
+        public bool skip_cost;
+        public Action<Card, Card, bool> callback;
+        public Action<Card, Player, bool> pcallback;
     }
 
     public class SecretQueueElement

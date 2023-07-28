@@ -35,6 +35,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Paralyse \u7671\u7613"
-  desc: "Paralyse target character for 3 turns.\n\u76EE\u6A19\u751F\u7269\u7121\u6CD5\u884C\u52D5
-    3 \u56DE\u5408"
+  title: "\u7671\u7613"
+  desc: "\u76EE\u6A19\u751F\u7269\u7121\u6CD5\u884C\u52D5 3 \u56DE\u5408"

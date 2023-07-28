@@ -496,7 +496,9 @@ MonoBehaviour:
   cost: {fileID: 0}
   delete_btn: {fileID: 0}
   click_audio: {fileID: 0}
-  disabled_mat: {fileID: 2100000, guid: 20369ec185166fa4e98a6df6f6f0dc08, type: 2}
+  disabled_mat: {fileID: 2100000, guid: 4f48bef4a205519449e166c2d47e4337, type: 2}
+  default_mat: {fileID: 2100000, guid: 2578a245d0a9f3e43b7b77aff6cf9df0, type: 2}
+  warning: {fileID: 0}
 --- !u!222 &3845838344019372043
 CanvasRenderer:
   m_ObjectHideFlags: 0

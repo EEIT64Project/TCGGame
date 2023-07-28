@@ -49,6 +49,11 @@ namespace TcgEngine
             permission_level = 1;
         }
 
+        public int GetLevel()
+        {
+            return Mathf.FloorToInt(xp / 1000) + 1;
+        }
+
         public string GetAvatar()
         {
             if (avatar != null)
@@ -324,7 +329,7 @@ namespace TcgEngine
             foreach (VariantData variant in VariantData.GetAll())
             {
                 string suffix = variant.GetSuffix();
-                if (tid.EndsWith(suffix))
+                if (tid != null && tid.EndsWith(suffix))
                     return tid.Replace(suffix, "");
             }
             return tid;
@@ -335,7 +340,7 @@ namespace TcgEngine
             foreach (VariantData variant in VariantData.GetAll())
             {
                 string suffix = variant.GetSuffix();
-                if (tid.EndsWith(suffix))
+                if (tid != null && tid.EndsWith(suffix))
                     return variant;
             }
             return VariantData.GetDefault();
@@ -347,6 +352,7 @@ namespace TcgEngine
     {
         public string tid;
         public string title;
+        public string hero;
         public string[] cards;
 
         public int GetQuantity()
@@ -356,17 +362,8 @@ namespace TcgEngine
 
         public bool IsValid()
         {
-            return !string.IsNullOrEmpty(tid) && !string.IsNullOrWhiteSpace(title) && cards.Length >= GameplayData.Get().deck_size;
+            return !string.IsNullOrEmpty(tid) && !string.IsNullOrWhiteSpace(title) && cards.Length == GameplayData.Get().deck_size;
         }
-    }
-
-    [System.Serializable]
-    public class UserChallengesData
-    {
-        public string username;
-        public string time;
-        public string game;
-        public bool accepted;
     }
 }
 

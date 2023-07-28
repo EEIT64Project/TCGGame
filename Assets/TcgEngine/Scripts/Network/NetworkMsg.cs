@@ -111,11 +111,18 @@ namespace TcgEngine
     }
 
     [System.Serializable]
-    public struct MatchmakingListItem
+    public struct MatchmakingListItem : INetworkSerializable
     {
         public string group;
         public string user_id;
         public string username;
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref group);
+            serializer.SerializeValue(ref user_id);
+            serializer.SerializeValue(ref username);
+        }
     }
 
     public class MatchmakingList : INetworkSerializable
@@ -124,36 +131,25 @@ namespace TcgEngine
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            if (serializer.IsReader)
-            {
-                int size = 0;
-                serializer.SerializeValue(ref size);
-                if (size > 0)
-                {
-                    byte[] bytes = new byte[size];
-                    serializer.SerializeValue(ref bytes);
-                    items = NetworkTool.Deserialize<MatchmakingListItem[]>(bytes);
-                }
-            }
-
-            if (serializer.IsWriter)
-            {
-                byte[] bytes = NetworkTool.Serialize(items);
-                int size = bytes.Length;
-                serializer.SerializeValue(ref size);
-                if (size > 0)
-                    serializer.SerializeValue(ref bytes);
-            }
+            NetworkTool.NetSerializeArray(serializer, ref items);
         }
     }
 
     [System.Serializable]
-    public class MatchListItem
+    public class MatchListItem : INetworkSerializable
     {
         public string group;
         public string username;
         public string game_uid;
         public string game_url;
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref group);
+            serializer.SerializeValue(ref username);
+            serializer.SerializeValue(ref game_uid);
+            serializer.SerializeValue(ref game_url);
+        }
     }
 
     public class MatchList : INetworkSerializable
@@ -162,26 +158,7 @@ namespace TcgEngine
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            if (serializer.IsReader)
-            {
-                int size = 0;
-                serializer.SerializeValue(ref size);
-                if (size > 0)
-                {
-                    byte[] bytes = new byte[size];
-                    serializer.SerializeValue(ref bytes);
-                    items = NetworkTool.Deserialize<MatchListItem[]>(bytes);
-                }
-            }
-
-            if (serializer.IsWriter)
-            {
-                byte[] bytes = NetworkTool.Serialize(items);
-                int size = bytes.Length;
-                serializer.SerializeValue(ref size);
-                if (size > 0)
-                    serializer.SerializeValue(ref bytes);
-            }
+            NetworkTool.NetSerializeArray(serializer, ref items);
         }
     }
 

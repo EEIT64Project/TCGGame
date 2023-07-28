@@ -36,6 +36,12 @@ namespace TcgEngine
                 player.RemoveCardFromAllGroups(target);
                 player.cards_discard.Add(target);
             }
+
+            if (pile == PileType.Temp)
+            {
+                player.RemoveCardFromAllGroups(target);
+                player.cards_temp.Add(target);
+            }
         }
     }
 
@@ -47,6 +53,7 @@ namespace TcgEngine
         Deck = 30,
         Discard = 40,
         Secret = 50,
+        Temp = 90,
     }
 
 }

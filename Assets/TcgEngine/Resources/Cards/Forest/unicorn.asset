@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: unicorn
   m_EditorClassIdentifier: 
   id: unicorn
-  title: "Unicorn \u7368\u89D2\u7378"
+  title: "\u7368\u89D2\u7378"
   art_full: {fileID: 21300000, guid: 3292abc2a706cc64fbd62d560d817588, type: 3}
   art_board: {fileID: 21300000, guid: 028bf9dce47277945b4c7d7a3fead0da, type: 3}
   type: 10
@@ -27,8 +27,7 @@ MonoBehaviour:
   abilities:
   - {fileID: 11400000, guid: c361771bc0f771e48bb0a97fd2325564, type: 2}
   - {fileID: 11400000, guid: dbdc04150338c3c4e8a6552b66924448, type: 2}
-  text: "<b>Play:</b> Give +2/2.\n<b>Action:</b> Charge.\n<b>\u6253\u51FA:</b> \u7D66\u4E88
-    +2/2.\n<b>\u52D5\u4F5C:</b> \u885D\u92D2"
+  text: "<b>\u6253\u51FA:</b> \u7D66\u4E88 +2/2.\n<b>\u52D5\u4F5C:</b> \u885D\u92D2"
   desc: 
   spawn_fx: {fileID: 5791330189299518109, guid: 1fa8fa11b2c6b9b4d976743e5bbb3956,
     type: 3}
@@ -36,12 +35,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: dc059d79ba4de47bcacd56fb05df850e, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

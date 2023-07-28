@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: potion_blue
   m_EditorClassIdentifier: 
   id: potion_blue
-  title: "Blue Potion \u6771\u6CC9\u96EA\u78A7"
+  title: "\u4E00\u755D\u592A\u5E73\u6D0B"
   art_full: {fileID: 21300000, guid: 61ea4cc78589cad4e9f44b123557240d, type: 3}
   art_board: {fileID: 0}
   type: 20
@@ -27,19 +27,19 @@ MonoBehaviour:
   abilities:
   - {fileID: 11400000, guid: d0cd8086bc61cdf45ad6c9eb49bbcea4, type: 2}
   - {fileID: 11400000, guid: 2a806d0cbef18e344a7c1eb317673b21, type: 2}
-  text: "Target gains 2 armor and fully heals.\n\u76EE\u6A19\u7372\u5F97 2 \u9EDE\u8B77\u7532\u4E26\u6062\u5FA9\u5168\u90E8\u751F\u547D\u503C"
+  text: "\u76EE\u6A19\u7372\u5F97 2 \u9EDE\u8B77\u7532\u4E26\u6062\u5FA9\u5168\u90E8\u751F\u547D\u503C"
   desc: 
   spawn_fx: {fileID: 0}
   death_fx: {fileID: 0}
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 85e329c1f84d0499ba7c6c4975effbff, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

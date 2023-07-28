@@ -30,16 +30,16 @@ namespace TcgEngine
         public string selector_ability_id;
         public string selector_caster_uid;
 
-        //Other values (not serialized)
-        [System.NonSerialized] public Card last_played;
-        [System.NonSerialized] public Card last_target;
-        [System.NonSerialized] public Card last_killed;
-        [System.NonSerialized] public Card ability_triggerer;
-        [System.NonSerialized] public int rolled_value;
+        //Other values
+        public Card last_played;
+        public Card last_target;
+        public Card last_killed;
+        public Card ability_triggerer;
+        public int rolled_value;
 
-        //Other arrays  (not serialized)
-        [System.NonSerialized] public HashSet<string> ability_played = new HashSet<string>();
-        [System.NonSerialized] public HashSet<string> cards_attacked = new HashSet<string>();
+        //Other arrays 
+        public HashSet<string> ability_played = new HashSet<string>();
+        public HashSet<string> cards_attacked = new HashSet<string>();
 
         public Game() { }
         
@@ -121,12 +121,12 @@ namespace TcgEngine
         }
 
         //Check if a card is allowed to move to slot
-        public virtual bool CanMoveCard(Card card, Slot slot)
+        public virtual bool CanMoveCard(Card card, Slot slot, bool skip_cost = false)
         {
             if (card == null || !slot.IsValid())
                 return false;
 
-            if (!card.CanMove())
+            if (!card.CanMove(skip_cost))
                 return false; //Card cant move
 
             if (Slot.GetP(card.player_id) != slot.p)
@@ -143,12 +143,12 @@ namespace TcgEngine
         }
 
         //Check if a card is allowed to attack a player
-        public virtual bool CanAttackTarget(Card attacker, Player target)
+        public virtual bool CanAttackTarget(Card attacker, Player target, bool skip_cost = false)
         {
             if(attacker == null || target == null)
                 return false;
 
-            if (!attacker.CanAttack())
+            if (!attacker.CanAttack(skip_cost))
                 return false; //Card cant attack
 
             if (attacker.player_id == target.player_id)
@@ -163,29 +163,29 @@ namespace TcgEngine
             return true;
         }
 
-        //Check if a card is allowed to attack another one
-        public virtual bool CanAttackTarget(Card attacker, Card target)
+        //攻擊檢查判定（是否允許攻擊）
+        public virtual bool CanAttackTarget(Card attacker, Card target, bool skip_cost = false)
         {
             if (attacker == null || target == null)
                 return false;
 
-            if (!attacker.CanAttack())
-                return false; //Card cant attack
+            if (!attacker.CanAttack(skip_cost))
+                return false; //卡牌無法攻擊
 
             if (attacker.player_id == target.player_id)
-                return false; //Cant attack same player
+                return false; //玩家無法攻擊自己
 
             if (!IsOnBoard(attacker) || !IsOnBoard(target))
-                return false; //Cards not on board
+                return false; //卡牌沒有在面板上
 
             if (!attacker.CardData.IsCharacter() || !target.CardData.IsBoardCard())
-                return false; //Only character can attack
+                return false; //只有生物牌可以攻擊
 
             if (target.HasStatus(StatusType.Stealth))
-                return false; //Stealth cant be attacked
+                return false; //潛行生物無法被攻擊
 
             if (target.HasStatus(StatusType.Protected) && !attacker.HasStatus(StatusType.Flying))
-                return false; //Protected by adjacent card
+                return false; //相鄰卡牌受到保護
 
             return true;
         }
@@ -193,17 +193,17 @@ namespace TcgEngine
         public virtual bool CanCastAbility(Card card, AbilityData ability)
         {
             if (card == null || !card.CanDoActivatedAbilities())
-                return false; //This card cant cast
+                return false; //此卡牌無法施放能力
 
             if (ability.trigger != AbilityTrigger.Activate)
-                return false; //Not an activated ability
+                return false; //無效能力
 
             Player player = GetPlayer(card.player_id);
             if (!player.CanPayAbility(card, ability))
-                return false; //Cant pay for ability
+                return false; //此能力無法消耗法力值
 
             if (!ability.AreTriggerConditionsMet(this, card))
-                return false; //Conditions not met
+                return false; //不滿足條件
 
             return true;
         }
@@ -218,7 +218,8 @@ namespace TcgEngine
             {
                 if (ability && ability.trigger == AbilityTrigger.OnPlay && ability.target == AbilityTarget.PlayTarget)
                 {
-                    if (!ability.CanTarget(this, caster, target, ai_check))
+                    bool can_target = ai_check ? ability.CanAiTarget(this, caster, target) : ability.CanTarget(this, caster, target);
+                    if (!can_target)
                         return false;
                 }
             }
@@ -235,7 +236,8 @@ namespace TcgEngine
             {
                 if (ability && ability.trigger == AbilityTrigger.OnPlay && ability.target == AbilityTarget.PlayTarget)
                 {
-                    if (!ability.CanTarget(this, caster, target, ai_check))
+                    bool can_target = ai_check ? ability.CanAiTarget(this, caster, target) : ability.CanTarget(this, caster, target);
+                    if (!can_target)
                         return false;
                 }
             }
@@ -248,7 +250,7 @@ namespace TcgEngine
             if (caster == null || target == null)
                 return false;
 
-            if (!target.IsValid())
+            if (target.IsPlayerSlot())
                 return IsPlayTargetValid(caster, GetPlayer(target.p)); //Slot 0,0, means we are targeting a player
 
             Card slot_card = GetSlotCard(target);
@@ -259,7 +261,8 @@ namespace TcgEngine
             {
                 if (ability && ability.trigger == AbilityTrigger.OnPlay && ability.target == AbilityTarget.PlayTarget)
                 {
-                    if (!ability.CanTarget(this, caster, target, ai_check))
+                    bool can_target = ai_check ? ability.CanAiTarget(this, caster, target) : ability.CanTarget(this, caster, target);
+                    if (!can_target)
                         return false;
                 }
             }
@@ -360,6 +363,19 @@ namespace TcgEngine
             return null;
         }
 
+        public Card GetTempCard(string card_uid)
+        {
+            foreach (Player player in players)
+            {
+                foreach (Card card in player.cards_temp)
+                {
+                    if (card != null && card.uid == card_uid)
+                        return card;
+                }
+            }
+            return null;
+        }
+
         public Card GetSlotCard(Slot slot)
         {
             foreach (Player player in players)
@@ -416,6 +432,11 @@ namespace TcgEngine
             return card != null && GetSecretCard(card.uid) != null;
         }
 
+        public bool IsInTemp(Card card)
+        {
+            return card != null && GetTempCard(card.uid) != null;
+        }
+
         public bool IsCardOnSlot(Slot slot)
         {
             return GetSlotCard(slot) != null;
@@ -431,6 +452,7 @@ namespace TcgEngine
             return state == GameState.GameEnded;
         }
 
+        //Same as clone, but also instantiates the variable (much slower)
         public static Game CloneNew(Game source)
         {
             Game game = new Game();
@@ -438,6 +460,7 @@ namespace TcgEngine
             return game;
         }
 
+        //Clone all variables into another var, used mostly by the AI when building a prediction tree
         public static void Clone(Game source, Game dest)
         {
             dest.game_uid = source.game_uid;
@@ -464,11 +487,13 @@ namespace TcgEngine
             dest.selector_player = source.selector_player;
             dest.selector_caster_uid = source.selector_caster_uid;
             dest.selector_ability_id = source.selector_ability_id;
+            dest.rolled_value = source.rolled_value;
 
-            //No need to copy temporary data for optimization
-            //dest.last_played = source.last_played;
-            //dest.last_killed = source.last_killed;
-            //dest.last_target = source.last_target;
+            //Some values are commented for optimization, you can uncomment if you want more accurate slower AI
+            //Card.CloneNull(source.last_played, ref dest.last_played);
+            //Card.CloneNull(source.last_killed, ref dest.last_killed);
+            //Card.CloneNull(source.last_target, ref dest.last_target);
+            Card.CloneNull(source.ability_triggerer, ref dest.ability_triggerer);
 
             //CloneHash(source.ability_played, dest.ability_played);
             //CloneHash(source.cards_attacked, dest.cards_attacked);

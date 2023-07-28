@@ -100,7 +100,7 @@ namespace TcgEngine.UI
             udata.AddCard(tid, quantity);
             udata.coins -= cost;
             await Authenticator.Get().SaveUserData();
-            CollectionPanel.Get().ReloadUserCards();
+            CollectionPanel.Get().ReloadUser();
             Hide();
         }
 
@@ -121,7 +121,7 @@ namespace TcgEngine.UI
             WebResponse res = await ApiClient.Get().SendPostRequest(url, jdata);
             if (res.success)
             {
-                CollectionPanel.Get().ReloadUserCards();
+                CollectionPanel.Get().ReloadUser();
                 Hide();
             }
             else
@@ -146,7 +146,8 @@ namespace TcgEngine.UI
             udata.AddCard(tid, -quantity);
             udata.coins += cost;
             await Authenticator.Get().SaveUserData();
-            CollectionPanel.Get().ReloadUserCards();
+            CollectionPanel.Get().ReloadUser();
+            MainMenu.Get().RefreshDeckList();
             Hide();
         }
 
@@ -167,7 +168,7 @@ namespace TcgEngine.UI
             WebResponse res = await ApiClient.Get().SendPostRequest(url, jdata);
             if (res.success)
             {
-                CollectionPanel.Get().ReloadUserCards();
+                CollectionPanel.Get().ReloadUser();
                 Hide();
             }
             else

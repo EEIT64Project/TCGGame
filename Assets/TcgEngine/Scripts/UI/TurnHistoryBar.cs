@@ -6,7 +6,7 @@ using UnityEngine;
 namespace TcgEngine.UI
 {
     /// <summary>
-    /// History bar shows all the previous moved perform by a player this turn
+    /// 歷史欄顯示玩家本回合之前的所有歷史動作資料
     /// </summary>
 
     public class TurnHistoryBar : MonoBehaviour

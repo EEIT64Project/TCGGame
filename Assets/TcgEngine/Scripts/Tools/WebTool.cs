@@ -140,21 +140,21 @@ namespace TcgEngine
             return value;
         }
 
-        public static ListResponse<T> JsonToArray<T>(string json)
+        public static ListJson<T> JsonToArray<T>(string json)
         {
-            ListResponse<T> list = new ListResponse<T>();
+            ListJson<T> list = new ListJson<T>();
             list.list = new T[0];
             try
             {
                 string wrap_json = "{ \"list\": " + json + "}";
-                list = JsonUtility.FromJson<ListResponse<T>>(wrap_json);
+                list = JsonUtility.FromJson<ListJson<T>>(wrap_json);
             }
             catch (Exception) { }
             return list;
         }
 
         public static string ToJson(object data)
-        {   
+        {
             return JsonUtility.ToJson(data);
         }
 
@@ -402,13 +402,6 @@ namespace TcgEngine
     [Serializable]
     public class ErrorResponse
     {
-        public string error;
-    }
-
-    [Serializable]
-    public class ListResponse<T>
-    {
-        public T[] list;
         public string error;
     }
 }

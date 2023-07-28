@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: lava_beast
   m_EditorClassIdentifier: 
   id: lava_beast
-  title: "Lava Beast \u7194\u5CA9\u7378"
+  title: "\u7194\u5CA9\u7378"
   art_full: {fileID: 21300000, guid: 51d961cdbcb2f564ea854511cab2d4f9, type: 3}
   art_board: {fileID: 21300000, guid: bc7b86463ccd8fe469fb6033f021450d, type: 3}
   type: 10
@@ -26,8 +26,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: e3d40ecfce3c72347933eff9a42b95a0, type: 2}
-  text: "After playing a spell, gain +2 attack.\n\u4F7F\u7528\u6CD5\u8853\u5F8C\uFF0C\u589E\u52A0
-    2 \u9EDE\u653B\u64CA\u529B"
+  text: "\u4F7F\u7528\u6CD5\u8853\u5F8C\uFF0C\u589E\u52A0 2 \u9EDE\u653B\u64CA\u529B"
   desc: 
   spawn_fx: {fileID: 9125387663047351618, guid: bac685160af4aff46ae561a51da6f5f4,
     type: 3}
@@ -35,12 +34,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 47e642e1e27844f38af28a05c6b3b657, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

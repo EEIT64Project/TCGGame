@@ -81,8 +81,8 @@ namespace TcgEngine.UI
             string url = ApiClient.ServerURL + "/users";
             WebResponse res = await ApiClient.Get().SendGetRequest(url);
 
-            ListResponse<UserData> users = ApiTool.JsonToArray<UserData>(res.data);
-            List<UserData> sorted_users = new List<UserData>(users.list);
+            UserData[] users = ApiTool.JsonToArray<UserData>(res.data);
+            List<UserData> sorted_users = new List<UserData>(users);
             sorted_users.Sort((UserData a, UserData b) => { return b.elo.CompareTo(a.elo); });
 
             int previous_rank = 0;

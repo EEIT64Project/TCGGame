@@ -41,11 +41,13 @@ MonoBehaviour:
   card_spawn_audio: {fileID: 0}
   card_destroy_audio: {fileID: 0}
   card_attack_audio: {fileID: 0}
-  card_damage_audio: {fileID: 0}
-  player_damage_audio: {fileID: 0}
-  hand_card_click_audio: {fileID: 0}
+  card_move_audio: {fileID: 8300000, guid: 40cda89d5c9ce45d8bf41858dcf61230, type: 3}
+  card_damage_audio: {fileID: 8300000, guid: 2e3d6fd662065485aa3c010eb664f9cc, type: 3}
+  player_damage_audio: {fileID: 8300000, guid: 92401439244ae4d72b35a83773c240d2, type: 3}
+  hand_card_click_audio: {fileID: 8300000, guid: 63753cca0e0644ad09d52bc2a7db7559,
+    type: 3}
   new_turn_audio: {fileID: 0}
-  win_audio: {fileID: 0}
-  defeat_audio: {fileID: 0}
+  win_audio: {fileID: 8300000, guid: 9b261acccb58d4443aab5349544b5610, type: 3}
+  defeat_audio: {fileID: 8300000, guid: 5eff1e4749a5e42f2a85c0bda53c9b2b, type: 3}
   win_music: {fileID: 0}
   defeat_music: {fileID: 0}

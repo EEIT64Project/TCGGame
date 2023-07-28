@@ -35,6 +35,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Roar \u5486\u54EE"
-  desc: "All allied creatures gain +1 attack until the end of the turn.\n\u6240\u6709\u6211\u65B9\u751F\u7269\u7372\u5F97
-    +1 \u653B\u64CA\u529B\u76F4\u5230\u56DE\u5408\u7D50\u675F"
+  title: "\u5486\u54EE"
+  desc: "\u6240\u6709\u6211\u65B9\u751F\u7269\u7372\u5F97 +1 \u653B\u64CA\u529B\u76F4\u5230\u56DE\u5408\u7D50\u675F"

@@ -32,6 +32,7 @@ namespace TcgEngine
         public AudioClip card_spawn_audio;
         public AudioClip card_destroy_audio;
         public AudioClip card_attack_audio;
+        public AudioClip card_move_audio;
         public AudioClip card_damage_audio;
         public AudioClip player_damage_audio;
         public AudioClip hand_card_click_audio;

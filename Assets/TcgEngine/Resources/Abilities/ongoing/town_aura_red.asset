@@ -35,6 +35,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Red Aura \u71BE\u7130\u4E4B\u9B42"
-  desc: "All Red characters gain +2 attack.\n\u6240\u6709\u71BE\u7130\u5C6C\u6027\u5361\u724C\u589E\u52A0
-    2 \u9EDE\u653B\u64CA\u529B"
+  title: "\u71BE\u7130\u4E4B\u9B42"
+  desc: "\u6240\u6709\u71BE\u7130\u5C6C\u6027\u5361\u724C\u589E\u52A0 2 \u9EDE\u653B\u64CA\u529B"

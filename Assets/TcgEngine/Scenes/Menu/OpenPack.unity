@@ -528,7 +528,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   click_audio: {fileID: 8300000, guid: e14210c40505d4c7384e2c64f02b329d, type: 3}
-  hover_audio: {fileID: 0}
 --- !u!1 &679480444
 GameObject:
   m_ObjectHideFlags: 0
@@ -1536,52 +1535,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4196175996399161075, guid: d239d65a88816f8409f118084a3fc874,
-        type: 3}
-      propertyPath: m_Delegates.Array.data[2].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4196175996399161075, guid: d239d65a88816f8409f118084a3fc874,
-        type: 3}
-      propertyPath: m_Delegates.Array.data[2].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 5073420584982709168, guid: d239d65a88816f8409f118084a3fc874,
-        type: 3}
-    - target: {fileID: 4196175996399161075, guid: d239d65a88816f8409f118084a3fc874,
-        type: 3}
-      propertyPath: m_Delegates.Array.data[2].callback.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4196175996399161075, guid: d239d65a88816f8409f118084a3fc874,
-        type: 3}
-      propertyPath: m_Delegates.Array.data[2].callback.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: OnMouseDownCard
-      objectReference: {fileID: 0}
-    - target: {fileID: 4196175996399161075, guid: d239d65a88816f8409f118084a3fc874,
-        type: 3}
-      propertyPath: m_Delegates.Array.data[2].callback.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: TcgEngine.Client.HandPack, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 4196175996399161075, guid: d239d65a88816f8409f118084a3fc874,
-        type: 3}
-      propertyPath: m_Delegates.Array.data[2].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4196175996399161075, guid: d239d65a88816f8409f118084a3fc874,
-        type: 3}
-      propertyPath: m_Delegates.Array.data[2].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 5073420584982709168, guid: d239d65a88816f8409f118084a3fc874,
         type: 3}
       propertyPath: pack_open_audio
       value: 
       objectReference: {fileID: 8300000, guid: 0c4b5d7d1408c4ed18e0e0169be3de83, type: 3}
-    - target: {fileID: 5073420584982709168, guid: d239d65a88816f8409f118084a3fc874,
-        type: 3}
-      propertyPath: hand_card_click_audio
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d239d65a88816f8409f118084a3fc874, type: 3}
 --- !u!1 &8958687642284033997 stripped

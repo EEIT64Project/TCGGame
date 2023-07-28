@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: adventure5
   level: 5
-  title: "\u9F8D\u606F"
+  title: "\u9F8D\u68F2\u4E4B\u5730"
   scene: Game
   player_deck: {fileID: 11400000, guid: 96bd0817bf6040a44af76fb0033a3760, type: 2}
   ai_deck: {fileID: 11400000, guid: c5edccb7c0204c841b4211752c45d7ee, type: 2}

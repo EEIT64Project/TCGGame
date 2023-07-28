@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: town_volcano
   m_EditorClassIdentifier: 
   id: town_volcano
-  title: "Volcano Town \u706B\u708E\u93AE"
+  title: "\u9F90\u8C9D\u53E4\u57CE"
   art_full: {fileID: 21300000, guid: 5c8db759a5257ad498b2769e94d8acb1, type: 3}
   art_board: {fileID: 21300000, guid: 25fabafc035372f4da561d5b9d0f49f7, type: 3}
   type: 30
@@ -26,8 +26,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: c0cea65074408f8498948aeae58fac68, type: 2}
-  text: "All red cards have +2 attack.\n\u6240\u6709\u71BE\u71C4\u5C6C\u6027\u5361\u724C\u589E\u52A0
-    2 \u9EDE\u653B\u64CA\u529B"
+  text: "\u6240\u6709\u71BE\u71C4\u5C6C\u6027\u5361\u724C\u589E\u52A0 2 \u9EDE\u653B\u64CA\u529B"
   desc: 
   spawn_fx: {fileID: 9125387663047351618, guid: bac685160af4aff46ae561a51da6f5f4,
     type: 3}
@@ -35,12 +34,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 8564c75b3cb0c430a9149254742995e6, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

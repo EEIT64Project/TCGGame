@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: town_underwater
   m_EditorClassIdentifier: 
   id: town_underwater
-  title: "Underwater Town \u4E9E\u7279\u862D\u63D0\u65AF"
+  title: "\u4E9E\u7279\u862D\u63D0\u65AF"
   art_full: {fileID: 21300000, guid: 7fc0bfcbe3cb6f140814840245dda73b, type: 3}
   art_board: {fileID: 21300000, guid: 24c14e88b5498bb4e8bc24429ee85c27, type: 3}
   type: 30
@@ -26,8 +26,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: f405476e6b47d6d498fe3d3211c16430, type: 2}
-  text: "All blue cards cost 1 less.\n\u6240\u6709\u6D77\u6D0B\u5C6C\u6027\u5361\u724C\u6E1B\u5C11
-    1 \u9EDE\u6CD5\u529B\u503C\u6D88\u8017"
+  text: "\u6240\u6709\u6D77\u6D0B\u5C6C\u6027\u5361\u724C\u6E1B\u5C11 1 \u9EDE\u6CD5\u529B\u503C\u6D88\u8017"
   desc: 
   spawn_fx: {fileID: 2106287953758554471, guid: a1e1ec86d02e969408bf2a6c17010f46,
     type: 3}
@@ -35,12 +34,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: aa8789facd7154276a68d1426b08c45a, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

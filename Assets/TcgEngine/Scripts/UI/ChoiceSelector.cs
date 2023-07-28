@@ -7,7 +7,8 @@ using TcgEngine.Client;
 namespace TcgEngine.UI
 {
     /// <summary>
-    /// 卡牌能力選擇框
+    /// The choice selector is a box that appears when using an ability with ChoiceSelector as target
+    /// it let you choose between different abilities
     /// </summary>
 
     public class ChoiceSelector : UIPanel
@@ -49,12 +50,12 @@ namespace TcgEngine.UI
                 int index = 0;
                 foreach (AbilityData choice in ability.chain_abilities)
                 {
-                    if (index < choices.Length)
+                    if (choice != null && index < choices.Length)
                     {
                         ChoiceSelectorChoice achoice = choices[index];
                         achoice.SetChoice(index, choice.title, choice.desc);
-                        index++;
                     }
+                    index++;
                 }
             }
         }

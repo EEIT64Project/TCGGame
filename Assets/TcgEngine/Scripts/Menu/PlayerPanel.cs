@@ -24,9 +24,10 @@ namespace TcgEngine.UI
         public Text victories;
         public Text defeats;
 
-        [Header("Other players")]
+        [Header("Bottom bar")]
         public GameObject your_area;
         public GameObject other_area;
+        public GameObject account_button;
         public GameObject add_friend_btn;
         public GameObject remove_friend_btn;
         public GameObject challenge_friend_btn;
@@ -51,6 +52,7 @@ namespace TcgEngine.UI
         public Button edit_change2;
         public Button resend_button;
         public Button confirm_button;
+        public Text edit_error;
 
         private string username;
         private UserData user_data;
@@ -134,6 +136,7 @@ namespace TcgEngine.UI
 
                 your_area.SetActive(IsYou());
                 other_area.SetActive(!IsYou());
+                account_button.SetActive(Authenticator.Get().IsApi());
 
                 if (!IsYou())
                 {
@@ -279,6 +282,7 @@ namespace TcgEngine.UI
             edit_change2.gameObject.SetActive(true);
             resend_button.gameObject.SetActive(udata.validation_level == 0);
             confirm_button.gameObject.SetActive(false);
+            edit_error.text = "";
             edit_panel.Show();
         }
 
@@ -313,16 +317,23 @@ namespace TcgEngine.UI
 
         public async void OnClickResendConfirm()
         {
+            edit_error.text = "";
             string url = ApiClient.ServerURL + "/users/email/resend";
             WebResponse res = await ApiClient.Get().SendPostRequest(url, "");
             if (res.success)
             {
                 edit_panel.Hide();
             }
+            else
+            {
+                edit_error.text = res.error;
+            }
         }
 
         public async void OnClickEditConfirm()
         {
+            edit_error.text = "";
+
             if (!user_email.readOnly && user_email.text.Length > 0)
             {
                 EditEmailRequest req = new EditEmailRequest();
@@ -334,6 +345,10 @@ namespace TcgEngine.UI
                 {
                     edit_panel.Hide();
                     MainMenu.Get().RefreshUserData();
+                }
+                else
+                {
+                    edit_error.text = res.error;
                 }
             }
             else if (!user_password_new.readOnly && user_password_new.text.Length > 0)
@@ -349,6 +364,10 @@ namespace TcgEngine.UI
                     if (res.success)
                     {
                         edit_panel.Hide();
+                    }
+                    else
+                    {
+                        edit_error.text = res.error;
                     }
                 }
             }

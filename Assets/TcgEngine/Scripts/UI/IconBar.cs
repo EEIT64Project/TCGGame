@@ -6,8 +6,8 @@ using UnityEngine.UI;
 namespace TcgEngine.UI
 {
     /// <summary>
-    /// Bar that contain multiple icons to represent a value
-    /// Such as the mana bar during the game
+    /// 包含多個圖標來表示值
+    /// 游戲過程中的法力條
     /// </summary>
 
     public class IconBar : MonoBehaviour

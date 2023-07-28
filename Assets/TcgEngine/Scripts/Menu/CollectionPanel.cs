@@ -49,6 +49,7 @@ namespace TcgEngine.UI
         public GameObject deck_cards_prefab;
         public RectTransform deck_content;
         public GridLayoutGroup deck_grid;
+        public IconButton[] hero_powers;
 
         private TeamData filter_planet = null;
         private int filter_dropdown = 0;
@@ -86,15 +87,26 @@ namespace TcgEngine.UI
 
             foreach (IconButton button in team_filters)
                 button.onClick += OnClickPlanet;
-
-            //if (TheGame.IsMobile())
-            //    MobileResize();
         }
 
         protected override void Start()
         {
             base.Start();
 
+            //Set power abilities hover text
+            foreach (IconButton btn in hero_powers)
+            {
+                CardData icard = CardData.Get(btn.value);
+                HoverTargetUI hover = btn.GetComponent<HoverTargetUI>();
+                AbilityData iability = icard?.GetAbility(AbilityTrigger.Activate);
+                if (icard != null && hover != null && iability != null)
+                {
+                    hover.text = "<b><color=#38c5c9ff>英雄能力: </color>";
+                    hover.text += icard.title + "</b>\n " + iability.GetDesc(icard);
+                    if (iability.mana_cost > 0)
+                        hover.text += " <size=16>法力值: " + iability.mana_cost + "</size>";
+                }
+            }
         }
 
         protected override void Update()
@@ -118,6 +130,14 @@ namespace TcgEngine.UI
                     update_grid = false;
                 }
             }
+        }
+
+        public async void ReloadUser()
+        {
+            await Authenticator.Get().LoadUserData(); 
+            MainMenu.Get().RefreshDeckList();
+            RefreshDeckList();
+            RefreshCards();
         }
 
         public async void ReloadUserCards()
@@ -285,14 +305,25 @@ namespace TcgEngine.UI
             }
         }
 
+        private void ShowDeckList()
+        {
+            deck_list_panel.Show();
+            card_list_panel.Hide();
+        }
+
+        private void ShowDeckCards()
+        {
+            deck_list_panel.Hide();
+            card_list_panel.Show();
+        }
+
         private void RefreshDeckList()
         {
             foreach (DeckLine line in deck_lines)
                 line.Hide();
-            deck_list_panel.Show();
-            card_list_panel.Hide();
             deck_cards.Clear();
             editing_deck = false;
+            saving = false;
 
             UserData udata = Authenticator.Get().UserData;
             if (udata == null)
@@ -319,16 +350,25 @@ namespace TcgEngine.UI
 
         private void RefreshDeck(UserDeckData deck)
         {
-            deck_title.text = "Deck Name";
+            deck_title.text = "";
             current_deck_tid = GameTool.GenerateRandomID(7);
             deck_cards.Clear();
             saving = false;
+
+            foreach (IconButton btn in hero_powers)
+                btn.Deactivate();
 
             if (deck != null)
             {
                 deck_title.text = deck.title;
                 current_deck_tid = deck.tid;
 
+                foreach (IconButton btn in hero_powers)
+                {
+                    if (btn.value == deck.hero)
+                        btn.Activate();
+                }
+                
                 for (int i = 0; i < deck.cards.Length; i++)
                 {
                     CardData card = UserCardData.GetCardData(deck.cards[i]);
@@ -347,8 +387,6 @@ namespace TcgEngine.UI
         {
             foreach (DeckLine line in deck_card_lines)
                 line.Hide();
-            deck_list_panel.Hide();
-            card_list_panel.Show();
 
             List<CardDataQ> list = new List<CardDataQ>();
             foreach (KeyValuePair<string, int> pair in deck_cards)
@@ -382,7 +420,7 @@ namespace TcgEngine.UI
             }
 
             deck_quantity.text = count + "/" + GameplayData.Get().deck_size;
-            deck_quantity.color = count >= GameplayData.Get().deck_size ? Color.white : Color.red;
+            deck_quantity.color = count == GameplayData.Get().deck_size ? Color.white : Color.red;
 
             RefreshCardsOpacity();
         }
@@ -441,7 +479,14 @@ namespace TcgEngine.UI
             UserDeckData udeck = new UserDeckData();
             udeck.tid = current_deck_tid;
             udeck.title = deck_title.text;
+            udeck.hero = "";
             saving = true;
+
+            foreach (IconButton btn in hero_powers)
+            {
+                if (btn.IsActive())
+                    udeck.hero = btn.value;
+            }
 
             List<string> card_list = new List<string>();
             foreach (KeyValuePair<string, int> pair in deck_cards)
@@ -459,6 +504,8 @@ namespace TcgEngine.UI
 
             if (Authenticator.Get().IsApi())
                 SaveDeckAPI(udata, udeck);
+
+            ShowDeckList();
         }
 
         private async void SaveDeckTest(UserData udata, UserDeckData udeck)
@@ -473,12 +520,12 @@ namespace TcgEngine.UI
             string url = ApiClient.ServerURL + "/users/deck/" + udeck.tid;
             string jdata = ApiTool.ToJson(udeck);
             WebResponse res = await ApiClient.Get().SendPostRequest(url, jdata);
-            ListResponse<UserDeckData> decks = ApiTool.JsonToArray<UserDeckData>(res.data);
+            UserDeckData[] decks = ApiTool.JsonToArray<UserDeckData>(res.data);
             saving = res.success;
 
-            if (res.success && decks.list != null)
+            if (res.success && decks != null)
             {
-                udata.decks = decks.list;
+                udata.decks = decks;
                 await Authenticator.Get().SaveUserData();
                 ReloadUserDecks();
             }
@@ -542,15 +589,16 @@ namespace TcgEngine.UI
 
         public void OnClickDeckBack()
         {
-            RefreshDeckList();
+            ShowDeckList();
         }
 
         public void OnClickDeckLine(DeckLine line)
         {
-            if (line.IsHidden())
+            if (line.IsHidden() || saving)
                 return;
             UserDeckData deck = line.GetUserDeck();
             RefreshDeck(deck);
+            ShowDeckCards();
         }
 
         public void OnClickDeckDelete(DeckLine line)
@@ -625,10 +673,10 @@ namespace TcgEngine.UI
 
         public void OnClickSaveDeck()
         {
-            if (saving)
-                return;
-
-            SaveDeck();
+            if (!saving)
+            {
+                SaveDeck();
+            }
         }
 
         public int CountDeckCards(CardData card, VariantData cvariant)
@@ -655,6 +703,7 @@ namespace TcgEngine.UI
         {
             base.Show(instant);
             RefreshAll();
+            ShowDeckList();
         }
 
         public static CollectionPanel Get()

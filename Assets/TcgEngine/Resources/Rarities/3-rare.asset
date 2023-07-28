@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 3-rare
   m_EditorClassIdentifier: 
   id: rare
-  title: Rare
+  title: "\u53F2\u8A69"
   icon: {fileID: 21300000, guid: 2b1b462a8d4e2b74bbf0896752ce0e44, type: 3}
   rank: 3

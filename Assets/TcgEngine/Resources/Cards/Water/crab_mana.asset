@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: crab_mana
   m_EditorClassIdentifier: 
   id: crab_mana
-  title: "Mana Crab \u540E\u91CC\u87F9"
+  title: "\u540E\u91CC\u87F9"
   art_full: {fileID: 21300000, guid: cce549b2eaf206644bd6bc7ac6e38295, type: 3}
   art_board: {fileID: 21300000, guid: e73be87636869234498a5156aa80fd7a, type: 3}
   type: 10
@@ -26,8 +26,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: 9fe267054ee4b774b8219c64e0fc33c5, type: 2}
-  text: "When attacking a player, gain 2 mana.\n\u653B\u64CA\u73A9\u5BB6\u6642\uFF0C\u7372\u5F97
-    2 \u9EDE\u6CD5\u529B\u503C"
+  text: "\u653B\u64CA\u73A9\u5BB6\u6642\uFF0C\u7372\u5F97 2 \u9EDE\u6CD5\u529B\u503C"
   desc: 
   spawn_fx: {fileID: 2106287953758554471, guid: a1e1ec86d02e969408bf2a6c17010f46,
     type: 3}
@@ -35,12 +34,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 05d69fd0932ac4067ac8c5782d8a97f4, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

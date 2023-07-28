@@ -14,6 +14,7 @@ namespace TcgEngine.UI
     {
         public Text text;
         public Text players_txt;
+        public Text code_txt;
 
         private static MatchmakingPanel instance;
 
@@ -26,7 +27,7 @@ namespace TcgEngine.UI
         protected override void Start()
         {
             base.Start();
-
+            code_txt.text = "";
         }
 
         protected override void Update()
@@ -37,6 +38,12 @@ namespace TcgEngine.UI
                 text.text = "正在尋找對手...";
             else
                 text.text = "連接至伺服器...";
+
+            code_txt.text = "";
+
+            string group = GameClientMatchmaker.Get().GetGroup();
+            if (group != null && group.StartsWith("code_"))
+                code_txt.text = group.Replace("code_", "");
         }
 
         public void SetCount(int players)

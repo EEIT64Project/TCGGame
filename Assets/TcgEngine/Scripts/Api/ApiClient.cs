@@ -138,23 +138,8 @@ namespace TcgEngine
             string json = ApiTool.ToJson(data);
 
             WebResponse res = await SendPostRequest(url, json);
-            LoginResponse login_res = ApiTool.JsonToObject<LoginResponse>(res.data);
-            login_res.success = res.success;
-            login_res.error = res.error;
-            logged_in = res.success;
-
-            if (res.success)
-            {
-                user_id = login_res.id;
-                username = login_res.username;
-                access_token = login_res.access_token;
-                refresh_token = login_res.refresh_token;
-                api_version = login_res.version;
-                expired = false;
-                expiration_timer = 0f;
-                expiration_duration = login_res.duration;
-                SaveTokens();
-            }
+            LoginResponse login_res = GetLoginRes(res);
+            AfterLogin(login_res);
 
             onLogin?.Invoke(login_res);
             return login_res;
@@ -168,12 +153,35 @@ namespace TcgEngine
             string json = ApiTool.ToJson(data);
 
             WebResponse res = await SendPostRequest(url, json);
+            LoginResponse login_res = GetLoginRes(res);
+            AfterLogin(login_res);
+
+            onRefresh?.Invoke(login_res);
+            return login_res;
+        }
+
+        private LoginResponse GetLoginRes(WebResponse res)
+        {
             LoginResponse login_res = ApiTool.JsonToObject<LoginResponse>(res.data);
             login_res.success = res.success;
             login_res.error = res.error;
-            logged_in = res.success;
 
-            if (res.success)
+            //Uncomment to force having same client version as api
+            /*if (!IsVersionValid())
+            {
+                login_res.error = "Invalid Version";
+                login_res.success = false;
+            }*/
+
+            return login_res;
+        }
+
+        private void AfterLogin(LoginResponse login_res)
+        {
+            last_error = login_res.error;
+            logged_in = login_res.success;
+
+            if (login_res.success)
             {
                 user_id = login_res.id;
                 username = login_res.username;
@@ -185,9 +193,6 @@ namespace TcgEngine
                 expiration_duration = login_res.duration;
                 SaveTokens();
             }
-
-            onRefresh?.Invoke(login_res);
-            return login_res;
         }
 
         public async Task<UserData> LoadUserData()
@@ -240,7 +245,7 @@ namespace TcgEngine
 
         public async void CreateMatch(Game game_data)
         {
-            if (game_data.settings.play_mode != PlayMode.Multiplayer)
+            if (game_data.settings.game_type != GameType.Multiplayer)
                 return;
 
             AddMatchRequest req = new AddMatchRequest();
@@ -259,7 +264,7 @@ namespace TcgEngine
 
         public async void EndMatch(Game game_data, int winner_id)
         {
-            if (game_data.settings.play_mode != PlayMode.Multiplayer)
+            if (game_data.settings.game_type != GameType.Multiplayer)
                 return;
 
             Player player = game_data.GetPlayer(winner_id);

@@ -30,6 +30,11 @@ namespace TcgEngine
             return true; //Override this, condition targeting slot
         }
 
+        public virtual bool IsTargetConditionMet(Game data, AbilityData ability, Card caster, CardData target)
+        {
+            return true; //Override this, for effects that create new cards
+        }
+
         public bool CompareBool(bool condition, ConditionOperatorBool oper)
         {
             if (oper == ConditionOperatorBool.IsFalse)

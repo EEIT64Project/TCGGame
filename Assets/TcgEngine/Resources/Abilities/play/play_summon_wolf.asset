@@ -32,9 +32,9 @@ MonoBehaviour:
   board_fx: {fileID: 0}
   caster_fx: {fileID: 0}
   target_fx: {fileID: 0}
-  cast_audio: {fileID: 0}
+  cast_audio: {fileID: 8300000, guid: 0b5b2f815dfc9445d809056ad142fb39, type: 3}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Summon Wolf \u53EC\u559A\u72FC"
-  desc: "On play, summon a 1/1 baby wolf on each adjacent empty slot.\n\u6253\u51FA\u6B64\u724C\uFF0C\u5728\u6BCF\u500B\u76F8\u9130\u7684\u7A7A\u4F4D\u4E0A\u53EC\u559A\u4E00\u96BB
+  title: "\u53EC\u559A\u72FC"
+  desc: "\u6253\u51FA\u6B64\u724C\uFF0C\u5982\u679C\u53EF\u4EE5\uFF0C\u5728\u6BCF\u500B\u76F8\u9130\u7684\u7A7A\u4F4D\u4E0A\u53EC\u559A\u4E00\u96BB
     1/1 \u7684\u5C0F\u72FC"

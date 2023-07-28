@@ -57,7 +57,7 @@ namespace TcgEngine.AI
 
             if (best != null)
             {
-                Debug.Log("Execute AI Order: " + best.GetText(game_data) + "\n" + ai_logic.GetNodePath());
+                Debug.Log("Execute AI Action: " + best.GetText(game_data) + "\n" + ai_logic.GetNodePath());
                 //foreach (NodeState node in ai_logic.GetFirst().childs)
                 //   Debug.Log(ai_logic.GetNodePath(node));
 

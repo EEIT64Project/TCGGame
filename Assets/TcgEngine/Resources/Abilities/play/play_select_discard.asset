@@ -33,8 +33,8 @@ MonoBehaviour:
   board_fx: {fileID: 0}
   caster_fx: {fileID: 0}
   target_fx: {fileID: 0}
-  cast_audio: {fileID: 0}
+  cast_audio: {fileID: 8300000, guid: 40cda89d5c9ce45d8bf41858dcf61230, type: 3}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Dig \u76DC\u5893"
-  desc: "On play, return a character from your graveyard to your hand.\n\u6253\u51FA\u6B64\u724C\uFF0C\u5C07\u4E00\u500B\u751F\u7269\u724C\u5F9E\u4F60\u7684\u68C4\u724C\u5806\u79FB\u56DE\u4F60\u7684\u624B\u4E0A"
+  title: "\u76DC\u5893"
+  desc: "\u6253\u51FA\u6B64\u724C\uFF0C\u5C07\u4E00\u500B\u751F\u7269\u724C\u5F9E\u4F60\u7684\u68C4\u724C\u5806\u79FB\u56DE\u4F60\u7684\u624B\u4E0A"

@@ -7,6 +7,7 @@ namespace TcgEngine
     public enum CardType
     {
         None = 0,
+        Hero = 5,
         Character = 10,
         Spell = 20,
         Artifact = 30,
@@ -218,6 +219,16 @@ namespace TcgEngine
                     return true;
             }
             return false;
+        }
+
+        public AbilityData GetAbility(AbilityTrigger trigger)
+        {
+            foreach (AbilityData ability in abilities)
+            {
+                if (ability && ability.trigger == trigger)
+                    return ability;
+            }
+            return null;
         }
 
         public bool AreSecretConditionsMet(AbilityTrigger secret_trigger, Game data, Card caster, Card trigger)

@@ -25,7 +25,7 @@ namespace TcgEngine.Client
         void OnGameEnd(int winner)
         {
             int player_id = GameClient.Get().GetPlayerID();
-            if (GameClient.game_settings.play_mode == PlayMode.Adventure && winner == player_id)
+            if (GameClient.game_settings.game_type == GameType.Adventure && winner == player_id)
             {
                 UserData udata = Authenticator.Get().UserData;
                 LevelData level = LevelData.Get(GameClient.game_settings.level);
@@ -68,7 +68,7 @@ namespace TcgEngine.Client
             string url = ApiClient.ServerURL + "/users/rewards/gain/" + ApiClient.Get().UserID;
             string json = ApiTool.ToJson(req);
             WebResponse res = await ApiClient.Get().SendPostRequest(url, json);
-            Debug.Log("Gain Reward: " + level.id + " " + res.success);
+            Debug.Log("得到獎勵: " + level.id + " " + res.success);
             reward_gained = res.success;
         }
 

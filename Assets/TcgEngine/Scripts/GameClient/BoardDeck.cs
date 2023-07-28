@@ -23,7 +23,10 @@ namespace TcgEngine.Client
         
         void Start()
         {
-
+            if (GameTool.IsMobile())
+            {
+                hover_panel?.SetVisible(true);
+            }
         }
 
         void Update()
@@ -53,32 +56,38 @@ namespace TcgEngine.Client
         public void ShowDeckCards()
         {
             Player player = GameClient.Get().GetPlayer();
-            CardSelector.Get().Show(player.cards_deck, "DECK");
+            CardSelector.Get().Show(player.cards_deck, "牌組內容");
         }
 
         public void ShowDiscardCards()
         {
             Player player = opponent ? GameClient.Get().GetOpponentPlayer() : GameClient.Get().GetPlayer();
-            CardSelector.Get().Show(player.cards_discard, "DISCARD");
+            CardSelector.Get().Show(player.cards_discard, "棄牌堆");
+        }
+
+        private void ShowHover(bool hover)
+        {
+            if(!GameTool.IsMobile())
+                hover_panel?.SetVisible(hover);
         }
 
         private void OnMouseEnter()
         {
             hover = true;
-            hover_panel?.SetVisible(hover);
+            ShowHover(hover);
             Refresh();
         }
 
         private void OnMouseExit()
         {
             hover = false;
-            hover_panel?.SetVisible(hover);
+            ShowHover(hover);
         }
 
         private void OnDisable()
         {
             hover = false;
-            hover_panel?.SetVisible(hover);
+            ShowHover(hover);
         }
 
         private void OnMouseOver()

@@ -68,8 +68,7 @@ namespace TcgEngine.UI
 
         private void OnClick()
         {
-            if (avatar != null)
-                onClick?.Invoke(avatar);
+            onClick?.Invoke(avatar);
         }
     }
 }

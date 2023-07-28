@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: sleep
   m_EditorClassIdentifier: 
   effect: 36
-  title: "Sleep \u6C88\u7761"
+  title: "\u6C88\u7761"
   icon: {fileID: 0}
-  desc: "Does not unexhaust.\nRemoved if attacked.\n\u7121\u6CD5\u57F7\u884C\u4EFB\u4F55\u52D5\u4F5C\u3002\n\u5982\u679C\u53D7\u5230\u653B\u64CA\u5247\u79FB\u9664\u3002"
+  desc: "\u7121\u6CD5\u57F7\u884C\u4EFB\u4F55\u52D5\u4F5C\u3002\n\u5982\u679C\u53D7\u5230\u653B\u64CA\u5247\u79FB\u9664\u3002"
   status_fx: {fileID: 8207343968682951967, guid: 73965d73de1b01a4c8c2f1820472d53f,
     type: 3}
   hvalue: -1

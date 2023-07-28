@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: test_deck
   title: Test Deck
+  hero: {fileID: 11400000, guid: cf170aea7ffb041428f37608f1561058, type: 2}
   cards:
   - {fileID: 11400000, guid: 1e22d4647e903814d96f63a729e1f820, type: 2}
   - {fileID: 11400000, guid: 1e22d4647e903814d96f63a729e1f820, type: 2}
@@ -95,3 +96,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ab1fd2e7036d86041a4106f7e63ba256, type: 2}
   - {fileID: 11400000, guid: 715703be67fff2c4d92ff16751a9ad7b, type: 2}
   - {fileID: 11400000, guid: 715703be67fff2c4d92ff16751a9ad7b, type: 2}
+  - {fileID: 11400000, guid: 8faf0d78746617c4594039cb64dcca7c, type: 2}

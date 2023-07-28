@@ -73,7 +73,6 @@ namespace TcgEngine.UI
             UserDeckData udeck = udata?.GetDeck(deck);
             if (udeck != null)
             {
-                deck_dropdown.SetValue(deck);
                 SelectDeck(udeck);
                 return;
             }
@@ -104,9 +103,21 @@ namespace TcgEngine.UI
             onChange?.Invoke(value);
         }
 
-        public string GetDeck()
+        public string GetDeckID()
         {
             return deck_dropdown.GetSelectedValue();
+        }
+
+        public PlayerDeckSettings GetDeck()
+        {
+            UserData user = Authenticator.Get().UserData;
+            UserDeckData udeck = user.GetDeck(GetDeckID()); //Check for user custom deck
+            DeckData deck = DeckData.Get(GetDeckID());     //Check for deck presets
+            if (udeck != null)
+                return new PlayerDeckSettings(udeck); 
+            else if (deck != null)
+                return new PlayerDeckSettings(deck); 
+            return null;
         }
     }
 }

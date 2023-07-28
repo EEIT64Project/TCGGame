@@ -29,13 +29,15 @@ namespace TcgEngine
 
         public const ushort PlayerSettings = 1100; //After connect, send player data
         public const ushort PlayerSettingsAI = 1102; //After connect, send player data
-        public const ushort GameplaySettings = 1105; //After connect, send gameplay settings
+        public const ushort GameSettings = 1105; //After connect, send gameplay settings
 
         //Refresh (server to client)
         public const ushort Connected = 2000;
-        public const ushort GameStart = 2002;
-        public const ushort GameEnd = 2004;
-        public const ushort NewTurn = 2010;
+        public const ushort PlayerReady = 2001;
+
+        public const ushort GameStart = 2010;
+        public const ushort GameEnd = 2012;
+        public const ushort NewTurn = 2015;
 
         public const ushort CardPlayed = 2020;
         public const ushort CardSummoned = 2022;
@@ -66,6 +68,8 @@ namespace TcgEngine
         {
             if (type == GameAction.PlayCard)
                 return "play";
+            if (type == GameAction.Move)
+                return "move";
             if (type == GameAction.Attack)
                 return "attack";
             if (type == GameAction.AttackPlayer)

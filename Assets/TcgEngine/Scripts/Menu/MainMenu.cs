@@ -1,9 +1,8 @@
-﻿using TcgEngine.Client;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TcgEngine;
+using TcgEngine.Client;
 
 namespace TcgEngine.UI
 {
@@ -47,6 +46,8 @@ namespace TcgEngine.UI
             AudioTool.Get().PlayMusic("music", music);
             AudioTool.Get().PlaySFX("ambience", ambience, 0.5f, true, true);
 
+            username_txt.text = "";
+            credits_txt.text = "";
             version_text.text = "Version " + Application.version;
             deck_selector.onChange += OnChangeDeck;
 
@@ -90,7 +91,7 @@ namespace TcgEngine.UI
             matchmaker.onMatchList += OnReceiveObserver;
 
             //Deck
-            GameClient.player_settings.deck = PlayerPrefs.GetString("tcg_deck_" + Authenticator.Get().Username, "");
+            GameClient.player_settings.deck.id = PlayerPrefs.GetString("tcg_deck_" + Authenticator.Get().Username, "");
 
             //UserData
             RefreshUserData();
@@ -118,8 +119,8 @@ namespace TcgEngine.UI
         public void RefreshDeckList()
         {
             deck_selector.RefreshDeckList();
-            deck_selector.SelectDeck(GameClient.player_settings.deck);
-            RefreshDeck(deck_selector.GetDeck());
+            deck_selector.SelectDeck(GameClient.player_settings.deck.id);
+            RefreshDeck(deck_selector.GetDeckID());
         }
 
         private void RefreshDeck(string tid)
@@ -137,7 +138,7 @@ namespace TcgEngine.UI
 
         private void OnChangeDeck(string tid)
         {
-            GameClient.player_settings.deck = tid;
+            GameClient.player_settings.deck.id = tid;
             PlayerPrefs.SetString("tcg_deck_" + Authenticator.Get().Username, tid);
             RefreshDeck(tid);
         }
@@ -150,7 +151,7 @@ namespace TcgEngine.UI
             if (result.success)
             {
                 Debug.Log("Matchmaking found: " + result.success + " " + result.server_url + "/" + result.game_uid);
-                StartGame(PlayMode.Multiplayer, GameMode.Ranked, result.server_url, result.game_uid);
+                StartGame(GameType.Multiplayer, result.game_uid, result.server_url);
             }
             else
             {
@@ -169,23 +170,30 @@ namespace TcgEngine.UI
 
             if (target != null)
             {
-                StartGame(PlayMode.Observer, target.game_uid);
+                StartGame(GameType.Observer, target.game_uid, target.game_url);
             }
         }
 
-        public void StartGame(PlayMode mode, string game_uid)
+        public void StartGame(GameType type, GameMode mode)
         {
-            StartGame(mode, GameMode.Casual, "", game_uid); //Empty server_url will use the default one in NetworkData
+            string uid = GameTool.GenerateRandomID();
+            GameClient.game_settings.game_type = type;
+            GameClient.game_settings.game_mode = mode;
+            StartGame(uid); 
         }
 
-        public void StartGame(PlayMode mode, GameMode rank, string server_url, string game_uid)
+        public void StartGame(GameType type, string game_uid, string server_url = "")
+        {
+            GameClient.game_settings.game_type = type;
+            StartGame(game_uid, server_url);
+        }
+
+        public void StartGame(string game_uid, string server_url = "")
         {
             if (!starting)
             {
                 starting = true;
-                GameClient.game_settings.play_mode = mode;
-                GameClient.game_settings.game_mode = rank;
-                GameClient.game_settings.server_url = server_url;
+                GameClient.game_settings.server_url = server_url; //Empty server_url will use the default one in NetworkData
                 GameClient.game_settings.game_uid = game_uid;
                 GameClient.game_settings.scene = GameplayData.Get().GetRandomArena();
                 GameClientMatchmaker.Get().Disconnect();
@@ -212,13 +220,19 @@ namespace TcgEngine.UI
             else
                 key = user + "-" + self;
 
-            StartMathmaking(key);
+            StartMathmaking(GameMode.Casual, key);
         }
 
-        public void StartMathmaking(string group)
+        public void StartMathmaking(GameMode mode, string group)
         {
-            GameClient.player_settings.deck = deck_selector.GetDeck();
-            GameClientMatchmaker.Get().StartMatchmaking(group, GameClient.game_settings.nb_players);
+            PlayerDeckSettings deck = deck_selector.GetDeck();
+            if (deck != null)
+            {
+                GameClient.game_settings.game_type = GameType.Multiplayer;
+                GameClient.game_settings.game_mode = mode;
+                GameClient.player_settings.deck = deck;
+                GameClientMatchmaker.Get().StartMatchmaking(group, GameClient.game_settings.nb_players);
+            }
         }
 
         public void OnClickSolo()
@@ -229,12 +243,11 @@ namespace TcgEngine.UI
                 return;
             }
 
-            GameClient.player_settings.deck = deck_selector.GetDeck();
-            GameClient.ai_settings.deck = GameplayData.Get().GetRandomAIDeck();
+            GameClient.player_settings.deck.id = deck_selector.GetDeckID();
+            GameClient.ai_settings.deck.id = GameplayData.Get().GetRandomAIDeck();
             GameClient.ai_settings.ai_level = GameplayData.Get().ai_level;
 
-            string uid = GameTool.GenerateRandomID();
-            StartGame(PlayMode.Solo, uid);
+            StartGame(GameType.Solo, GameMode.Casual);
         }
 
         public void OnClickPvP()
@@ -245,17 +258,27 @@ namespace TcgEngine.UI
                 return;
             }
 
-            StartMathmaking("");
+            StartMathmaking(GameMode.Ranked, "");
         }
 
         public void OnClickAdventure()
         {
             AdventurePanel.Get().Show();
         }
+
+        public void OnClickPlayCode()
+        {
+            JoinCodePanel.Get().Show();
+        }
         
         public void OnClickCancelMatch()
         {
             GameClientMatchmaker.Get().StopMatchmaking();
+        }
+
+        public void OnClickSettings()
+        {
+            SettingsPanel.Get().Show();
         }
 
         public void FadeToScene(string scene)

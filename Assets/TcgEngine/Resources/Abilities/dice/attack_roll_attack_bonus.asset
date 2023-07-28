@@ -30,9 +30,9 @@ MonoBehaviour:
   board_fx: {fileID: 0}
   caster_fx: {fileID: 0}
   target_fx: {fileID: 0}
-  cast_audio: {fileID: 0}
+  cast_audio: {fileID: 8300000, guid: 94a1175b4621f4eafb0f1d7107efd9fc, type: 3}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Tentacles \u4FC4\u7F85\u65AF\u8F49\u76E4"
-  desc: "Before attacking, roll a D6, on 4+ gain +6 attack until the end of the turn.\n\u5728\u653B\u64CA\u4E4B\u524D\uFF0C\u64F2
-    D6\uFF0C\u5728 4+ \u6642\u7372\u5F97 +6 \u653B\u64CA\u76F4\u5230\u56DE\u5408\u7D50\u675F\u3002"
+  title: "\u4FC4\u7F85\u65AF\u8F49\u76E4"
+  desc: "\u5728\u653B\u64CA\u4E4B\u524D\uFF0C\u64F2\u9AB0\u5B50\uFF0C\u5728 4+ \u6642\u7372\u5F97
+    +6 \u653B\u64CA\u76F4\u5230\u56DE\u5408\u7D50\u675F\u3002"

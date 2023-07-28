@@ -59,25 +59,25 @@ namespace TcgEngine.UI
 
             if (history.type == GameAction.PlayCard)
             {
-                string text = icard.title + " was played";
+                string text = icard.title + " 被打出";
                 SetLine(icard, variant, text);
             }
 
             if (history.type == GameAction.Move)
             {
-                string text = icard.title + " moved";
+                string text = icard.title + " 被移動";
                 SetLine(icard, variant, text);
             }
 
             if (history.type == GameAction.Attack && itarget != null)
             {
-                string text = icard.title + " attacked " + itarget.title;
+                string text = icard.title + " 攻擊 " + itarget.title;
                 SetLine(icard, variant, text);
             }
 
             if (history.type == GameAction.AttackPlayer && ptarget != null)
             {
-                string text = icard.title + " attacked " + ptarget.username;
+                string text = icard.title + " 攻擊 " + ptarget.username;
                 SetLine(icard, variant, text);
             }
 
@@ -85,19 +85,19 @@ namespace TcgEngine.UI
             {
                 if (iability.target == AbilityTarget.SelectTarget && itarget != null)
                 {
-                    string text = icard.title + " casted " + iability.GetTitle() + " on " + itarget.title;
+                    string text = icard.title + " 發動 " + iability.GetTitle() + " 在 " + itarget.title;
                     SetLine(icard, variant, text);
                 }
                 else
                 {
-                    string text = icard.title + " casted " + iability.GetTitle();
+                    string text = icard.title + " 發動 " + iability.GetTitle();
                     SetLine(icard, variant, text);
                 }
             }
 
             if (history.type == GameAction.SecretTriggered)
             {
-                string text = icard.title + " was triggered";
+                string text = icard.title + " 被觸發";
                 SetLine(icard, variant, text);
             }
 

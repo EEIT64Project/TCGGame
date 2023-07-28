@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: poison_frog
   m_EditorClassIdentifier: 
   id: poison_frog
-  title: "Poison Frog \u6BD2\u5471"
+  title: "\u5471\u4E0D\u8B93"
   art_full: {fileID: 21300000, guid: 1fd910ecdc1a61144b346d8eb03024df, type: 3}
   art_board: {fileID: 21300000, guid: d5061174448f5ae44a0044ca206cea88, type: 3}
   type: 10
@@ -26,7 +26,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: 1cf38265d50073740ac297c481077fb6, type: 2}
-  text: "Deathtouch\n\u6B7B\u4EA1\u4E4B\u89F8"
+  text: "\u6B7B\u4EA1\u4E4B\u89F8"
   desc: 
   spawn_fx: {fileID: 2106287953758554471, guid: a1e1ec86d02e969408bf2a6c17010f46,
     type: 3}
@@ -34,12 +34,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 92b08e4408b18447c8ec177ba96f8490, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

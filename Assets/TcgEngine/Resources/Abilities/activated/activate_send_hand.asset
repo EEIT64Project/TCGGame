@@ -30,9 +30,9 @@ MonoBehaviour:
   exhaust: 1
   board_fx: {fileID: 0}
   caster_fx: {fileID: 0}
-  target_fx: {fileID: 100000, guid: aa3fed151f536ee49b583c6a3ac4a2e1, type: 3}
+  target_fx: {fileID: 0}
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 1
-  title: "Charge \u5145\u80FD"
-  desc: "Return a character to its owner's hand.\n\u5C07\u4E00\u5F35\u751F\u7269\u724C\u8FD4\u56DE\u5176\u64C1\u6709\u8005\u624B\u4E0A"
+  title: "\u5145\u80FD"
+  desc: "\u5C07\u4E00\u5F35\u751F\u7269\u724C\u8FD4\u56DE\u5176\u64C1\u6709\u8005\u624B\u4E0A"

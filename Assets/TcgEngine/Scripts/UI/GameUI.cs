@@ -24,8 +24,11 @@ namespace TcgEngine.UI
         public Text turn_count;
         public Text turn_timer;
         public Button end_turn_button;
+        public Animator timeout_animator;
+        public AudioClip timeout_audio;
 
         private float selector_timer = 0f;
+        private int prev_time_val = 0;
 
         private static GameUI _instance;
 
@@ -46,7 +49,7 @@ namespace TcgEngine.UI
             BlackPanel.Get().Hide();
 
             if (quit_btn != null)
-                quit_btn.text = GameClient.game_settings.IsOnlinePlayer() ? "投降" : "離開遊戲";
+                quit_btn.text = GameClient.game_settings.IsOnlinePlayer() ? "投降" : "放棄";
         }
 
         void Update()
@@ -66,7 +69,7 @@ namespace TcgEngine.UI
             bool yourturn = GameClient.Get().IsYourTurn();
             int player_id = GameClient.Get().GetPlayerID();
 
-            LoadPanel.Get().SetVisible(is_connecting && !data.AreAllPlayersConnected());
+            LoadPanel.Get().SetVisible(is_connecting && !data.HasStarted());
             end_turn_button.interactable = yourturn && data.state == GameState.Play;
 
             //Timer
@@ -78,6 +81,16 @@ namespace TcgEngine.UI
             //Simulate timer
             if (data.state == GameState.Play && data.turn_timer > 0f)
                 data.turn_timer -= Time.deltaTime;
+
+            //Timer warning
+            if (data.state == GameState.Play)
+            {
+                int val = Mathf.RoundToInt(data.turn_timer);
+                int tick_val = 5;
+                if (val < prev_time_val && val <= tick_val)
+                    PulseFX();
+                prev_time_val = val;
+            }
 
             //Card target
             bool show_msg = data.selector == SelectorType.SelectTarget && data.selector_player == player_id;
@@ -118,6 +131,12 @@ namespace TcgEngine.UI
             if (!yourturn && ChoiceSelector.Get().IsVisible())
                 ChoiceSelector.Get().Hide();
 
+        }
+
+        private void PulseFX()
+        {
+            timeout_animator?.SetTrigger("pulse");
+            AudioTool.Get().PlaySFX("time", timeout_audio, 1f);
         }
 
         private void OnGameStart()
@@ -203,7 +222,12 @@ namespace TcgEngine.UI
             return results.Count > 0;
         }
 
-        public static bool IsOverUILayer(int layer)
+        public static bool IsOverUILayer(string sorting_layer)
+        {
+            return IsOverUILayer(SortingLayer.NameToID(sorting_layer));
+        }
+
+        public static bool IsOverUILayer(int sorting_layer)
         {
             //return UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
             PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
@@ -213,7 +237,7 @@ namespace TcgEngine.UI
             int count = 0;
             foreach (RaycastResult result in results)
             {
-                if (result.sortingLayer == layer)
+                if (result.sortingLayer == sorting_layer)
                     count++;
             }
             return count > 0;

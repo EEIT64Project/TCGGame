@@ -88,7 +88,7 @@ namespace TcgEngine.Client
             Player player = GameClient.Get().GetPlayer();
             Card card = data.GetCard(card_uid);
             if(!destroyed)
-                card_ui.SetCardBoard(card);
+                card_ui.SetCard(card);
 
             bool selected = controls.GetSelected() == this;
             Vector3 targ_pos = GetTargetPos();
@@ -113,10 +113,15 @@ namespace TcgEngine.Client
             armor.enabled = armor_val > 0;
             armor_icon.enabled = armor_val > 0;
 
-            //Reset after transform
+            //Update card image
             Sprite sprite = card.CardData.GetBoardArt(card.VariantData);
             if (sprite != card_sprite.sprite)
                 card_sprite.sprite = sprite;
+
+            //Update frame image
+            Sprite frame = card.VariantData.frame_board;
+            if (frame != null && card_ui.frame_image != null)
+                card_ui.frame_image.sprite = frame;
 
             //Ability buttons
             foreach (AbilityButton button in buttons)
@@ -175,7 +180,7 @@ namespace TcgEngine.Client
             CardData icard = CardData.Get(card.card_id);
             if (icard)
             {
-                card_ui.SetCardBoard(card);
+                card_ui.SetCard(card);
                 card_sprite.sprite = icard.GetBoardArt(card.VariantData);
                 armor.enabled = false;
                 armor_icon.enabled = false;
@@ -222,7 +227,7 @@ namespace TcgEngine.Client
                 if (!back_to_hand)
                 {
                     card.hp = 0;
-                    card_ui.SetCardBoard(card);
+                    card_ui.SetCard(card);
                 }
 
                 if (onKill != null)
@@ -337,12 +342,7 @@ namespace TcgEngine.Client
         {
             if (Input.GetMouseButtonDown(1))
             {
-                Game gdata = GameClient.Get().GetGameData();
-                int player_id = GameClient.Get().GetPlayerID();
-                if (gdata.state == GameState.Play && player_id == gdata.current_player)
-                {
-                    PlayerControls.Get().SelectCardRight(this);
-                }
+                PlayerControls.Get().SelectCardRight(this);
             }
         }
 

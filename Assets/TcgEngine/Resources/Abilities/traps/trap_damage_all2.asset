@@ -37,6 +37,6 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Fire Damage \u706B\u7130\u9677\u9631"
-  desc: "When an enemy creature attacks, damage all enemy creatures by 2.\n\u7576\u6575\u65B9\u751F\u7269\u653B\u64CA\u6642\uFF0C\u5C0D\u6240\u6709\u6575\u65B9\u751F\u7269\u9020\u6210
+  title: "\u706B\u7130\u9677\u9631"
+  desc: "\u7576\u6575\u65B9\u751F\u7269\u653B\u64CA\u6642\uFF0C\u5C0D\u6240\u6709\u6575\u65B9\u751F\u7269\u9020\u6210
     2 \u9EDE\u50B7\u5BB3"

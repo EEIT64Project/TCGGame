@@ -8,7 +8,7 @@ using TcgEngine;
 namespace TcgEngine.UI
 {
     /// <summary>
-    /// 在遊戲場景中，滑鼠停止於卡片上方時以大尺寸顯示卡片和額外信息的部分
+    /// In the game scene, the CardPreviewUI is what shows the card in big with extra info when hovering a card
     /// </summary>
 
     public class CardPreviewUI : MonoBehaviour
@@ -48,7 +48,9 @@ namespace TcgEngine.UI
 
             HandCard hcard = HandCard.GetFocus();
             BoardCard bcard = BoardCard.GetFocus();
+            HeroUI hero_ui = HeroUI.GetFocus();
             Card histcard = TurnHistoryLine.GetHoverCard();
+
             PlayerControls controls = PlayerControls.Get();
 
             float delay = hcard != null ? hover_delay_hand : hover_delay_board;
@@ -58,6 +60,8 @@ namespace TcgEngine.UI
             Card pcard = hcard != null ? hcard?.GetCard() : bcard?.GetCard();
             if (pcard == null)
                 pcard = histcard;
+            if (pcard == null)
+                pcard = hero_ui?.GetCard();
 
             bool hover_only = !Input.GetMouseButton(0) && !HandCardArea.Get().IsDragging();
             bool should_show_preview = hover_only && !GameUI.IsUIOpened() && pcard != null;

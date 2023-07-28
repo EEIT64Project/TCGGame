@@ -51,6 +51,7 @@ namespace TcgEngine.UI
             for (int i = 0; i < secrets.Length; i++)
                 secrets[i].gameObject.SetActive(false);
 
+            avatar.onClick += OnClickAvatar;
             GameClient.Get().onSecretTrigger += OnSecretTrigger;
         }
 
@@ -107,6 +108,16 @@ namespace TcgEngine.UI
             avatar.SetImage(avatar_dead);
             AudioTool.Get().PlaySFX("fx", dead_audio);
             FXTool.DoFX(dead_fx, avatar.transform.position);
+        }
+
+        private void OnClickAvatar(AvatarData avatar)
+        {
+            Game gdata = GameClient.Get().GetGameData();
+            int player_id = GameClient.Get().GetPlayerID();
+            if (gdata.selector == SelectorType.SelectTarget && player_id == gdata.selector_player)
+            {
+                GameClient.Get().SelectPlayer(GetPlayer());
+            }
         }
 
         private void OnSecretTrigger(Card secret, Card triggerer)

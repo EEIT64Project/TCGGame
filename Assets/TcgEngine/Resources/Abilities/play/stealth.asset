@@ -32,5 +32,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Stealth \u6F5B\u884C"
-  desc: "Cannot be targeted or attacked until it performs an action.\n\u5728\u6B64\u724C\u6709\u4EFB\u4F55\u52D5\u4F5C\u4E4B\u524D\u4E0D\u80FD\u6210\u70BA\u76EE\u6A19\u6216\u88AB\u653B\u64CA"
+  title: "\u6F5B\u884C"
+  desc: "\u5728\u6B64\u724C\u6709\u4EFB\u4F55\u52D5\u4F5C\u4E4B\u524D\u4E0D\u80FD\u6210\u70BA\u76EE\u6A19\u6216\u88AB\u653B\u64CA"

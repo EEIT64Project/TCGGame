@@ -26,6 +26,7 @@ namespace TcgEngine.Client
 
         public UnityAction onConnectServer;
         public UnityAction onConnectGame;
+        public UnityAction<int> onPlayerReady;
         public UnityAction onGameStart;
         public UnityAction<int> onGameEnd;              //winner player_id
         public UnityAction<int> onNewTurn;              //current player_id
@@ -75,6 +76,7 @@ namespace TcgEngine.Client
         protected virtual void Start()
         {
             RegisterRefresh(GameAction.Connected, OnConnectedToGame);
+            RegisterRefresh(GameAction.PlayerReady, OnPlayerReady);
             RegisterRefresh(GameAction.GameStart, OnGameStart);
             RegisterRefresh(GameAction.GameEnd, OnGameEnd);
             RegisterRefresh(GameAction.NewTurn, OnNewTurn);
@@ -140,8 +142,8 @@ namespace TcgEngine.Client
             {
                 Authenticator.Get().LoginTest("Player");
 
-                player_settings.deck = GameplayData.Get().test_deck.id;
-                ai_settings.deck = GameplayData.Get().test_deck_ai.id;
+                player_settings.deck = new PlayerDeckSettings(GameplayData.Get().test_deck);
+                ai_settings.deck = new PlayerDeckSettings(GameplayData.Get().test_deck_ai);
                 ai_settings.ai_level = GameplayData.Get().ai_level;
             }
             
@@ -179,7 +181,7 @@ namespace TcgEngine.Client
             nplayer.username = Authenticator.Get().Username;
             nplayer.game_uid = uid;
             nplayer.nb_players = game_settings.nb_players;
-            nplayer.observer = game_settings.play_mode == PlayMode.Observer;
+            nplayer.observer = game_settings.game_type == GameType.Observer;
 
             Messaging.SendObject("connect", ServerID, nplayer, NetworkDelivery.Reliable);
         }
@@ -238,7 +240,7 @@ namespace TcgEngine.Client
 
         public void SendGameplaySettings(GameSettings settings)
         {
-            SendAction(GameAction.GameplaySettings, settings);
+            SendAction(GameAction.GameSettings, settings);
         }
 
         public void PlayCard(Card card, Slot slot)
@@ -377,7 +379,7 @@ namespace TcgEngine.Client
             writer.Dispose();
         }
 
-        //-------------------------
+        //--- Receive Refresh ----------------------
 
         protected virtual void OnConnectServer()
         {
@@ -395,13 +397,22 @@ namespace TcgEngine.Client
             if (observe_mode)
                 SetObserverMode(observe_user);
 
-            SendGameSettings();
-
             if (onConnectGame != null)
                 onConnectGame.Invoke();
+
+            SendGameSettings();
         }
 
-        private void OnGameStart( SerializedData sdata)
+        protected virtual void OnPlayerReady(SerializedData sdata)
+        {
+            MsgInt msg = sdata.Get<MsgInt>();
+            int pid = msg.value;
+
+            if (onPlayerReady != null)
+                onPlayerReady.Invoke(pid);
+        }
+
+        private void OnGameStart(SerializedData sdata)
         {
             onGameStart?.Invoke();
         }

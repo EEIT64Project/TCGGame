@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: spell_storm
   m_EditorClassIdentifier: 
   id: spell_storm
-  title: "Sea Storm \u6D77\u562F"
+  title: "\u6D77\u795E\u4E4B\u62F3"
   art_full: {fileID: 21300000, guid: 87b1bf15c44b86945b51d6a798840222, type: 3}
   art_board: {fileID: 0}
   type: 20
@@ -26,19 +26,19 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: c8298887e73eb514da76e4e6907274b2, type: 2}
-  text: "All cards return to their owner's hand.\n\u6240\u6709\u5361\u724C\u8FD4\u56DE\u5176\u64C1\u6709\u8005\u7684\u624B\u4E0A"
+  text: "\u6240\u6709\u5361\u724C\u8FD4\u56DE\u5176\u64C1\u6709\u8005\u7684\u624B\u4E0A"
   desc: 
   spawn_fx: {fileID: 0}
   death_fx: {fileID: 0}
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: affda0967c01e4f6db108e003d7db418, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

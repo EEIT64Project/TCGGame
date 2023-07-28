@@ -32,5 +32,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Deathtouch \u6B7B\u4EA1\u4E4B\u89F8"
-  desc: "Kill any creature it attacks.\n\u6BBA\u6B7B\u6240\u6709\u88AB\u6B64\u724C\u653B\u64CA\u7684\u4EFB\u4F55\u751F\u7269"
+  title: "\u6B7B\u4EA1\u4E4B\u89F8"
+  desc: "\u6BBA\u6B7B\u6240\u6709\u88AB\u6B64\u724C\u653B\u64CA\u7684\u4EFB\u4F55\u751F\u7269"

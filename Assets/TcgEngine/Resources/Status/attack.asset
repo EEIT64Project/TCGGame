@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: attack
   m_EditorClassIdentifier: 
   effect: 4
-  title: "Attack Bonus \u653B\u64CA\u7D05\u5229"
+  title: "\u653B\u64CA\u7D05\u5229"
   icon: {fileID: 0}
-  desc: "Bonus Attack Damage\n\u984D\u5916\u7684\u653B\u64CA\u529B"
+  desc: "\u984D\u5916\u7684\u653B\u64CA\u529B"
   status_fx: {fileID: 0}
   hvalue: 1

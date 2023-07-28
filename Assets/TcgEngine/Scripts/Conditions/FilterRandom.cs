@@ -25,5 +25,10 @@ namespace TcgEngine
         {
             return GameTool.PickXRandom(source, dest, amount);
         }
+
+        public override List<CardData> FilterTargets(Game data, AbilityData ability, Card caster, List<CardData> source, List<CardData> dest)
+        {
+            return GameTool.PickXRandom(source, dest, amount);
+        }
     }
 }

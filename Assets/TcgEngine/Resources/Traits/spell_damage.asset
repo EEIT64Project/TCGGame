@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: spell_damage
   m_EditorClassIdentifier: 
   id: spell_damage
-  title: Spell Damage
+  title: "\u6CD5\u8853\u50B7\u5BB3"
   icon: {fileID: 0}

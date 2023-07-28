@@ -59,9 +59,7 @@ namespace TcgEngine.Client
 
         public void SelectCardRight(BoardCard card)
         {
-            bool yourturn = GameClient.Get().IsYourTurn();
-            bool yourcard = card.GetCard().player_id == GameClient.Get().GetPlayerID();
-            if (yourcard && yourturn && !Input.GetMouseButton(0))
+            if (!Input.GetMouseButton(0))
             {
                 //Nothing on right-click
             }
@@ -78,7 +76,7 @@ namespace TcgEngine.Client
                 BoardSlot tslot = BoardSlot.GetNearest(wpos, 2f);
                 Card target = tslot ? gdata.GetSlotCard(tslot.GetSlot()) : null;
                 AbilityButton ability = AbilityButton.GetHover(wpos, 1f);
-                PlayerAttackZone zone = PlayerAttackZone.Get(true);
+                BoardSlotPlayer zone = BoardSlotPlayer.Get(true);
                 
                 if (ability != null && ability.IsVisible())
                 {
@@ -102,9 +100,9 @@ namespace TcgEngine.Client
                 {
                     GameClient.Get().Move(selected_card.GetCard(), tslot.GetSlot());
                 }
-
-                UnselectAll();
             }
+
+            UnselectAll();
         }
 
         public void UnselectAll()

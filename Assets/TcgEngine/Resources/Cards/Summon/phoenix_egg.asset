@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: phoenix_egg
   m_EditorClassIdentifier: 
   id: phoenix_egg
-  title: "Phoenix Egg \u9CF3\u51F0\u86CB"
+  title: "\u9CF3\u51F0\u86CB"
   art_full: {fileID: 21300000, guid: 6d8258dd15f2aab4c953bc3f153a779c, type: 3}
   art_board: {fileID: 21300000, guid: ddca84ba252385348ab499692aa2f163, type: 3}
   type: 30
@@ -26,7 +26,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: ff2043076c7d1ab4fb46e85f8e5f0f0e, type: 2}
-  text: "After 3 turns, transforms into a Pheonix.\n3 \u56DE\u5408\u5F8C\u8B8A\u8EAB\u9CF3\u51F0"
+  text: "3 \u56DE\u5408\u5F8C\u8B8A\u8EAB\u9CF3\u51F0"
   desc: 
   spawn_fx: {fileID: 9125387663047351618, guid: bac685160af4aff46ae561a51da6f5f4,
     type: 3}
@@ -34,7 +34,7 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: ea958080c11914565bbe50f62ff12254, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}

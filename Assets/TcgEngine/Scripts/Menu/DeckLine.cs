@@ -21,6 +21,7 @@ namespace TcgEngine.UI
         public UIPanel delete_btn;
         public AudioClip click_audio;
         public Material disabled_mat;
+        public Material default_mat;
 
         public UnityAction<DeckLine> onClick;
         public UnityAction<DeckLine> onClickRight;
@@ -30,28 +31,24 @@ namespace TcgEngine.UI
         private VariantData variant;
         private DeckData deck;
         private UserDeckData udeck;
-        private Material default_mat;
         private bool hidden = false;
         private bool hover = false;
 
         void Awake()
         {
-            if (image != null)
-                default_mat = image.material;
-            if (frame != null)
-                default_mat = frame.material;
+
         }
 
         void Update()
         {
             if (delete_btn != null)
             {
-                bool visi = hover && !GameTool.IsMobile();
+                bool visi = hover || GameTool.IsMobile();
                 delete_btn.SetVisible(visi && !hidden && udeck != null);
             }
         }
 
-        public void SetLine(CardData card, VariantData variant, int quantity, bool warn = false)
+        public void SetLine(CardData card, VariantData variant, int quantity, bool invalid = false)
         {
             this.card = card;
             this.variant = variant;
@@ -70,20 +67,22 @@ namespace TcgEngine.UI
             if (cost != null)
                 cost.value = card.mana;
             if (this.value != null)
-                this.value.color = warn ? Color.red : Color.white;
+                this.value.color = invalid ? Color.red : Color.white;
+            if(invalid)
+                title.color = Color.gray;
 
             if (image != null)
             {
                 image.sprite = card.GetFullArt(variant);
                 image.enabled = true;
-                image.material = warn ? disabled_mat : default_mat;
+                image.material = invalid ? disabled_mat : default_mat;
             }
 
             if (frame != null)
             {
                 frame.sprite = variant.frame;
                 frame.enabled = true;
-                frame.material = warn ? disabled_mat : default_mat;
+                frame.material = invalid ? disabled_mat : default_mat;
             }
 
             gameObject.SetActive(true);

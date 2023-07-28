@@ -30,7 +30,12 @@ namespace TcgEngine
         {
             //Server side gameplay logic
         }
-        
+
+        public virtual void DoEffect(GameLogic logic, AbilityData ability, Card caster, CardData target)
+        {
+            //Server side gameplay logic
+        }
+
         public virtual void DoOngoingEffect(GameLogic logic, AbilityData ability, Card caster, Card target)
         {
             //Ongoing effect only

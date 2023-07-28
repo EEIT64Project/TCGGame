@@ -145,6 +145,9 @@ namespace TcgEngine.AI
                         AddActions(action_list, data, node, GameAction.CastAbility, card);
                         //AddActions(action_list, data, node, GameAction.Move, card);        //Uncomment to consider move actions
                     }
+
+                    if (player.hero != null)
+                        AddActions(action_list, data, node, GameAction.CastAbility, player.hero);
                 }
                 else
                 {
@@ -453,6 +456,7 @@ namespace TcgEngine.AI
             }
         }
 
+        //Add all possible moves for a selection
         private void AddSelectActions(List<AIAction> actions, Game data, NodeState node)
         {
             if (data.selector == SelectorType.None)
@@ -469,7 +473,7 @@ namespace TcgEngine.AI
                 for (int p = 0; p < data.players.Length; p++)
                 {
                     Player tplayer = data.players[p];
-                    if (ability.CanTarget(data, caster, tplayer, true))
+                    if (ability.CanAiTarget(data, caster, tplayer))
                     {
                         AIAction action = CreateAction(GameAction.SelectPlayer, caster);
                         action.target_player_id = tplayer.player_id;
@@ -479,13 +483,13 @@ namespace TcgEngine.AI
                     foreach (Slot slot in Slot.GetAll())
                     {
                         Card tcard = data.GetSlotCard(slot);
-                        if (tcard != null && ability.CanTarget(data, caster, tcard, true))
+                        if (tcard != null && ability.CanAiTarget(data, caster, tcard))
                         {
                             AIAction action = CreateAction(GameAction.SelectCard, caster);
                             action.target_uid = tcard.uid;
                             actions.Add(action);
                         }
-                        else if (tcard == null && ability.CanTarget(data, caster, slot, true))
+                        else if (tcard == null && ability.CanAiTarget(data, caster, slot))
                         {
                             AIAction action = CreateAction(GameAction.SelectSlot, caster);
                             action.slot = slot;
@@ -499,7 +503,7 @@ namespace TcgEngine.AI
             {
                 for (int p = 0; p < data.players.Length; p++)
                 {
-                    List<Card> cards = ability.GetValidCardSelectTargets(data, caster, card_array);
+                    List<Card> cards = ability.GetCardTargets(data, caster, card_array);
                     foreach (Card tcard in cards)
                     {
                         AIAction action = CreateAction(GameAction.SelectCard, caster);
@@ -514,7 +518,7 @@ namespace TcgEngine.AI
                 for(int i=0; i<ability.chain_abilities.Length; i++)
                 {
                     AbilityData choice = ability.chain_abilities[i];
-                    if (choice.AreTriggerConditionsMet(data, caster))
+                    if (choice != null && choice.AreTriggerConditionsMet(data, caster))
                     {
                         AIAction action = CreateAction(GameAction.SelectChoice, caster);
                         action.value = i;
@@ -583,7 +587,7 @@ namespace TcgEngine.AI
 
             if (action.type == GameAction.CastAbility)
             {
-                Card card = player.GetBoardCard(action.card_uid);
+                Card card = player.GetCard(action.card_uid);
                 AbilityData ability = AbilityData.Get(action.ability_id);
                 game_logic.CastAbility(card, ability);
             }
@@ -645,7 +649,7 @@ namespace TcgEngine.AI
 
         public string GetNodePath(NodeState node)
         {
-            string path = "";
+            string path = "Prediction: HValue: " + node.hvalue + "\n";
             NodeState current = node;
             AIAction move;
 
@@ -653,9 +657,7 @@ namespace TcgEngine.AI
             {
                 move = current.last_action;
                 if (move != null)
-                    path += "P" + current.current_player + " " + move.GetText(game_data) + " H:" + current.hvalue + "\n";
-                else if(move == null)
-                    path += "Current " + "P" + current.current_player + " H:" + current.hvalue + "\n";
+                    path += "Player " + current.current_player + ": " + move.GetText(game_data) + "\n";
                 current = current.best_child;
             }
             return path;
@@ -771,15 +773,15 @@ namespace TcgEngine.AI
             Card card = data.GetCard(card_uid);
             Card target = data.GetCard(target_uid);
             if (card != null)
-                txt += " c " + card.card_id;
+                txt += " card " + card.card_id;
             if (target != null)
-                txt += " t " + target.card_id;
+                txt += " target " + target.card_id;
             if (slot != Slot.None)
-                txt += " s " + slot.x + "-" + slot.p;
+                txt += " slot " + slot.x + "-" + slot.p;
             if (ability_id != null)
-                txt += " a " + ability_id;
+                txt += " ability " + ability_id;
             if (value > 0)
-                txt += " v " + value;
+                txt += " value " + value;
             return txt;
         }
 

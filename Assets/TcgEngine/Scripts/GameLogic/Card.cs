@@ -22,9 +22,9 @@ namespace TcgEngine
         public int attack = 0;
         public int hp = 0;
 
-        public int mana_ongoing_bonus = 0;
-        public int attack_ongoing_bonus = 0;
-        public int hp_ongoing_bonus = 0;
+        public int mana_ongoing = 0;
+        public int attack_ongoing = 0;
+        public int hp_ongoing = 0;
 
         public List<CardTrait> traits = new List<CardTrait>();
         public List<CardTrait> ongoing_traits = new List<CardTrait>();
@@ -39,16 +39,16 @@ namespace TcgEngine
         public Card(string card_id, string uid, int player_id) { this.card_id = card_id; this.uid = uid; this.player_id = player_id; }
 
         public virtual void Refresh() { exhausted = false; }
-        public virtual void CleanOngoing() { ongoing_status.Clear(); ongoing_traits.Clear(); attack_ongoing_bonus = 0; hp_ongoing_bonus = 0; mana_ongoing_bonus = 0; }
+        public virtual void CleanOngoing() { ongoing_status.Clear(); ongoing_traits.Clear(); attack_ongoing = 0; hp_ongoing = 0; mana_ongoing = 0; }
         public virtual void Cleanse()
         {
             CleanOngoing(); Refresh(); damage = 0; status.Clear(); 
         }
 
-        public virtual int GetAttack() { return Mathf.Max(attack + attack_ongoing_bonus, 0); }
-        public virtual int GetHP() { return Mathf.Max(hp + hp_ongoing_bonus - damage, 0); }
-        public virtual int GetHPMax() { return Mathf.Max(hp + hp_ongoing_bonus, 0); }
-        public virtual int GetMana() { return Mathf.Max(mana + mana_ongoing_bonus, 0); }
+        public virtual int GetAttack() { return Mathf.Max(attack + attack_ongoing, 0); }
+        public virtual int GetHP() { return Mathf.Max(hp + hp_ongoing - damage, 0); }
+        public virtual int GetHPMax() { return Mathf.Max(hp + hp_ongoing, 0); }
+        public virtual int GetMana() { return Mathf.Max(mana + mana_ongoing, 0); }
 
         public virtual void SetCard(CardData icard, VariantData cvariant)
         {
@@ -141,14 +141,6 @@ namespace TcgEngine
             return null;
         }
 
-        public List<CardTrait> GetAllTraits()
-        {
-            List<CardTrait> all_traits = new List<CardTrait>();
-            all_traits.AddRange(traits);
-            all_traits.AddRange(ongoing_traits);
-            return all_traits;
-        }
-
         public int GetTraitValue(TraitData trait)
         {
             if (trait != null)
@@ -180,7 +172,38 @@ namespace TcgEngine
             return GetTrait(id) != null || GetOngoingTrait(id) != null;
         }
 
+        public List<CardTrait> GetAllTraits()
+        {
+            List<CardTrait> all_traits = new List<CardTrait>();
+            all_traits.AddRange(traits);
+            all_traits.AddRange(ongoing_traits);
+            return all_traits;
+        }
+        
+        //Alternate names since traits/stats are stored in same var
+        public void SetStat(string id, int value) => SetTrait(id, value);
+        public void AddStat(string id, int value) => AddTrait(id, value);
+        public void AddOngoingStat(string id, int value) => AddOngoingTrait(id, value);
+        public void RemoveStat(string id) => RemoveTrait(id);
+        public int GetStatValue(TraitData trait) => GetTraitValue(trait);
+        public int GetStatValue(string id) => GetTraitValue(id);
+        public bool HasStat(TraitData trait) => HasTrait(trait);
+        public bool HasStat(string id) => HasTrait(id);
+        public List<CardTrait> GetAllStats() => GetAllTraits();
+
         //------  Status Effects ---------
+
+        public void AddStatus(StatusData status, int value, int duration)
+        {
+            if (status != null)
+                AddStatus(status.effect, value, duration);
+        }
+
+        public void AddOngoingStatus(StatusData status, int value)
+        {
+            if (status != null)
+                AddOngoingStatus(status.effect, value);
+        }
 
         public void AddStatus(StatusType type, int value, int duration)
         {
@@ -322,21 +345,21 @@ namespace TcgEngine
 
         //---- Action Check ---------
 
-        public virtual bool CanAttack()
+        public virtual bool CanAttack(bool skip_cost = false)
         {
             if (HasStatus(StatusType.Paralysed))
                 return false;
-            if (exhausted)
+            if (!skip_cost && exhausted)
                 return false; //no more action
             return true;
         }
 
-        public virtual bool CanMove()
+        public virtual bool CanMove(bool skip_cost = false)
         {
             //In demo we can move freely, since it has no effect
             //if (HasStatusEffect(StatusEffect.Paralysed))
             //   return false;
-            //if (exhausted)
+            //if (!skip_cost && exhausted)
             //    return false; //no more action
             return true; 
         }
@@ -414,6 +437,7 @@ namespace TcgEngine
             return card;
         }
 
+        //Clone all card variables into another var, used mostly by the AI when building a prediction tree
         public static void Clone(Card source, Card dest)
         {
             dest.card_id = source.card_id;
@@ -429,14 +453,35 @@ namespace TcgEngine
             dest.hp = source.hp;
             dest.mana = source.mana;
 
-            dest.mana_ongoing_bonus = source.mana_ongoing_bonus;
-            dest.attack_ongoing_bonus = source.attack_ongoing_bonus;
-            dest.hp_ongoing_bonus = source.hp_ongoing_bonus;
+            dest.mana_ongoing = source.mana_ongoing;
+            dest.attack_ongoing = source.attack_ongoing;
+            dest.hp_ongoing = source.hp_ongoing;
 
             CardTrait.CloneList(source.traits, dest.traits);
             CardTrait.CloneList(source.ongoing_traits, dest.ongoing_traits);
             CardStatus.CloneList(source.status, dest.status);
             CardStatus.CloneList(source.ongoing_status, dest.ongoing_status);
+        }
+
+        //Clone a var that could be null
+        public static void CloneNull(Card source, ref Card dest)
+        {
+            //Source is null
+            if (source == null)
+            {
+                dest = null;
+                return;
+            }
+
+            //Dest is null
+            if (dest == null)
+            {
+                dest = CloneNew(source);
+                return;
+            }
+
+            //Both arent null, just clone
+            Clone(source, dest);
         }
 
         //Clone dictionary completely

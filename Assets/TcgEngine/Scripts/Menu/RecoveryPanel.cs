@@ -107,14 +107,12 @@ namespace TcgEngine.UI
         {
             base.Show(instant);
             RefreshPanel();
-
         }
 
         public override void Hide(bool instant = false)
         {
             base.Hide(instant);
             confirm_panel.Hide();
-
         }
 
         public void OnClickReset()

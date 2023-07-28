@@ -24,6 +24,7 @@ namespace TcgEngine
 
         private void Awake()
         {
+            LoadPrefs();
             RefreshVolume();
         }
 
@@ -157,22 +158,36 @@ namespace TcgEngine
         public void SetMasterVolume(float value)
         {
             master_vol = value;
-            PlayerPrefs.SetFloat("audio_master_volume", master_vol);
             RefreshVolume();
+            SavePrefs();
         }
 
         public void SetMusicVolume(float value)
         {
             music_vol = value;
-            PlayerPrefs.SetFloat("audio_music_volume", music_vol);
             RefreshVolume();
+            SavePrefs();
         }
 
         public void SetSFXVolume(float value)
         {
             sfx_vol = value;
-            PlayerPrefs.SetFloat("audio_sfx_volume", sfx_vol);
             RefreshVolume();
+            SavePrefs();
+        }
+
+        public void LoadPrefs()
+        {
+            master_vol = PlayerPrefs.GetFloat("audio_master_volume", 1f);
+            music_vol = PlayerPrefs.GetFloat("audio_music_volume", 1f);
+            sfx_vol = PlayerPrefs.GetFloat("audio_sfx_volume", 1f);
+        }
+
+        public void SavePrefs()
+        {
+            PlayerPrefs.SetFloat("audio_master_volume", master_vol);
+            PlayerPrefs.SetFloat("audio_music_volume", music_vol);
+            PlayerPrefs.SetFloat("audio_sfx_volume", sfx_vol);
         }
 
         public void RefreshVolume()

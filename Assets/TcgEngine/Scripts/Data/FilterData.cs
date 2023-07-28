@@ -13,17 +13,22 @@ namespace TcgEngine
     {
         public virtual List<Card> FilterTargets(Game data, AbilityData ability, Card caster, List<Card> source, List<Card> dest)
         {
-            return source; //Override this, condition targeting card
+            return source; //Override this, filter targeting card
         }
 
         public virtual List<Player> FilterTargets(Game data, AbilityData ability, Card caster, List<Player> source, List<Player> dest)
         {
-            return source; //Override this, condition targeting player
+            return source; //Override this, filter targeting player
         }
 
         public virtual List<Slot> FilterTargets(Game data, AbilityData ability, Card caster, List<Slot> source, List<Slot> dest)
         {
-            return source; //Override this, condition targeting slot
+            return source; //Override this, filter targeting slot
+        }
+
+        public virtual List<CardData> FilterTargets(Game data, AbilityData ability, Card caster, List<CardData> source, List<CardData> dest)
+        {
+            return source; //Override this, for filters that create new cards
         }
     }
 }

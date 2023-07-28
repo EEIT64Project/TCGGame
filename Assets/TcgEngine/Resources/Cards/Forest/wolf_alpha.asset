@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: wolf_alpha
   m_EditorClassIdentifier: 
   id: wolf_alpha
-  title: "Alpha Wolf \u963F\u723E\u6CD5\u72FC"
+  title: "\u963F\u723E\u6CD5\u72FC"
   art_full: {fileID: 21300000, guid: e51daa54a539c9a4ba7c82f9c832bbc9, type: 3}
   art_board: {fileID: 21300000, guid: 5cd105acce20b0f40810123f6fe80756, type: 3}
   type: 10
@@ -28,8 +28,8 @@ MonoBehaviour:
   abilities:
   - {fileID: 11400000, guid: 952d8d808aec0464a8135270b1ed4049, type: 2}
   - {fileID: 11400000, guid: c04ebd6a2109d0e4891c3e1dc9786993, type: 2}
-  text: "<b>Play</b>: Summon baby wolves.\nAll Wolves +1 attack.\n<b>\u6253\u51FA</b>:
-    \u53EC\u559A\u5C0F\u72FC\uFF0C\n\u6240\u6709\u72FC\u589E\u52A0 1 \u9EDE\u653B\u64CA\u529B"
+  text: "<b>\u6253\u51FA</b>: \u53EC\u559A\u5C0F\u72FC\uFF0C\n\u6240\u6709\u72FC\u589E\u52A0
+    1 \u9EDE\u653B\u64CA\u529B"
   desc: 
   spawn_fx: {fileID: 5791330189299518109, guid: 1fa8fa11b2c6b9b4d976743e5bbb3956,
     type: 3}
@@ -37,12 +37,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 5484b467496cf4857bc41f23ed116c18, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

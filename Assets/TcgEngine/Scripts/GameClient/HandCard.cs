@@ -128,7 +128,7 @@ namespace TcgEngine.Client
         public void SetCard(Card card)
         {
             this.card_uid = card.uid;
-            card_ui.SetCardBoard(card);
+            card_ui.SetCard(card);
         }
 
         public void Kill()
@@ -187,7 +187,7 @@ namespace TcgEngine.Client
 
         public void OnMouseDownCard()
         {
-            if (!GameUI.IsOverUILayer(5))
+            if (!GameUI.IsOverUILayer("UI"))
             {
                 UnselectAll();
                 drag = true;
@@ -216,7 +216,7 @@ namespace TcgEngine.Client
                 return;
             }
 
-            PlayerAttackZone zone = PlayerAttackZone.GetNearest(board_pos, 3f, 1f);
+            BoardSlotPlayer zone = BoardSlotPlayer.GetNearest(board_pos, 3f, 1f);
             BoardSlot bslot = BoardSlot.GetNearest(board_pos, 2f);
             int player_id = GameClient.Get().GetPlayerID();
             Game gdata = GameClient.Get().GetGameData();

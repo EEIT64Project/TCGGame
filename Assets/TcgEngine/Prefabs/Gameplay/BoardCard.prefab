@@ -113,7 +113,7 @@ MonoBehaviour:
   attack: {fileID: 1095425094801124750}
   hp: {fileID: 2630487396038922837}
   cost: {fileID: 0}
-  card_title: {fileID: 0}
+  card_title: {fileID: 3046232166395948562}
   card_text: {fileID: 0}
   stats: []
 --- !u!1 &105562412579017727
@@ -365,7 +365,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 11
+  m_SortingOrder: 18
   m_TargetDisplay: 0
 --- !u!114 &8746483245099765795
 MonoBehaviour:
@@ -1016,7 +1016,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 16
+  m_SortingOrder: 18
   m_TargetDisplay: 0
 --- !u!114 &4566077401296328921
 MonoBehaviour:
@@ -1681,7 +1681,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 6
   m_TargetDisplay: 0
 --- !u!114 &6132934038323766916
 MonoBehaviour:
@@ -1865,7 +1865,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: b44484a51437e03489ba17aef9aa199b, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 0.5019608}
   m_FlipX: 0

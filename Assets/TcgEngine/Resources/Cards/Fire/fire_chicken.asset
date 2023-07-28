@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: fire_chicken
   m_EditorClassIdentifier: 
   id: fire_chicken
-  title: "Roasted Chicken\u597D\u5E02\u591A\u70E4\u96DE"
+  title: "\u96DE\u9838\u9F8D"
   art_full: {fileID: 21300000, guid: fbac205dc606347499e187567b38dc8a, type: 3}
   art_board: {fileID: 21300000, guid: 78af8169df8e58045bcb52fe3b0739c1, type: 3}
   type: 10
@@ -26,7 +26,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: bbd458257afc3b143902562079df3124, type: 2}
-  text: "<b>Death:</b> turns into an egg.\n<b>\u6B7B\u4EA1:</b> \u8B8A\u6210\u86CB"
+  text: "<b>\u6B7B\u4EA1:</b> \u8B8A\u6210\u86CB"
   desc: 
   spawn_fx: {fileID: 9125387663047351618, guid: bac685160af4aff46ae561a51da6f5f4,
     type: 3}
@@ -34,12 +34,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 013224a32f72749399a0a77e2653502f, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

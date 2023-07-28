@@ -56,7 +56,7 @@ namespace TcgEngine.UI
                 stat.SetCard(card);
         }
 
-        public void SetCardBoard(Card card)
+        public void SetCard(Card card)
         {
             if (card == null)
                 return;
@@ -99,6 +99,10 @@ namespace TcgEngine.UI
                 hp_icon.enabled = card.IsBoardCard();
             if (hp != null)
                 hp.enabled = card.IsBoardCard();
+            if (cost_icon != null)
+                cost_icon.enabled = card.type != CardType.Hero;
+            if (cost != null)
+                cost.enabled = card.type != CardType.Hero;
 
             if (cost != null)
                 cost.text = card.mana.ToString();
@@ -116,7 +120,7 @@ namespace TcgEngine.UI
             if (rarity_icon != null)
             {
                 rarity_icon.sprite = card.rarity.icon;
-                rarity_icon.enabled = rarity_icon.sprite != null;
+                rarity_icon.enabled = rarity_icon.sprite != null && card.type != CardType.Hero;
             }
 
             foreach (TraitUI stat in stats)

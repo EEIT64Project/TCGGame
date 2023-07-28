@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: level3_player
   title: 
+  hero: {fileID: 0}
   cards:
   - {fileID: 11400000, guid: 9f363479388a0c347b8a455c4f32a659, type: 2}
   - {fileID: 11400000, guid: fa7053162e690c948a100b6cbcde7266, type: 2}

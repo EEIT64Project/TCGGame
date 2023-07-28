@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: town_forest
   m_EditorClassIdentifier: 
   id: town_forest
-  title: "Forest Town \u71B1\u5E36\u96E8\u6797"
+  title: "\u96C5\u99AC\u905C\u96E8\u6797"
   art_full: {fileID: 21300000, guid: 47bb00911776e254286a5e9252ee4430, type: 3}
   art_board: {fileID: 21300000, guid: dc645e79cebe0e34b856f13245fc683d, type: 3}
   type: 30
@@ -26,8 +26,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: a9b2604692f4d6340960f244d4122253, type: 2}
-  text: "All green cards have +2 HP.\n\u6240\u6709\u68EE\u6797\u5C6C\u6027\u5361\u724C\u589E\u52A0
-    2 \u9EDE\u751F\u547D\u503C"
+  text: "\u6240\u6709\u68EE\u6797\u5C6C\u6027\u5361\u724C\u589E\u52A0 2 \u9EDE\u751F\u547D\u503C"
   desc: 
   spawn_fx: {fileID: 5791330189299518109, guid: 1fa8fa11b2c6b9b4d976743e5bbb3956,
     type: 3}
@@ -35,12 +34,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 09a23d373bb0c458d9013ee1a43fa0a4, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

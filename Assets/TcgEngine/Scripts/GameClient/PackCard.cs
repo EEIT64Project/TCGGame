@@ -111,7 +111,7 @@ namespace TcgEngine.Client
 
         public void OnMouseDown()
         {
-            if (!GameUI.IsOverUILayer(5))
+            if (!GameUI.IsOverUILayer("UI"))
             {
                 Reveal();
             }

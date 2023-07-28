@@ -119,7 +119,7 @@ namespace TcgEngine
         {
             foreach (ConditionData cond in conditions_target)
             {
-                if (cond && !cond.IsTargetConditionMet(data, this, caster, target_card))
+                if (cond != null && !cond.IsTargetConditionMet(data, this, caster, target_card))
                     return false;
             }
             return true;
@@ -130,7 +130,7 @@ namespace TcgEngine
         {
             foreach (ConditionData cond in conditions_target)
             {
-                if (cond && !cond.IsTargetConditionMet(data, this, caster, target_player))
+                if (cond != null && !cond.IsTargetConditionMet(data, this, caster, target_player))
                     return false;
             }
             return true;
@@ -141,45 +141,44 @@ namespace TcgEngine
         {
             foreach (ConditionData cond in conditions_target)
             {
-                if (cond && !cond.IsTargetConditionMet(data, this, caster, target_slot))
+                if (cond != null && !cond.IsTargetConditionMet(data, this, caster, target_slot))
+                    return false;
+            }
+            return true;
+        }
+
+        //Check if the card data target is valid
+        public bool AreTargetConditionsMet(Game data, Card caster, CardData target_card)
+        {
+            foreach (ConditionData cond in conditions_target)
+            {
+                if (cond != null && !cond.IsTargetConditionMet(data, this, caster, target_card))
                     return false;
             }
             return true;
         }
 
         //CanTarget is similar to AreTargetConditionsMet but only applies to targets on the board, with extra board-only conditions
-        public bool CanTarget(Game data, Card caster, Card target, bool ai_check = false)
+        public bool CanTarget(Game data, Card caster, Card target)
         {
-            if (target == null)
-                return false;
-
             if (target.HasStatus(StatusType.Stealth))
                 return false; //Hidden
 
             if (target.HasStatus(StatusType.SpellImmunity))
                 return false; //Spell immunity
 
-            if (ai_check && !CanAiTarget(data, caster, target))
-                return false; //Additional AI Conditions
-
             bool condition_match = AreTargetConditionsMet(data, caster, target);
             return condition_match;
         }
 
         //Can target check additional restrictions and is usually for SelectTarget or PlayTarget abilities
-        public bool CanTarget(Game data, Card caster, Player target, bool ai_check = false)
+        public bool CanTarget(Game data, Card caster, Player target)
         {
-            if (target == null)
-                return false;
-
-            if (ai_check && !CanAiTarget(data, caster, target))
-                return false; //Additional AI Conditions
-
             bool condition_match = AreTargetConditionsMet(data, caster, target);
             return condition_match;
         }
 
-        public bool CanTarget(Game data, Card caster, Slot target, bool ai_check = false)
+        public bool CanTarget(Game data, Card caster, Slot target)
         {
             return AreTargetConditionsMet(data, caster, target); //No additional conditions for slots
         }
@@ -187,16 +186,26 @@ namespace TcgEngine
         //AI has additional restrictions based on if the effect is positive or not
         public bool CanAiTarget(Game data, Card caster, Card target_card)
         {
-            return CanAiTarget(data, caster, data.GetPlayer(target_card.player_id));
+            return CanTarget(data, caster, target_card) && CanAiTarget(caster.player_id, target_card.player_id);
         }
 
         //AI has additional restrictions based on if the effect is positive or not
         public bool CanAiTarget(Game data, Card caster, Player target_player)
         {
+            return CanTarget(data, caster, target_player) && CanAiTarget(caster.player_id, target_player.player_id);
+        }
+
+        public bool CanAiTarget(Game data, Card caster, Slot target_slot)
+        {
+            return CanTarget(data, caster, target_slot); //No additional condition
+        }
+
+        public bool CanAiTarget(int caster_pid, int target_pid)
+        {
             int ai_value = GetAiValue();
-            if (ai_value > 0 && caster.player_id != target_player.player_id)
+            if (ai_value > 0 && caster_pid != target_pid)
                 return false; //Positive effect, dont target others
-            if (ai_value < 0 && caster.player_id == target_player.player_id)
+            if (ai_value < 0 && caster_pid == target_pid)
                 return false; //Negative effect, dont target self
             return true;
         }
@@ -204,59 +213,65 @@ namespace TcgEngine
         //Check if destination array has the target after being filtered, used to support filters in CardSelector
         public bool IsCardSelectionValid(Game data, Card caster, Card target, ListSwap<Card> card_array = null)
         {
-            List<Card> targets = GetValidCardSelectTargets(data, caster, card_array);
+            List<Card> targets = GetCardTargets(data, caster, card_array);
             return targets.Contains(target); //Card is still in array after filtering
         }
 
         public void DoEffects(GameLogic logic, Card caster)
         {
             foreach(EffectData effect in effects)
-                effect.DoEffect(logic, this, caster);
+                effect?.DoEffect(logic, this, caster);
         }
 
         public void DoEffects(GameLogic logic, Card caster, Card target)
         {
             foreach (EffectData effect in effects)
-                effect.DoEffect(logic, this, caster, target);
+                effect?.DoEffect(logic, this, caster, target);
             foreach(StatusData stat in status)
-                target.AddStatus(stat.effect, value, duration);
+                target.AddStatus(stat, value, duration);
         }
 
         public void DoEffects(GameLogic logic, Card caster, Player target)
         {
             foreach (EffectData effect in effects)
-                effect.DoEffect(logic, this, caster, target);
+                effect?.DoEffect(logic, this, caster, target);
             foreach (StatusData stat in status)
-                target.AddStatus(stat.effect, value, duration);
+                target.AddStatus(stat, value, duration);
         }
 
         public void DoEffects(GameLogic logic, Card caster, Slot target)
         {
             foreach (EffectData effect in effects)
-                effect.DoEffect(logic, this, caster, target);
+                effect?.DoEffect(logic, this, caster, target);
+        }
+
+        public void DoEffects(GameLogic logic, Card caster, CardData target)
+        {
+            foreach (EffectData effect in effects)
+                effect?.DoEffect(logic, this, caster, target);
         }
 
         public void DoOngoingEffects(GameLogic logic, Card caster, Card target)
         {
             foreach (EffectData effect in effects)
-                effect.DoOngoingEffect(logic, this, caster, target);
+                effect?.DoOngoingEffect(logic, this, caster, target);
             foreach (StatusData stat in status)
-                target.AddOngoingStatus(stat.effect, value);
+                target.AddOngoingStatus(stat, value);
         }
 
         public void DoOngoingEffects(GameLogic logic, Card caster, Player target)
         {
             foreach (EffectData effect in effects)
-                effect.DoOngoingEffect(logic, this, caster, target);
+                effect?.DoOngoingEffect(logic, this, caster, target);
             foreach (StatusData stat in status)
-                target.AddOngoingStatus(stat.effect, value);
+                target.AddOngoingStatus(stat, value);
         }
 
         public bool HasEffect<T>() where T : EffectData
         {
             foreach (EffectData eff in effects)
             {
-                if (eff is T)
+                if (eff != null && eff is T)
                     return true;
             }
             return false;
@@ -266,11 +281,11 @@ namespace TcgEngine
         {
             int total = 0;
             foreach (EffectData eff in effects)
-                total += eff.GetAiValue(this);
+                total += eff != null ? eff.GetAiValue(this) : 0;
             foreach (StatusData astatus in status)
-                total += astatus.hvalue;
+                total += astatus != null ? astatus.hvalue : 0;
             foreach (AbilityData ability in chain_abilities)
-                total += ability.GetAiValue();
+                total += ability != null ? ability.GetAiValue() : 0;
             return total;
         }
 
@@ -281,58 +296,6 @@ namespace TcgEngine
                 if (AreTargetConditionsMet(data, caster, card))
                     targets.Add(card);
             }
-        }
-
-        //Return list of possible targets (not selected yet),  memory_array is used for optimization and avoid allocating new memory
-        public List<Card> GetValidCardSelectTargets(Game data, Card caster, ListSwap<Card> memory_array = null)
-        {
-            if (memory_array == null)
-                memory_array = new ListSwap<Card>(); //Slow operation
-
-            List<Card> targets = memory_array.Get();
-
-            //Card can be anywhere
-            if (target == AbilityTarget.AllCardsAllPiles || target == AbilityTarget.CardSelector)
-            {
-                foreach (Player player in data.players)
-                {
-                    AddValidCards(data, caster, player.cards_deck, targets);
-                    AddValidCards(data, caster, player.cards_discard, targets);
-                    AddValidCards(data, caster, player.cards_hand, targets);
-                    AddValidCards(data, caster, player.cards_secret, targets);
-                    AddValidCards(data, caster, player.cards_board, targets);
-                }
-            }
-            else if (target == AbilityTarget.AllCardsHand)
-            {
-                foreach (Player player in data.players)
-                {
-                    foreach (Card card in player.cards_hand)
-                    {
-                        if (AreTargetConditionsMet(data, caster, card))
-                            targets.Add(card);
-                    }
-                }
-            }
-            else
-            {
-                foreach (Player player in data.players)
-                {
-                    foreach (Card card in player.cards_board)
-                    {
-                        if (AreTargetConditionsMet(data, caster, card))
-                            targets.Add(card);
-                    }
-                }
-            }
-
-            if (filters_target != null && targets.Count > 0)
-            {
-                foreach (FilterData filter in filters_target)
-                    targets = filter.FilterTargets(data, this, caster, targets, memory_array.GetOther(targets));
-            }
-
-            return targets;
         }
 
         //Return cards targets,  memory_array is used for optimization and avoid allocating new memory
@@ -349,7 +312,7 @@ namespace TcgEngine
                     targets.Add(caster);
             }
 
-            if (target == AbilityTarget.AllCardsBoard)
+            if (target == AbilityTarget.AllCardsBoard || target == AbilityTarget.SelectTarget)
             {
                 foreach (Player player in data.players)
                 {
@@ -373,7 +336,7 @@ namespace TcgEngine
                 }
             }
 
-            if (target == AbilityTarget.AllCardsAllPiles)
+            if (target == AbilityTarget.AllCardsAllPiles || target == AbilityTarget.CardSelector)
             {
                 foreach (Player player in data.players)
                 {
@@ -382,6 +345,7 @@ namespace TcgEngine
                     AddValidCards(data, caster, player.cards_hand, targets);
                     AddValidCards(data, caster, player.cards_secret, targets);
                     AddValidCards(data, caster, player.cards_board, targets);
+                    AddValidCards(data, caster, player.cards_temp, targets);
                 }
             }
 
@@ -417,7 +381,10 @@ namespace TcgEngine
             if (filters_target != null && targets.Count > 0)
             {
                 foreach (FilterData filter in filters_target)
-                    targets = filter.FilterTargets(data, this, caster, targets, memory_array.GetOther(targets));
+                {
+                    if (filter != null)
+                        targets = filter.FilterTargets(data, this, caster, targets, memory_array.GetOther(targets));
+                }
             }
 
             return targets;
@@ -456,7 +423,10 @@ namespace TcgEngine
             if (filters_target != null && targets.Count > 0)
             {
                 foreach (FilterData filter in filters_target)
-                    targets = filter.FilterTargets(data, this, caster, targets, memory_array.GetOther(targets));
+                {
+                    if (filter != null)
+                        targets = filter.FilterTargets(data, this, caster, targets, memory_array.GetOther(targets));
+                }
             }
 
             return targets;
@@ -484,7 +454,29 @@ namespace TcgEngine
             if (filters_target != null && targets.Count > 0)
             {
                 foreach (FilterData filter in filters_target)
-                    targets = filter.FilterTargets(data, this, caster, targets, memory_array.GetOther(targets));
+                {
+                    if (filter != null)
+                        targets = filter.FilterTargets(data, this, caster, targets, memory_array.GetOther(targets));
+                }
+            }
+
+            return targets;
+        }
+
+        public List<CardData> GetCardDataTargets(Game data, Card caster, ListSwap<CardData> memory_array = null)
+        {
+            if (memory_array == null)
+                memory_array = new ListSwap<CardData>(); //Slow operation
+
+            List<CardData> targets = memory_array.Get();
+
+            if (target == AbilityTarget.AllCardData)
+            {
+                foreach (CardData card in CardData.GetAll())
+                {
+                    if (AreTargetConditionsMet(data, caster, card))
+                        targets.Add(card);
+                }
             }
 
             return targets;
@@ -548,6 +540,7 @@ namespace TcgEngine
         AllCardsHand = 11,
         AllCardsAllPiles = 12,
         AllSlots = 15,
+        AllCardData = 17,       //For card Create effects only
 
         PlayTarget = 20,        //The target selected at the same time the spell was played (spell only)      
         AbilityTriggerer = 25,   //The card that triggered the trap

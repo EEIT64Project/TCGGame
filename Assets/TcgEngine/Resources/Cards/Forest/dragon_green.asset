@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: dragon_green
   m_EditorClassIdentifier: 
   id: dragon_green
-  title: "Green Dragon \u7DA0\u5149\u9F8D"
+  title: "\u7DA0\u7FE1\u7FE0"
   art_full: {fileID: 21300000, guid: 57f0c14a54bae484e9d621feb3d56249, type: 3}
   art_board: {fileID: 21300000, guid: ccaee4164e13479428e1ac9cc2a6126a, type: 3}
   type: 10
@@ -27,7 +27,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: 643b2aa17cd6c8847884a5771a5656b3, type: 2}
-  text: "Spell Immunity\n\u6CD5\u8853\u514D\u75AB"
+  text: "\u6CD5\u8853\u514D\u75AB"
   desc: 
   spawn_fx: {fileID: 5791330189299518109, guid: 1fa8fa11b2c6b9b4d976743e5bbb3956,
     type: 3}
@@ -35,12 +35,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 66f7e2dc334984023aad460b4446399c, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

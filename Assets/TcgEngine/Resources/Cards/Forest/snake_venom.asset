@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: snake_venom
   m_EditorClassIdentifier: 
   id: snake_venom
-  title: "Viper \u6BD2\u86C7"
+  title: "\u6BD2\u86C7"
   art_full: {fileID: 21300000, guid: 26fdf69f03d65644b8cd961f59f33a40, type: 3}
   art_board: {fileID: 21300000, guid: b636d860c011d0a4aba40414f67dac28, type: 3}
   type: 10
@@ -27,7 +27,7 @@ MonoBehaviour:
   abilities:
   - {fileID: 11400000, guid: e60f3724f57913949bb49eef22c7759e, type: 2}
   - {fileID: 11400000, guid: e8de10b59328c0b4ab07db3040214ee9, type: 2}
-  text: "<b>Attack:</b> Poison.\n<b>\u653B\u64CA:</b> \u9020\u6210\u4E2D\u6BD2\u72C0\u614B"
+  text: "<b>\u653B\u64CA:</b> \u9020\u6210\u4E2D\u6BD2\u72C0\u614B"
   desc: 
   spawn_fx: {fileID: 5791330189299518109, guid: 1fa8fa11b2c6b9b4d976743e5bbb3956,
     type: 3}
@@ -35,12 +35,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: f33f7a431d64b434f82ffecce5615a0e, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

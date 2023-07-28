@@ -65,6 +65,9 @@ namespace TcgEngine
             if (pile == PileType.Secret)
                 card_pile = player.cards_secret;
 
+            if (pile == PileType.Temp)
+                card_pile = player.cards_temp;
+
             if (card_pile != null)
             {
                 int count = 0;

@@ -35,7 +35,7 @@ MonoBehaviour:
   target_fx: {fileID: 8327183289831986084, guid: 8d68eb12f4dda644184359acd4008081,
     type: 3}
   cast_audio: {fileID: 0}
-  target_audio: {fileID: 0}
+  target_audio: {fileID: 8300000, guid: fa50087670bc3402cbb4ce9a597dfc62, type: 3}
   charge_target: 0
-  title: "Silence \u6C88\u9ED8"
-  desc: "Target abilities are canceled.\n\u79FB\u9664\u76EE\u6A19\u6548\u679C"
+  title: "\u6C88\u9ED8"
+  desc: "\u79FB\u9664\u76EE\u6A19\u6548\u679C"

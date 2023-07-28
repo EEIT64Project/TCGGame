@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 24
-  productGUID: 5ecd941be8b5749c6809319f928e9be8
+  productGUID: 8928c73381df24e5aa24e41086c439ff
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
-  productName: TCG Game V2
+  companyName: EEIT64
+  productName: "\u5143\u7D20\u98A8\u66B4:\u5361\u724C\u5C0D\u6230"
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
@@ -137,7 +137,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1.05
+  bundleVersion: 1.07
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -159,7 +159,8 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.IndieMarc.TcgEngine
-    Standalone: com.Indie-Marc.TcgEngine
+    Standalone: com.EEIT64.-------------------------
+    iPhone: com.DefaultCompany.TCGGameV3
   buildNumber:
     Standalone: 0
     iPhone: 0

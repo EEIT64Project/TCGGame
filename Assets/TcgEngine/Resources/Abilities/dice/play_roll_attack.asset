@@ -30,8 +30,8 @@ MonoBehaviour:
   board_fx: {fileID: 0}
   caster_fx: {fileID: 0}
   target_fx: {fileID: 0}
-  cast_audio: {fileID: 0}
+  cast_audio: {fileID: 8300000, guid: 94a1175b4621f4eafb0f1d7107efd9fc, type: 3}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Random Attack. \u4E82\u64CA"
-  desc: "Roll a D6, increase this card's attack by the result.\n\u6295\u64F2D6\uFF0C\u6839\u64DA\u7D50\u679C\u589E\u52A0\u9019\u5F35\u5361\u7684\u653B\u64CA\u529B\u3002"
+  title: "\u4E82\u64CA"
+  desc: "\u6295\u64F2\u9AB0\u5B50\uFF0C\u6839\u64DA\u7D50\u679C\u589E\u52A0\u9019\u5F35\u5361\u7684\u653B\u64CA\u529B\u3002"

@@ -28,10 +28,11 @@ namespace TcgEngine.FX
             bcard = GetComponent<BoardCard>();
             bcard.onKill += OnKill;
 
+            GameClient.Get().onCardMoved += OnMove;
             GameClient.Get().onAttackStart += OnAttack;
             GameClient.Get().onAttackPlayerStart += OnAttackPlayer;
-            GameClient.Get().onAbilityTargetCard += OnAbilityEffect;
             GameClient.Get().onAbilityStart += OnAbilityStart;
+            GameClient.Get().onAbilityTargetCard += OnAbilityEffect;
             GameClient.Get().onAbilityEnd += OnAbilityAfter;
         }
 
@@ -42,10 +43,12 @@ namespace TcgEngine.FX
 
         private void OnDestroy()
         {
+            GameClient.Get().onCardMoved -= OnMove;
             GameClient.Get().onAttackStart -= OnAttack;
             GameClient.Get().onAttackPlayerStart -= OnAttackPlayer;
             GameClient.Get().onAbilityStart -= OnAbilityStart;
             GameClient.Get().onAbilityTargetCard -= OnAbilityEffect;
+            GameClient.Get().onAbilityEnd -= OnAbilityAfter;
         }
 
         void Update()
@@ -167,7 +170,12 @@ namespace TcgEngine.FX
             AnimMatFX anim = AnimMatFX.Create(render.gameObject, render.material);
             anim.SetFloat(kill_mat_fade, val, duration);
         }
-		
+
+        private void OnMove(Card card, Slot slot)
+        {
+            AudioTool.Get().PlaySFX("card_move", AssetData.Get().card_move_audio);
+        }
+
         private void OnAttack(Card attacker, Card target)
         {
             Game gdata = GameClient.Get().GetGameData();
@@ -194,7 +202,7 @@ namespace TcgEngine.FX
             if (card.uid == attacker.uid)
             {
                 BoardCard btarget = BoardCard.Get(target.uid);
-                if (target != null)
+                if (btarget != null)
                 {
                     //Card charge into target
                     ChargeInto(btarget);
@@ -218,7 +226,7 @@ namespace TcgEngine.FX
             {
                 bool is_other = player.player_id != GameClient.Get().GetPlayerID();
                 CardData icard = bcard.GetCardData();
-                PlayerAttackZone zone = PlayerAttackZone.Get(is_other);
+                BoardSlotPlayer zone = BoardSlotPlayer.Get(is_other);
 
                 ChargeIntoPlayer(zone);
 
@@ -250,7 +258,7 @@ namespace TcgEngine.FX
             }
         }
 
-        private void ChargeIntoPlayer(PlayerAttackZone target)
+        private void ChargeIntoPlayer(BoardSlotPlayer target)
         {
             if (target != null)
             {

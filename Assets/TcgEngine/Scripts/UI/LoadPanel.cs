@@ -27,22 +27,38 @@ namespace TcgEngine.UI
             base.Start();
 
             GameClient.Get().onConnectGame += OnConnect;
+            GameClient.Get().onPlayerReady += OnReady;
+            GameClient.Get().onGameStart += OnStart;
 
-            if (load_txt != null)
-            {
-                load_txt.text = "";
-
-                if (IsOnline())
-                    load_txt.text = "Connecting to server...";
-            }
+            SetLoadText("正在連線至伺服器...");
         }
 
         private void OnConnect()
         {
-            if (load_txt != null)
+            SetLoadText("傳送玩家資料中...");
+        }
+
+        private void OnStart()
+        {
+            SetLoadText("");
+        }
+
+        private void OnReady(int player_id)
+        {
+            if (player_id == GameClient.Get().GetPlayerID())
             {
-                if (IsOnline())
-                    load_txt.text = "Waiting for other player...";
+                SetLoadText("正在等待對手...");
+            }
+        }
+
+        private void SetLoadText(string text)
+        {
+            if (IsOnline())
+            {
+                if (load_txt != null)
+                    load_txt.text = text;
+                if (!string.IsNullOrWhiteSpace(text))
+                    Debug.Log(text);
             }
         }
 

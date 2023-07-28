@@ -203,7 +203,7 @@ namespace TcgEngine.UI
         public void Show(AbilityData iability, Card caster)
         {
             Game data = GameClient.Get().GetGameData();
-            this.card_list = iability.GetValidCardSelectTargets(data, caster);
+            this.card_list = iability.GetCardTargets(data, caster);
             this.iability = iability;
             title.text = iability.title;
             subtitle.text = iability.desc;

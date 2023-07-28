@@ -97,7 +97,7 @@ namespace TcgEngine.Server
                 MatchData match = matched_players[user_id];
                 if (!match.ended)
                 {
-                    SendMatchmakingResponse(iclient, match, match.players.Length); //Was already matched, return saved result!
+                    SendMatchmakingResponse(iclient, match, msg.group, match.players.Length); //Was already matched, return saved result!
                     return;
                 }
             }
@@ -143,7 +143,7 @@ namespace TcgEngine.Server
             //Not enough players found, send current count
             if (valid_users.Count < msg.players)
             {
-                SendMatchmakingResponse(iclient, null, valid_users.Count);
+                SendMatchmakingResponse(iclient, null, msg.group, valid_users.Count);
                 return; //Not enough valid users
             }
 
@@ -170,16 +170,16 @@ namespace TcgEngine.Server
             //Send response to current request
             if (matched_players.ContainsKey(user_id))
             {
-                SendMatchmakingResponse(iclient, nmatch, nmatch.players.Length); //Just matched to new player!
+                SendMatchmakingResponse(iclient, nmatch, nmatch.group, nmatch.players.Length); //Just matched to new player!
             }
         }
 
-        protected virtual void SendMatchmakingResponse(ClientData iclient, MatchData match, int players)
+        protected virtual void SendMatchmakingResponse(ClientData iclient, MatchData match, string group, int players)
         {
             MatchmakingResult msg_match = new MatchmakingResult();
             msg_match.success = match != null;
             msg_match.players = players;
-            msg_match.group = match != null ? match.group : "";
+            msg_match.group = group;
             msg_match.game_uid = match != null ? match.game_uid : "";
             msg_match.server_url = match != null ? match.server_url : "";
 

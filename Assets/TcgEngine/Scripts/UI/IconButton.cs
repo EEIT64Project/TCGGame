@@ -30,6 +30,9 @@ namespace TcgEngine.UI
             toggle_list.Add(this);
             button = GetComponent<Button>();
             button.onClick.AddListener(OnClick);
+
+            if(!on_if_all_off && active_img != null)
+                active_img.enabled = false;
         }
 
         private void OnDestroy()

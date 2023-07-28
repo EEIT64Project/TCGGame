@@ -94,6 +94,56 @@ namespace TcgEngine
             }
         }
 
+        //Serialize an array using Netcode
+        public static void NetSerializeArray<TS>(BufferSerializer<TS> serializer, ref string[] array) where TS : IReaderWriter
+        {
+            if (serializer.IsReader)
+            {
+                int size = 0;
+                serializer.SerializeValue(ref size);
+                array = new string[size];
+                for (int i = 0; i < size; i++)
+                {
+                    string val = "";
+                    serializer.SerializeValue(ref val);
+                    array[i] = val;
+                }
+            }
+
+            if (serializer.IsWriter)
+            {
+                int size = array.Length;
+                serializer.SerializeValue(ref size);
+                for (int i = 0; i < size; i++)
+                    serializer.SerializeValue(ref array[i]);
+            }
+        }
+
+        //Serialize an array using Netcode
+        public static void NetSerializeArray<T, TS>(BufferSerializer<TS> serializer, ref T[] array) where T : INetworkSerializable, new() where TS : IReaderWriter
+        {
+            if (serializer.IsReader)
+            {
+                int size = 0;
+                serializer.SerializeValue(ref size);
+                array = new T[size];
+                for(int i=0; i<size; i++)
+                {
+                    T val = new T();
+                    serializer.SerializeValue(ref val);
+                    array[i] = val;
+                }
+            }
+
+            if (serializer.IsWriter)
+            {
+                int size = array.Length;
+                serializer.SerializeValue(ref size);
+                for (int i = 0; i < size; i++)
+                    serializer.SerializeValue(ref array[i]);
+            }
+        }
+
         public static byte[] SerializeInt32(int data)
         {
             return System.BitConverter.GetBytes(data);

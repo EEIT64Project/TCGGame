@@ -7,7 +7,7 @@ namespace TcgEngine
 {
 
     [System.Serializable]
-    public enum PlayMode
+    public enum GameType
     {
         Solo = 0,
         Adventure = 10,
@@ -36,28 +36,28 @@ namespace TcgEngine
         public string scene;        //Which scene to load
         public int nb_players;      //How many players, including AI (UI only supports 2)
 
-        public PlayMode play_mode = PlayMode.Solo;      //Multiplayer? Solo? Observer?
+        public GameType game_type = GameType.Solo;      //Multiplayer? Solo? Observer?
         public GameMode game_mode = GameMode.Casual;    //Ranked or not? Other special game mode?
         public string level;                            //Adventure level ID
 
         public virtual bool IsHost()
         {
-            return play_mode == PlayMode.Solo || play_mode == PlayMode.Adventure || play_mode == PlayMode.HostP2P;
+            return game_type == GameType.Solo || game_type == GameType.Adventure || game_type == GameType.HostP2P;
         }
 
         public virtual bool IsOffline()
         {
-            return play_mode == PlayMode.Solo || play_mode == PlayMode.Adventure;
+            return game_type == GameType.Solo || game_type == GameType.Adventure;
         }
 
         public virtual bool IsOnline()
         {
-            return play_mode == PlayMode.HostP2P || play_mode == PlayMode.Multiplayer || play_mode == PlayMode.Observer;
+            return game_type == GameType.HostP2P || game_type == GameType.Multiplayer || game_type == GameType.Observer;
         }
 
         public virtual bool IsOnlinePlayer()
         {
-            return play_mode == PlayMode.HostP2P || play_mode == PlayMode.Multiplayer;
+            return game_type == GameType.HostP2P || game_type == GameType.Multiplayer;
         }
 
         public virtual bool IsRanked()
@@ -93,7 +93,7 @@ namespace TcgEngine
             serializer.SerializeValue(ref server_url);
             serializer.SerializeValue(ref game_uid);
             serializer.SerializeValue(ref scene);
-            serializer.SerializeValue(ref play_mode);
+            serializer.SerializeValue(ref game_type);
             serializer.SerializeValue(ref game_mode);
             serializer.SerializeValue(ref nb_players);
             serializer.SerializeValue(ref level);
@@ -124,7 +124,7 @@ namespace TcgEngine
                 GameSettings settings = new GameSettings();
                 settings.server_url = "";
                 settings.game_uid = "test";
-                settings.play_mode = PlayMode.Solo;
+                settings.game_type = GameType.Solo;
                 settings.game_mode = GameMode.Casual;
                 settings.nb_players = 2;
                 settings.scene = "Game";
@@ -146,16 +146,16 @@ namespace TcgEngine
         public string username;
         public string avatar;
         public string cardback;
-        public string deck;
         public int ai_level;
+        public PlayerDeckSettings deck = new PlayerDeckSettings();
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             serializer.SerializeValue(ref username);
             serializer.SerializeValue(ref avatar);
             serializer.SerializeValue(ref cardback);
-            serializer.SerializeValue(ref deck);
             serializer.SerializeValue(ref ai_level);
+            serializer.SerializeValue(ref deck);
         }
 
         public static PlayerSettings Default
@@ -166,7 +166,7 @@ namespace TcgEngine
                 settings.username = "Player";
                 settings.avatar = "";
                 settings.cardback = "";
-                settings.deck = "";
+                settings.deck = PlayerDeckSettings.Default;
                 settings.ai_level = 1;
                 return settings;
             }
@@ -180,11 +180,58 @@ namespace TcgEngine
                 settings.username = "AI";
                 settings.avatar = "";
                 settings.cardback = "";
-                settings.deck = "";
+                settings.deck = PlayerDeckSettings.Default;
                 settings.ai_level = 10;
                 return settings;
             }
         }
 
+    }
+
+    [System.Serializable]
+    public class PlayerDeckSettings : INetworkSerializable
+    {
+        public string id;
+        public string hero;
+        public string[] cards;
+
+        public PlayerDeckSettings() { cards = new string[0]; }
+        public PlayerDeckSettings(UserDeckData deck) { id = deck.tid; hero = deck.hero; cards = deck.cards; FixData(); }
+
+        public PlayerDeckSettings(DeckData deck) { 
+            id = deck.id;
+            hero = deck.hero != null ? deck.hero.id : "";
+            cards = new string[deck.cards.Length];
+            for (int i = 0; i < deck.cards.Length; i++)
+                cards[i] = deck.cards[i].id;
+            FixData();
+        }
+
+        //Make sure data isnt broken
+        public void FixData()
+        {
+            if (id == null) id = "";
+            if (hero == null) hero = "";
+            if (cards == null) cards = new string[0];
+        }
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref id);
+            serializer.SerializeValue(ref hero);
+            NetworkTool.NetSerializeArray(serializer, ref cards);
+        }
+
+        public static PlayerDeckSettings Default
+        {
+            get
+            {
+                PlayerDeckSettings deck = new PlayerDeckSettings();
+                deck.id = "";
+                deck.hero = "";
+                deck.cards = new string[0];
+                return deck;
+            }
+        }
     }
 }

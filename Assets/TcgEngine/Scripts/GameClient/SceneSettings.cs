@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TcgEngine.UI;
 using UnityEngine;
 
 namespace TcgEngine.Client
@@ -10,6 +11,7 @@ namespace TcgEngine.Client
 
     public class SceneSettings : MonoBehaviour
     {
+        public AudioClip music;
         public AudioClip start_audio;
         public AudioClip[] game_music;
         public AudioClip[] game_ambience;
@@ -23,6 +25,7 @@ namespace TcgEngine.Client
 
         void Start()
         {
+            AudioTool.Get().PlayMusic("music", music);
             AudioTool.Get().PlaySFX("game_sfx", start_audio);
             if (game_music.Length > 0)
                 AudioTool.Get().PlayMusic("music", game_music[Random.Range(0, game_music.Length)]);
@@ -33,6 +36,19 @@ namespace TcgEngine.Client
         void Update()
         {
 
+        }
+
+        public void FadeToScene(string scene)
+        {
+            StartCoroutine(FadeToRun(scene));
+        }
+
+        private IEnumerator FadeToRun(string scene)
+        {
+            BlackPanel.Get().Show();
+            AudioTool.Get().FadeOutMusic("music");
+            yield return new WaitForSeconds(1f);
+            SceneNav.GoTo(scene);
         }
 
         public static SceneSettings Get()

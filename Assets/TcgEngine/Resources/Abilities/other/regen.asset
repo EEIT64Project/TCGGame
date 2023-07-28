@@ -33,5 +33,5 @@ MonoBehaviour:
   cast_audio: {fileID: 0}
   target_audio: {fileID: 0}
   charge_target: 0
-  title: "Regeneration \u518D\u751F"
-  desc: "At the start of your turn, this creature fully heal.\n\u5728\u4F60\u7684\u56DE\u5408\u958B\u59CB\u6642\uFF0C\u6B64\u751F\u7269\u6062\u5FA9\u5168\u90E8\u751F\u547D\u503C"
+  title: "\u518D\u751F"
+  desc: "\u5728\u4F60\u7684\u56DE\u5408\u958B\u59CB\u6642\uFF0C\u6B64\u751F\u7269\u6062\u5FA9\u5168\u90E8\u751F\u547D\u503C"

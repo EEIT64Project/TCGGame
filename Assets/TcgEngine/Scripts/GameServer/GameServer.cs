@@ -56,7 +56,7 @@ namespace TcgEngine.Server
             //Commands
             RegisterCommand(GameAction.PlayerSettings, ReceivePlayerSettings);
             RegisterCommand(GameAction.PlayerSettingsAI, ReceivePlayerSettingsAI);
-            RegisterCommand(GameAction.GameplaySettings, ReceiveGameplaySettings);
+            RegisterCommand(GameAction.GameSettings, ReceiveGameplaySettings);
             RegisterCommand(GameAction.PlayCard, ReceivePlayCard);
             RegisterCommand(GameAction.Attack, ReceiveAttackTarget);
             RegisterCommand(GameAction.AttackPlayer, ReceiveAttackPlayer);
@@ -272,7 +272,6 @@ namespace TcgEngine.Server
             if (player_id >= 0 && settings != null)
             {
                 SetGameSettings(settings);
-                RefreshAll();
             }
         }
 
@@ -382,7 +381,7 @@ namespace TcgEngine.Server
 
         //--- Setup Commands ------
 
-        public virtual async void SetPlayerDeck(int player_id, string username, string deck)
+        public virtual async void SetPlayerDeck(int player_id, string username, PlayerDeckSettings deck)
         {
             Player player = game_data.GetPlayer(player_id);
             if (player != null && game_data.state == GameState.Connecting)
@@ -392,27 +391,37 @@ namespace TcgEngine.Server
                 if(Authenticator.Get().IsApi())
                     user = await ApiClient.Get().LoadUserData(username); //Online game, validate from api
 
-                //Use user deck
-                if (user != null)
+                //Use user API deck
+                UserDeckData udeck = user?.GetDeck(deck.id);
+                if (user != null && udeck != null)
                 {
-                    UserDeckData udeck = user.GetDeck(deck);
-                    if (udeck != null)
+                    if (user.IsDeckValid(udeck))
                     {
                         gameplay.SetPlayerDeck(player_id, udeck);
-                        RefreshAll();
+                        SendPlayerReady(player);
+                        return;
+                    }
+                    else
+                    {
+                        Debug.Log(user.username + " deck is invalid: " + udeck.title);
                         return;
                     }
                 }
 
                 //Use premade deck
-                DeckData cdeck = DeckData.Get(deck);
+                DeckData cdeck = DeckData.Get(deck.id);
+                if (cdeck != null)
+                    gameplay.SetPlayerDeck(player_id, cdeck);
 
-                //Use test deck
-                if (cdeck == null)
-                    cdeck = GameplayData.Get().test_deck;
+                //Trust client in test mode
+                else if (Authenticator.Get().IsTest())
+                    gameplay.SetPlayerDeck(player_id, deck.id, deck.hero, deck.cards);
 
-                gameplay.SetPlayerDeck(player_id, cdeck);
-                RefreshAll();
+                //Deck not found
+                else
+                    Debug.Log("Player " + player_id + " deck not found: " + deck.id);
+
+                SendPlayerReady(player);
             }
         }
 
@@ -460,6 +469,7 @@ namespace TcgEngine.Server
             if (game_data.state == GameState.Connecting)
             {
                 game_data.settings = settings;
+                RefreshAll();
             }
         }
 
@@ -909,13 +919,21 @@ namespace TcgEngine.Server
             SendToAll(GameAction.SecretResolved, mdata, NetworkDelivery.Reliable);
         }
 
+        protected virtual void SendPlayerReady(Player player)
+        {
+            if (player != null && player.IsReady())
+            {
+                MsgInt mdata = new MsgInt();
+                mdata.value = player.player_id;
+                SendToAll(GameAction.PlayerReady, mdata, NetworkDelivery.Reliable);
+            }
+        }
+
         public virtual void RefreshAll()
         {
-            Profiler.BeginSample("RefreshAll");
             MsgRefreshAll mdata = new MsgRefreshAll();
             mdata.game_data = GetGameData();
             SendToAll(GameAction.RefreshAll, mdata, NetworkDelivery.ReliableFragmentedSequenced);
-            Profiler.EndSample();
         }
 
         public void SendToAll(ushort tag)

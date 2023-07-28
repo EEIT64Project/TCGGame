@@ -1,24 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace TcgEngine.UI
 {
     /// <summary>
-    /// 按鈕音效
+    /// Add sound when clicking on a button
     /// </summary>
 
-    public class ButtonAudio : MonoBehaviour, IPointerEnterHandler
+    public class ButtonAudio : MonoBehaviour
     {
         public AudioClip click_audio;
-        public AudioClip hover_audio;
 
         void Start()
         {
             Button button = GetComponent<Button>();
-
             if (button != null)
                 button.onClick.AddListener(OnClick);
         }
@@ -27,18 +24,5 @@ namespace TcgEngine.UI
         {
             AudioTool.Get().PlaySFX("ui", click_audio);
         }
-
-        void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
-        {
-            HoverAudio();
-        }
-
-
-        void HoverAudio()
-        {
-            AudioTool.Get().PlaySFX("ui", hover_audio);
-        }
-
-
     }
 }

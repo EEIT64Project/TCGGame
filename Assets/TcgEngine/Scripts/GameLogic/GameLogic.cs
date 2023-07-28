@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Profiling;
@@ -52,10 +53,12 @@ namespace TcgEngine.Gameplay
         private ListSwap<Card> card_array = new ListSwap<Card>();
         private ListSwap<Player> player_array = new ListSwap<Player>();
         private ListSwap<Slot> slot_array = new ListSwap<Slot>();
+        private ListSwap<CardData> card_data_array = new ListSwap<CardData>();
 
-        public GameLogic(bool is_ai)
+        public GameLogic(bool is_instant)
         {
-            resolve_queue = new ResolveQueue(null, is_ai);
+            //is_instant ignores all gameplay delays and process everything immediately, needed for AI prediction
+            resolve_queue = new ResolveQueue(null, is_instant); 
         }
 
         public GameLogic(Game game)
@@ -90,7 +93,7 @@ namespace TcgEngine.Gameplay
 
             //Adventure settings
             LevelData level = null;
-            if (game_data.settings.play_mode == PlayMode.Adventure)
+            if (game_data.settings.game_type == GameType.Adventure)
             {
                 level = LevelData.Get(game_data.settings.level);
                 if (level != null && level.first_player == LevelFirst.Player)
@@ -148,11 +151,11 @@ namespace TcgEngine.Gameplay
             //Cards draw
             if (game_data.turn_count > 1 || player.player_id != game_data.first_player)
             {
-                DrawCard(player.player_id, 1);
+                DrawCard(player.player_id, GameplayData.Get().cards_per_turn);
             }
 
             //Mana 
-            player.mana_max += 1;
+            player.mana_max += GameplayData.Get().mana_per_turn;
             player.mana_max = Mathf.Min(player.mana_max, GameplayData.Get().mana_max);
             player.mana = player.mana_max;
 
@@ -163,6 +166,9 @@ namespace TcgEngine.Gameplay
             //Player poison
             if (player.HasStatusEffect(StatusType.Poisoned))
                 player.hp -= player.GetStatusEffectValue(StatusType.Poisoned);
+
+            if (player.hero != null)
+                player.hero.Refresh();
 
             //Refresh Cards and Status Effects
             for (int i = player.cards_board.Count - 1; i >= 0; i--)
@@ -178,13 +184,9 @@ namespace TcgEngine.Gameplay
 
             //Ongoing Abilities
             UpdateOngoingAbilities();
-            
+
             //StartTurn Abilities
-            for (int i = player.cards_board.Count - 1; i >= 0; i--)
-            {
-                Card card = player.cards_board[i];
-                TriggerCardAbilityType(AbilityTrigger.StartOfTurn, card);
-            }
+            TriggerPlayerCardsAbilityType(player, AbilityTrigger.StartOfTurn);
 
             resolve_queue.AddCallback(StartPlayPhase);
             resolve_queue.ResolveAll(0.2f);
@@ -232,11 +234,7 @@ namespace TcgEngine.Gameplay
 
             //End of turn abilities
             Player player = game_data.GetActivePlayer();
-            for (int i = player.cards_board.Count - 1; i >= 0; i--)
-            {
-                Card card = player.cards_board[i];
-                TriggerCardAbilityType(AbilityTrigger.EndOfTurn, card);
-            }
+            TriggerPlayerCardsAbilityType(player, AbilityTrigger.EndOfTurn);
 
             onTurnEnd?.Invoke();
 
@@ -301,6 +299,7 @@ namespace TcgEngine.Gameplay
             card_array.Clear();
             player_array.Clear();
             slot_array.Clear();
+            card_data_array.Clear();
             game_data.last_played = null;
             game_data.last_killed = null;
             game_data.last_target = null;
@@ -320,11 +319,20 @@ namespace TcgEngine.Gameplay
             player.deck = deck.id;
 
             VariantData variant = VariantData.GetDefault();
+            if (deck.hero != null)
+            {
+                player.hero = Card.Create(deck.hero, variant, player.player_id);
+                player.cards_all[player.hero.uid] = player.hero;
+            }
+
             foreach (CardData card in deck.cards)
             {
-                Card acard = Card.Create(card, variant, player.player_id);
-                player.cards_all[acard.uid] = acard;
-                player.cards_deck.Add(acard);
+                if (card != null)
+                {
+                    Card acard = Card.Create(card, variant, player.player_id);
+                    player.cards_all[acard.uid] = acard;
+                    player.cards_deck.Add(acard);
+                }
             }
 
             DeckPuzzleData puzzle = deck as DeckPuzzleData;
@@ -349,13 +357,26 @@ namespace TcgEngine.Gameplay
         //Set deck using custom deck in save file or database
         public virtual void SetPlayerDeck(int player_id, UserDeckData deck)
         {
+            SetPlayerDeck(player_id, deck.tid, deck.hero, deck.cards);
+        }
+
+        public virtual void SetPlayerDeck(int player_id, string deck_id, string hero, string[] cards)
+        {
             Player player = game_data.GetPlayer(player_id);
-            
+
             player.cards_all.Clear();
             player.cards_deck.Clear();
-            player.deck = deck.tid;
+            player.deck = deck_id;
 
-            foreach (string tid in deck.cards)
+            CardData hdata = UserCardData.GetCardData(hero);
+            VariantData hvariant = UserCardData.GetCardVariant(hero);
+            if (hdata != null && !string.IsNullOrEmpty(hero))
+            {
+                player.hero = Card.Create(hdata, hvariant, player.player_id);
+                player.cards_all[player.hero.uid] = player.hero;
+            }
+
+            foreach (string tid in cards)
             {
                 CardData icard = UserCardData.GetCardData(tid);
                 VariantData variant = UserCardData.GetCardVariant(tid);
@@ -373,10 +394,11 @@ namespace TcgEngine.Gameplay
 
         public virtual void PlayCard(Card card, Slot slot, bool skip_cost = false)
         {
-            Player player = game_data.GetPlayer(card.player_id);
-            if (player == null || card == null)
-                return; //Cant find data
+            if (card == null)
+                return;
 
+            Player player = game_data.GetPlayer(card.player_id);
+            
             if (game_data.CanPlayCard(card, slot, skip_cost))
             {
                 //Cost
@@ -424,22 +446,23 @@ namespace TcgEngine.Gameplay
             }
         }
 
-        public virtual void MoveCard(Card card, Slot slot)
+        public virtual void MoveCard(Card card, Slot slot, bool skip_cost = false)
         {
-            Player player = game_data.GetPlayer(card.player_id);
-            if (player == null || card == null)
+            if (card == null)
                 return;
-            
+
+            Player player = game_data.GetPlayer(card.player_id);
             Card slot_card = game_data.GetSlotCard(slot);
             if (slot_card != null || !slot.IsValid())
                 return; //Cant move to already occipied slot
 
-            if (game_data.CanMoveCard(card, slot))
+            if (game_data.CanMoveCard(card, slot, skip_cost))
             {
                 card.slot = slot;
 
                 //Moving doesn't really have any effect in demo so can be done indefinitely
-                //card.exhausted = true;
+                //if(!skip_cost)
+                    //card.exhausted = true;
                 //card.RemoveStatus(StatusEffect.Stealth);
                 //player.AddHistory(GameAction.Move, card);
 
@@ -452,10 +475,10 @@ namespace TcgEngine.Gameplay
 
         public virtual void CastAbility(Card card, AbilityData iability)
         {
-            Player player = game_data.GetPlayer(card.player_id);
-            if (player == null || card == null || iability == null)
+            if (card == null || iability == null)
                 return;
 
+            Player player = game_data.GetPlayer(card.player_id);
             CardData icard = card.CardData;
             if (icard != null)
             {
@@ -470,12 +493,12 @@ namespace TcgEngine.Gameplay
             }
         }
 
-        public virtual void AttackTarget(Card attacker, Card target)
+        public virtual void AttackTarget(Card attacker, Card target, bool skip_cost = false)
         {
             if (attacker == null || target == null)
                 return;
 
-            if (!game_data.CanAttackTarget(attacker, target))
+            if (!game_data.CanAttackTarget(attacker, target, skip_cost))
                 return;
 
             Player player = game_data.GetPlayer(attacker.player_id);
@@ -488,22 +511,22 @@ namespace TcgEngine.Gameplay
             TriggerSecrets(AbilityTrigger.OnBeforeDefend, target);
 
             //Resolve attack
-            resolve_queue.AddAttack(attacker, target, ResolveAttack);
+            resolve_queue.AddAttack(attacker, target, ResolveAttack, skip_cost);
             resolve_queue.ResolveAll();
         }
 
-        protected virtual void ResolveAttack(Card attacker, Card target)
+        protected virtual void ResolveAttack(Card attacker, Card target, bool skip_cost)
         {
             onAttackStart?.Invoke(attacker, target);
 
             attacker.RemoveStatus(StatusType.Stealth);
             UpdateOngoingAbilities();
 
-            resolve_queue.AddAttack(attacker, target, ResolveAttackHit);
+            resolve_queue.AddAttack(attacker, target, ResolveAttackHit, skip_cost);
             resolve_queue.ResolveAll(0.3f);
         }
 
-        protected virtual void ResolveAttackHit(Card attacker, Card target)
+        protected virtual void ResolveAttackHit(Card attacker, Card target, bool skip_cost)
         {
             //Count attack damage
             int datt1 = attacker.GetAttack();
@@ -514,8 +537,8 @@ namespace TcgEngine.Gameplay
             DamageCard(target, attacker, datt2);
 
             //Save attack and exhaust
-            ExhaustBattle(attacker);
-            target.RemoveStatus(StatusType.Sleep);
+            if (!skip_cost)
+                ExhaustBattle(attacker);
 
             //Recalculate bonus
             UpdateOngoingAbilities();
@@ -538,12 +561,12 @@ namespace TcgEngine.Gameplay
             resolve_queue.ResolveAll(0.2f);
         }
 
-        public virtual void AttackPlayer(Card attacker, Player target)
+        public virtual void AttackPlayer(Card attacker, Player target, bool skip_cost = false)
         {
             if (attacker == null || target == null)
                 return;
 
-            if (!game_data.CanAttackTarget(attacker, target))
+            if (!game_data.CanAttackTarget(attacker, target, skip_cost))
                 return;
 
             Player player = game_data.GetPlayer(attacker.player_id);
@@ -554,22 +577,22 @@ namespace TcgEngine.Gameplay
             TriggerCardAbilityType(AbilityTrigger.OnBeforeAttack, attacker, target);
 
             //Resolve attack
-            resolve_queue.AddAttack(attacker, target, ResolveAttackPlayer);
+            resolve_queue.AddAttack(attacker, target, ResolveAttackPlayer, skip_cost);
             resolve_queue.ResolveAll();
         }
 
-        protected virtual void ResolveAttackPlayer(Card attacker, Player target)
+        protected virtual void ResolveAttackPlayer(Card attacker, Player target, bool skip_cost)
         {
             onAttackPlayerStart?.Invoke(attacker, target);
 
             attacker.RemoveStatus(StatusType.Stealth);
             UpdateOngoingAbilities();
 
-            resolve_queue.AddAttack(attacker, target, ResolveAttackPlayerHit);
+            resolve_queue.AddAttack(attacker, target, ResolveAttackPlayerHit, skip_cost);
             resolve_queue.ResolveAll(0.3f);
         }
 
-        protected virtual void ResolveAttackPlayerHit(Card attacker, Player target)
+        protected virtual void ResolveAttackPlayerHit(Card attacker, Player target, bool skip_cost)
         {
             //Damage player
             int datt1 = attacker.GetAttack();
@@ -577,7 +600,8 @@ namespace TcgEngine.Gameplay
             target.hp = Mathf.Clamp(target.hp, 0, target.hp_max);
 
             //Save attack and exhaust
-            ExhaustBattle(attacker);
+            if (!skip_cost)
+                ExhaustBattle(attacker);
 
             //Recalculate bonus
             UpdateOngoingAbilities();
@@ -600,6 +624,35 @@ namespace TcgEngine.Gameplay
             game_data.cards_attacked.Add(attacker.uid);
             bool attack_again = attacker.HasStatus(StatusType.Fury) && !attacked_before;
             attacker.exhausted = !attack_again;
+        }
+
+        //Redirect attack to a new target
+        public virtual void RedirectAttack(Card attacker, Card new_target)
+        {
+            foreach (AttackQueueElement att in resolve_queue.GetAttackQueue())
+            {
+                if (att.attacker.uid == attacker.uid)
+                {
+                    att.target = new_target;
+                    att.ptarget = null;
+                    att.callback = ResolveAttack;
+                    att.pcallback = null;
+                }
+            }
+        }
+
+        public virtual void RedirectAttack(Card attacker, Player new_target)
+        {
+            foreach (AttackQueueElement att in resolve_queue.GetAttackQueue())
+            {
+                if (att.attacker.uid == attacker.uid)
+                {
+                    att.ptarget = new_target;
+                    att.target = null;
+                    att.pcallback = ResolveAttackPlayer;
+                    att.callback = null;
+                }
+            }
         }
 
         public virtual void ShuffleDeck(List<Card> cards)
@@ -647,11 +700,15 @@ namespace TcgEngine.Gameplay
         //Summon copy of an exiting card
         public virtual Card SummonCopy(int player_id, Card copy, Slot slot)
         {
-            if (copy == null)
-                return null;
-
             CardData icard = copy.CardData;
             return SummonCard(player_id, icard, copy.VariantData, slot);
+        }
+
+        //Summon copy of an exiting card into hand
+        public virtual Card SummonCopyHand(int player_id, Card copy)
+        {
+            CardData icard = copy.CardData;
+            return SummonCardHand(player_id, icard, copy.VariantData);
         }
 
         //Create a new card and send it to the board
@@ -768,6 +825,9 @@ namespace TcgEngine.Gameplay
             if (extra > 0 && attacker.HasStatus(StatusType.Trample))
                 tplayer.hp -= extra;
 
+            //Remove sleep on damage
+            target.RemoveStatus(StatusType.Sleep);
+
             //Deathtouch
             if (value > 0 && attacker.HasStatus(StatusType.Deathtouch) && target.CardData.type == CardType.Character)
                 KillCard(attacker, target);
@@ -857,9 +917,21 @@ namespace TcgEngine.Gameplay
         {
             foreach (Player oplayer in game_data.players)
             {
-                foreach (Card ocard in oplayer.cards_board)
-                    TriggerCardAbilityType(type, ocard, triggerer);
+                if(oplayer.hero != null)
+                    TriggerCardAbilityType(type, oplayer.hero, triggerer);
+
+                foreach (Card card in oplayer.cards_board)
+                    TriggerCardAbilityType(type, card, triggerer);
             }
+        }
+
+        public virtual void TriggerPlayerCardsAbilityType(Player player, AbilityTrigger type)
+        {
+            if (player.hero != null)
+                TriggerCardAbilityType(type, player.hero, player.hero);
+
+            foreach (Card card in player.cards_board)
+                TriggerCardAbilityType(type, card, card);
         }
 
         public virtual void TriggerCardAbilityType(AbilityTrigger type, Card caster, Player triggerer)
@@ -910,6 +982,7 @@ namespace TcgEngine.Gameplay
             ResolveCardAbilityPlayers(iability, caster);
             ResolveCardAbilityCards(iability, caster);
             ResolveCardAbilitySlots(iability, caster);
+            ResolveCardAbilityCardData(iability, caster);
             ResolveCardAbilityNoTarget(iability, caster);
             AfterAbilityResolved(iability, caster);
         }
@@ -941,12 +1014,22 @@ namespace TcgEngine.Gameplay
             {
                 Slot slot = caster.slot;
                 Card slot_card = game_data.GetSlotCard(slot);
-                if (!slot.IsValid())
-                    ResolveEffectTarget(iability, caster, game_data.GetPlayer(slot.p));
+                if (slot.IsPlayerSlot())
+                {
+                    Player tplayer = game_data.GetPlayer(slot.p);
+                    if (iability.CanTarget(game_data, caster, tplayer))
+                        ResolveEffectTarget(iability, caster, tplayer);
+                }
                 else if (slot_card != null)
-                    ResolveEffectTarget(iability, caster, slot_card);
+                {
+                    if (iability.CanTarget(game_data, caster, slot_card))
+                        ResolveEffectTarget(iability, caster, slot_card);
+                }
                 else
-                    ResolveEffectTarget(iability, caster, slot);
+                {
+                    if (iability.CanTarget(game_data, caster, slot))
+                        ResolveEffectTarget(iability, caster, slot);
+                }
             }
         }
 
@@ -986,6 +1069,18 @@ namespace TcgEngine.Gameplay
             }
         }
 
+        protected virtual void ResolveCardAbilityCardData(AbilityData iability, Card caster)
+        {
+            //Get Cards Targets based on conditions
+            List<CardData> targets = iability.GetCardDataTargets(game_data, caster, card_data_array);
+
+            //Resolve effects
+            foreach (CardData target in targets)
+            {
+                ResolveEffectTarget(iability, caster, target);
+            }
+        }
+
         protected virtual void ResolveCardAbilityNoTarget(AbilityData iability, Card caster)
         {
             if (iability.target == AbilityTarget.None)
@@ -994,9 +1089,6 @@ namespace TcgEngine.Gameplay
 
         protected virtual void ResolveEffectTarget(AbilityData iability, Card caster, Player target)
         {
-            if (target == null)
-                return;
-
             iability.DoEffects(this, caster, target);
 
             onAbilityTargetPlayer?.Invoke(iability, caster, target);
@@ -1004,14 +1096,10 @@ namespace TcgEngine.Gameplay
 
         protected virtual void ResolveEffectTarget(AbilityData iability, Card caster, Card target)
         {
-            if (target == null)
-                return;
-
-            game_data.last_target = target;
-
             iability.DoEffects(this, caster, target);
 
             onAbilityTargetCard?.Invoke(iability, caster, target);
+            game_data.last_target = target;
         }
 
         protected virtual void ResolveEffectTarget(AbilityData iability, Card caster, Slot target)
@@ -1019,6 +1107,11 @@ namespace TcgEngine.Gameplay
             iability.DoEffects(this, caster, target);
 
             onAbilityTargetSlot?.Invoke(iability, caster, target);
+        }
+
+        protected virtual void ResolveEffectTarget(AbilityData iability, Card caster, CardData target)
+        {
+            iability.DoEffects(this, caster, target);
         }
 
         protected virtual void AfterAbilityResolved(AbilityData iability, Card caster)
@@ -1037,13 +1130,17 @@ namespace TcgEngine.Gameplay
 
             //Recalculate and clear
             UpdateOngoingAbilities();
+            CheckForWinner();
 
             //Chain ability
-            if (iability.target != AbilityTarget.ChoiceSelector)
+            if (iability.target != AbilityTarget.ChoiceSelector && game_data.state != GameState.GameEnded)
             {
                 foreach (AbilityData chain_ability in iability.chain_abilities)
                 {
-                    TriggerCardAbility(chain_ability, caster);
+                    if (chain_ability != null)
+                    {
+                        TriggerCardAbility(chain_ability, caster);
+                    }
                 }
             }
 
@@ -1071,86 +1168,12 @@ namespace TcgEngine.Gameplay
             for (int p = 0; p < game_data.players.Length; p++)
             {
                 Player player = game_data.players[p];
+                UpdateOngoingAbilities(player, player.hero);  //Remove this line if hero is on the board
+
                 for (int c = 0; c < player.cards_board.Count; c++)
                 {
                     Card card = player.cards_board[c];
-                    if (card.CanDoAbilities())
-                    {
-                        //Ongoing Abilitiess
-                        CardData icaster = card.CardData;
-                        for (int a = 0; a < icaster.abilities.Length; a++)
-                        {
-                            AbilityData ability = icaster.abilities[a];
-                            if (ability != null && ability.trigger == AbilityTrigger.Ongoing && ability.AreTriggerConditionsMet(game_data, card))
-                            {
-                                if (ability.target == AbilityTarget.Self)
-                                {
-                                    if (ability.AreTargetConditionsMet(game_data, card, card))
-                                    {
-                                        ability.DoOngoingEffects(this, card, card);
-                                    }
-                                }
-
-                                if (ability.target == AbilityTarget.PlayerSelf)
-                                {
-                                    if (ability.AreTargetConditionsMet(game_data, card, player))
-                                    {
-                                        ability.DoOngoingEffects(this, card, player);
-                                    }
-                                }
-
-                                if (ability.target == AbilityTarget.AllPlayers || ability.target == AbilityTarget.PlayerOpponent)
-                                {
-                                    for (int tp = 0; tp < game_data.players.Length; tp++)
-                                    {
-                                        if (ability.target == AbilityTarget.AllPlayers || tp != player.player_id)
-                                        {
-                                            Player oplayer = game_data.players[tp];
-                                            if (ability.AreTargetConditionsMet(game_data, card, oplayer))
-                                            {
-                                                ability.DoOngoingEffects(this, card, oplayer);
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if (ability.target == AbilityTarget.AllCardsAllPiles || ability.target == AbilityTarget.AllCardsHand || ability.target == AbilityTarget.AllCardsBoard)
-                                {
-                                    for (int tp = 0; tp < game_data.players.Length; tp++)
-                                    {
-                                        //Looping on all cards is very slow, since there are no ongoing effects that works out of board/hand we loop on those only
-                                        Player tplayer = game_data.players[tp];
-
-                                        //Hand Cards
-                                        if (ability.target == AbilityTarget.AllCardsAllPiles || ability.target == AbilityTarget.AllCardsHand)
-                                        {
-                                            for (int tc = 0; tc < tplayer.cards_hand.Count; tc++)
-                                            {
-                                                Card tcard = tplayer.cards_hand[tc];
-                                                if (ability.AreTargetConditionsMet(game_data, card, tcard))
-                                                {
-                                                    ability.DoOngoingEffects(this, card, tcard);
-                                                }
-                                            }
-                                        }
-
-                                        //Board Cards
-                                        if (ability.target == AbilityTarget.AllCardsAllPiles || ability.target == AbilityTarget.AllCardsBoard)
-                                        {
-                                            for (int tc = 0; tc < tplayer.cards_board.Count; tc++)
-                                            {
-                                                Card tcard = tplayer.cards_board[tc];
-                                                if (ability.AreTargetConditionsMet(game_data, card, tcard))
-                                                {
-                                                    ability.DoOngoingEffects(this, card, tcard);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    UpdateOngoingAbilities(player, card);
                 }
             }
 
@@ -1200,12 +1223,92 @@ namespace TcgEngine.Gameplay
             Profiler.EndSample();
         }
 
+        protected virtual void UpdateOngoingAbilities(Player player, Card card)
+        {
+            if (card == null || !card.CanDoAbilities())
+                return;
+
+            CardData icaster = card.CardData;
+            for (int a = 0; a < icaster.abilities.Length; a++)
+            {
+                AbilityData ability = icaster.abilities[a];
+                if (ability != null && ability.trigger == AbilityTrigger.Ongoing && ability.AreTriggerConditionsMet(game_data, card))
+                {
+                    if (ability.target == AbilityTarget.Self)
+                    {
+                        if (ability.AreTargetConditionsMet(game_data, card, card))
+                        {
+                            ability.DoOngoingEffects(this, card, card);
+                        }
+                    }
+
+                    if (ability.target == AbilityTarget.PlayerSelf)
+                    {
+                        if (ability.AreTargetConditionsMet(game_data, card, player))
+                        {
+                            ability.DoOngoingEffects(this, card, player);
+                        }
+                    }
+
+                    if (ability.target == AbilityTarget.AllPlayers || ability.target == AbilityTarget.PlayerOpponent)
+                    {
+                        for (int tp = 0; tp < game_data.players.Length; tp++)
+                        {
+                            if (ability.target == AbilityTarget.AllPlayers || tp != player.player_id)
+                            {
+                                Player oplayer = game_data.players[tp];
+                                if (ability.AreTargetConditionsMet(game_data, card, oplayer))
+                                {
+                                    ability.DoOngoingEffects(this, card, oplayer);
+                                }
+                            }
+                        }
+                    }
+
+                    if (ability.target == AbilityTarget.AllCardsAllPiles || ability.target == AbilityTarget.AllCardsHand || ability.target == AbilityTarget.AllCardsBoard)
+                    {
+                        for (int tp = 0; tp < game_data.players.Length; tp++)
+                        {
+                            //Looping on all cards is very slow, since there are no ongoing effects that works out of board/hand we loop on those only
+                            Player tplayer = game_data.players[tp];
+
+                            //Hand Cards
+                            if (ability.target == AbilityTarget.AllCardsAllPiles || ability.target == AbilityTarget.AllCardsHand)
+                            {
+                                for (int tc = 0; tc < tplayer.cards_hand.Count; tc++)
+                                {
+                                    Card tcard = tplayer.cards_hand[tc];
+                                    if (ability.AreTargetConditionsMet(game_data, card, tcard))
+                                    {
+                                        ability.DoOngoingEffects(this, card, tcard);
+                                    }
+                                }
+                            }
+
+                            //Board Cards
+                            if (ability.target == AbilityTarget.AllCardsAllPiles || ability.target == AbilityTarget.AllCardsBoard)
+                            {
+                                for (int tc = 0; tc < tplayer.cards_board.Count; tc++)
+                                {
+                                    Card tcard = tplayer.cards_board[tc];
+                                    if (ability.AreTargetConditionsMet(game_data, card, tcard))
+                                    {
+                                        ability.DoOngoingEffects(this, card, tcard);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         protected virtual void AddOngoingStatusBonus(Card card, CardStatus status)
         {
             if (status.type == StatusType.AttackBonus)
-                card.attack_ongoing_bonus += status.value;
+                card.attack_ongoing += status.value;
             if (status.type == StatusType.HPBonus)
-                card.hp_ongoing_bonus += status.value;
+                card.hp_ongoing += status.value;
         }
 
         //---- Secrets ------------

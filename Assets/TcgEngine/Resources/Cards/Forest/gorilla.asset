@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: gorilla
   m_EditorClassIdentifier: 
   id: gorilla
-  title: "Gorilla \u7329\u7403\u5D1B\u8D77"
+  title: "\u7329\u7403\u5D1B\u8D77"
   art_full: {fileID: 21300000, guid: 9f1c2bf32a1d8984687a6beebd13fe7a, type: 3}
   art_board: {fileID: 21300000, guid: e4382bfb1ee3f034a9ff74ddc6d3719e, type: 3}
   type: 10
@@ -26,8 +26,7 @@ MonoBehaviour:
   stats: []
   abilities:
   - {fileID: 11400000, guid: 26c48eded39b6444fb64b3fa43f10654, type: 2}
-  text: "<b>Play:</b> Roll a D6 to know your attack.\n<b>\u6253\u51FA\uFF1A</b>\u6295\u64F2
-    D6 \u51FA\u73FE\u7684\u6578\u5B57\u4EE3\u8868\u653B\u64CA\u529B\u3002"
+  text: "<b>\u6253\u51FA\uFF1A</b>\u6295\u64F2\u9AB0\u5B50\uFF0C\u51FA\u73FE\u7684\u6578\u5B57\u4EE3\u8868\u653B\u64CA\u529B\u3002"
   desc: 
   spawn_fx: {fileID: 5791330189299518109, guid: 1fa8fa11b2c6b9b4d976743e5bbb3956,
     type: 3}
@@ -35,12 +34,12 @@ MonoBehaviour:
   attack_fx: {fileID: 0}
   damage_fx: {fileID: 0}
   idle_fx: {fileID: 0}
-  spawn_audio: {fileID: 0}
+  spawn_audio: {fileID: 8300000, guid: 412ff3330e64f4fd589d1aebbf012f04, type: 3}
   death_audio: {fileID: 0}
   attack_audio: {fileID: 0}
   damage_audio: {fileID: 0}
   deckbuilding: 1
-  cost: 100
+  cost: 250
   packs:
   - {fileID: 11400000, guid: bafca3757bf537c43b1d2ba696456e2c, type: 2}
   - {fileID: 11400000, guid: 2db0d9f08bdfa57419101c08b8598c1a, type: 2}

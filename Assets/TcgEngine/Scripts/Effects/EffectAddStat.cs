@@ -44,11 +44,11 @@ namespace TcgEngine
         public override void DoOngoingEffect(GameLogic logic, AbilityData ability, Card caster, Card target)
         {
             if (type == EffectStatType.Attack)
-                target.attack_ongoing_bonus += ability.value;
+                target.attack_ongoing += ability.value;
             if (type == EffectStatType.HP)
-                target.hp_ongoing_bonus += ability.value;
+                target.hp_ongoing += ability.value;
             if (type == EffectStatType.Mana)
-                target.mana_ongoing_bonus += ability.value;
+                target.mana_ongoing += ability.value;
         }
 
         public override int GetAiValue(AbilityData ability)

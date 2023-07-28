@@ -123,8 +123,8 @@ namespace TcgEngine.Client
             WebResponse res = await ApiClient.Get().SendPostRequest(url, json);
             if (res.success)
             {
-                ListResponse<UserCardData> cards = ApiTool.JsonToArray<UserCardData>(res.data);
-                RevealCards(pack, cards.list);
+                UserCardData[] cards = ApiTool.JsonToArray<UserCardData>(res.data);
+                RevealCards(pack, cards);
             }
 
             HandPackArea.Get().LoadPacks();
