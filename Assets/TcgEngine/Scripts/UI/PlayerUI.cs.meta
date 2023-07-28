@@ -3,7 +3,15 @@ guid: 424cb2a085f4507429325fe86087b8d0
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - pname: {instanceID: 0}
+  - avatar: {instanceID: 0}
+  - mana_bar: {instanceID: 0}
+  - hp_txt: {instanceID: 0}
+  - hp_max_txt: {instanceID: 0}
+  - dead_fx: {instanceID: 0}
+  - dead_audio: {fileID: 8300000, guid: 2e3d6fd662065485aa3c010eb664f9cc, type: 3}
+  - avatar_dead: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

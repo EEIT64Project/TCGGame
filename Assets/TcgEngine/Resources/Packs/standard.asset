@@ -36,11 +36,10 @@ MonoBehaviour:
     probability: 96
   - variant: {fileID: 11400000, guid: 3a827aeeaca139641a4b8ad0c3c74f52, type: 2}
     probability: 4
-  title: "Standard Pack \u4E00\u822C\u5361\u724C\u5305"
+  title: "\u4E00\u822C\u5361\u724C\u5305"
   pack_img: {fileID: 21300000, guid: b2c2a8efa1f7d7b4593a512e2c8cd61a, type: 3}
   cardback_img: {fileID: 21300000, guid: 0e839bd6251bf9a4697b9cb18c1565a4, type: 3}
-  desc: "Standard pack with 5 cards.\n\u4E00\u822C\u5361\u5305\uFF0C\u5167\u542B
-    5 \u5F35\u5361\u7247\u3002"
+  desc: "\u4E00\u822C\u5361\u5305\uFF0C\u5167\u542B 5 \u5F35\u5361\u7247\u3002"
   sort_order: 0
   available: 1
   cost: 100

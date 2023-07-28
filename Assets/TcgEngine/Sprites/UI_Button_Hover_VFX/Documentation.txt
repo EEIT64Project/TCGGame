@@ -1,0 +1,12 @@
+The UI Button Prefab Require *UI_Particle_Mask* Shader to Work ,Also Put the Material *UI_Particle_Mask* in UI Button
+*Please do not remove it
+If you Want to Create new Particle System on your own You will need to Change These Settings
+-Scaling Mode to Hierarchy ,It will make scaling mode of Particle Follow UI Button
+-Masking ,If you want it to be Mask Inside or Outside UI Button
+-Order in Layer Should be 1 or more than 1 ,to make Particle render over UI Button
+
+Note
+Check the Button Sprite Size before replacing other Sprite
+the original Button of this Package is 1200 x 200 and 800 x 200
+
+Thank you for your Support.

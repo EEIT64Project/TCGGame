@@ -154,7 +154,7 @@ namespace TcgEngine
         }
 
         public static string ToJson(object data)
-        {
+        {   
             return JsonUtility.ToJson(data);
         }
 

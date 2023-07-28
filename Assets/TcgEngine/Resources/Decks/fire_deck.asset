@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: fire_deck
   m_EditorClassIdentifier: 
   id: fire_deck
-  title: "\u71BE\u71C4\u4E4B\u529B"
+  title: "\u71BE\u71C4\u4E4B\u9B42"
   cards:
   - {fileID: 11400000, guid: 99081d84b6aa6264aa1c68c6defbe31d, type: 2}
   - {fileID: 11400000, guid: 99081d84b6aa6264aa1c68c6defbe31d, type: 2}

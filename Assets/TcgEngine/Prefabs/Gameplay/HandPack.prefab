@@ -449,4 +449,4 @@ MonoBehaviour:
   deck_angle: 0
   pack_open_fx: {fileID: 1345720364488352221, guid: 3e5d0452d2c76134f891d0d34e13b6d1,
     type: 3}
-  pack_open_audio: {fileID: 0}
+  pack_open_audio: {fileID: 8300000, guid: 3b3ae48d5f52643b9b62eacf37c60693, type: 3}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: forest_deck
   m_EditorClassIdentifier: 
   id: forest_deck
-  title: "\u91CE\u6027\u4E4B\u9B42"
+  title: "\u91CE\u6027\u4E4B\u529B"
   cards:
   - {fileID: 11400000, guid: 1e22d4647e903814d96f63a729e1f820, type: 2}
   - {fileID: 11400000, guid: 1e22d4647e903814d96f63a729e1f820, type: 2}
